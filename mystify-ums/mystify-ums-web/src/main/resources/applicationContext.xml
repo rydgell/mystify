@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"  
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	   xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd    
+       http://www.springframework.org/schema/jdbc
+	   http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/mvc    
+       http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+       http://www.springframework.org/schema/task  
+       http://www.springframework.org/schema/task/spring-task-3.1.xsd"
+       default-lazy-init="false">
+     
+
+	<!--  引入配置文件   数据库属性配置文件 -->  
+ 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<!-- locations 属性指定属性文件的位置-->
+		<property name="locations">
+		<list>
+			<value>classpath:dbconfig.properties</value>
+			<!--如果有多个属性文件，依次在下面列出来-->
+		</list>
+		</property>
+	</bean>
+
+	<!-- 加载配置文件到 System.getProperty -->
+	<!-- <bean id="loadConfigToSystemGetProperty" class="com.mystify.ums.base.utils.PropertyConfig">
+       <property name="locations">
+        <list>
+         <value>classpath:config.properties</value>
+        </list>
+       </property>
+    </bean> -->
+    
+	<!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+  		<property name="driverClass" value="${jdbc.driverClassName}" />
+  		<property name="jdbcUrl" value="${jdbc.url}" />
+  		<property name="user" value="${jdbc.username}" />
+  		<property name="password" value="${jdbc.password}" />
+  		<property name="checkoutTimeout" value="${cpool.checkoutTimeout}"/>
+  		<property name="minPoolSize" value="${cpool.minPoolSize}"/>
+  		<property name="maxPoolSize" value="${cpool.maxPoolSize}"/>
+  		<property name="initialPoolSize" value="${cpool.initialPoolSize}"/>
+  		<property name="acquireRetryAttempts" value="${cpool.acquireRetryAttempts}"/>
+  		<property name="idleConnectionTestPeriod" value="${cpool.idleConnectionTestPeriod}"/>
+  		<property name="maxIdleTime" value="${cpool.maxIdleTime}"/>
+  		<property name="acquireIncrement" value="${cpool.acquireIncrement}"/>
+  		<property name="acquireRetryDelay" value="1000"/>
+  		<property name="breakAfterAcquireFailure" value="true"/>
+  		<property name="maxIdleTimeExcessConnections" value="${cpool.maxIdleTimeExcessConnections}"/> 
+  		<property name="maxStatements" value="${cpool.maxStatements}"/>
+	</bean> 
+
+
+    enable component scanning (beware that this does not enable mapper scanning!)    
+    <context:component-scan base-package="com.mystify.ums" />
+
+    enable autowire
+    <context:annotation-config />
+
+   创建SqlSessionFactory
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="typeAliasesPackage" value="com.mystify.ums.*.entity" />
+  		自动扫描mapping.xml文件  
+        <property name="mapperLocations" value="classpath*:com/mystify/ums/mapper/xml/*.xml"></property>  
+        <property name="configLocation" value="classpath:mybatis-config.xml" />  
+    </bean>
+
+    DAO接口所在包名，Spring会自动查找其下的类 
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.mystify.ums.*.dao" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property> 
+    </bean>
+
+	事务管理
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" read-only="true" propagation="NOT_SUPPORTED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="interceptorPointCuts"
+			expression="execution(* com.mystify.ums.*.service.impl.*Impl.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />
+	</aop:config>
+	
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		核心线程数
+		<property name="corePoolSize" value="${task.core_pool_size}" />
+		最大线程数
+		<property name="maxPoolSize" value="${task.max_pool_size}" />
+		队列最大长度
+		<property name="queueCapacity" value="${task.queue_capacity}" />
+		线程池维护线程所允许的空闲时间，默认为60s
+		<property name="keepAliveSeconds" value="${task.keep_alive_seconds}" />
+	</bean>
+	定时任务注解配置
+	<task:annotation-driven />  -->
+	<context:component-scan base-package="com.mystify.ums">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+  <!--  <import resource="classpath:applicationContext-timer.xml" />  -->
+	<import resource="classpath:dataSource.xml" />
+	<import resource="classpath:mybatis.xml" />
+	<import resource="classpath:applicationContext-shiro.xml" />
+	
+	
+</beans> 

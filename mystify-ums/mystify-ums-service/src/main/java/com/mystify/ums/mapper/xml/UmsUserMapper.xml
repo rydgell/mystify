@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mystify.ums.mapper.UmsUserMapper">
+
+	<!-- 开启二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.mystify.ums.entity.UmsUser">
+		<id column="user_id" property="id" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="salt" property="salt" />
+		<result column="realname" property="realname" />
+		<result column="avatar" property="avatar" />
+		<result column="phone" property="phone" />
+		<result column="email" property="email" />
+		<result column="sex" property="sex" />
+		<result column="locked" property="locked" />
+		<result column="ctime" property="ctime" />
+	</resultMap>
+
+</mapper>

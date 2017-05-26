@@ -1,0 +1,123 @@
+﻿@charset "utf-8";
+/* 全局样式 */
+body,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,img,div{margin:0;padding:0;border:0;}
+html,body,td{color:#333;font-size:12px;font-family:"宋体";}
+ul,ol{list-style-type:none;}
+h1,h2,h3,h4,h5,h6{font-size:12px;}
+select,input,img,select{vertical-align:middle;}
+a{color:#4f5656;text-decoration:none;}
+a:hover{color:#FF6600;}
+table{border-collapse: separate; empty-cells: show;}
+.clearit{clear:both;}
+.BLUE {color: #0000FF}
+
+
+.menubig {	
+    FONT-SIZE: 12px; 
+	COLOR: #ffffff; 
+	FONT-FAMILY: 宋体
+}
+
+.myput{
+	FONT-SIZE:12px;
+	border: 1px solid #7da4db;
+}
+
+.newslist{
+	FONT-SIZE:12px;
+	color: #555555;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.btnadd_1
+{
+	font-size: 12px;
+	width: 43px;
+	height: 19px;
+	border: 1px solid #A0C0EB;
+	padding-top: 1px;
+	cursor:hand;
+	background-color: #D1E0F5;
+}
+.back
+{
+    font-size: 12px;
+    width: 95px;
+    height: 21px;
+    background-image:  url(../System/images/back.gif);
+    border: none;
+    padding-top: 3px;
+    cursor:hand;
+} 
+
+.tx1 { 
+height: 20px;
+width: 30px; 
+font-size: 9pt;
+border: 1px solid; 
+border-color: black black #000000; 
+color: #0000FF;
+}
+.sbttn{
+font-family:宋体,MS SONG,SimSun,tahoma,sans-serif;
+font-size:9pt;
+background: #D6E7EF;
+border-bottom: 1px solid #104A7B;
+border-right: 1px solid #104A7B;
+border-left: 1px solid #AFC4D5;
+border-top:1px solid #AFC4D5;
+color:#000066;
+height:19px;
+text-decoration:none;
+cursor: hand;
+}
+BODY {
+	background-color: #e0dbdb;
+}
+td {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+	text-decoration: none;
+}
+
+/* 头部样式 */
+.headerTop{border:0px #0C3870 solid;}
+.headerTops{background:url(../img/HeaderBg.jpg);height:73px;zoom:1;overflow:hidden;}
+.headerLogo{float:left; padding-top:1px;}
+.headerother{float:left;width:450px;padding:40px 0 0 60px;color:#FBFEFF; }
+.headerother span{display:block;padding-top:6px;}
+.headerother span em{font-style:normal;color:#FFFF00;font-weight:700;}
+.headerMenus{float:right;width:auto;padding:6px 0 9px 0;zoom:1;overflow:hidden;}
+.headerMenus li{float:left;width:60px;height:60px;text-align:center;cursor:pointer;margin-right:10px;}
+.headerMenus li a{display:inline-block;width:60px;height:17px;color:#fff;padding-top:42px;}
+.headerMenus li:hover{float:left;width:60px;height:60px;text-align:center;background:url(../img/HeaderTopIco.gif);}
+.headerMenus li a:hover{color:#FFF600;}
+.headerMenus .statistics a{background:url(../img/icon_statistics.png) no-repeat center 4px;}
+.headerMenus .icon_home a{background:url(../img/home.png) no-repeat center 4px;}
+.headerMenus .password a{background:url(../img/icon_password.png) no-repeat center 4px;}
+.headerMenus .icon_exit a{background:url(../img/icon_exit.png) no-repeat center 4px;}
+
+
+/* 栏目导航样式 */
+.login_cg{color:#FFFFFF; padding-left:30px; margin-top:20px; width:400px; float:left;}
+.login_time{color:#FFFFFF; padding-right:30px; margin-top:20px; width:400px; float:right;}
+.navBox{width:182px;margin:0 auto;background:#E0DBDB;}
+.navTop{background:url(../img/inMainBg.gif);height:30px;padding:5px 0 9px 0;text-align:center;}
+.navTitle{background:url(../img/navTitleBg.jpg);height:33px;line-height:33px;color:#4f5656;padding-left:20px;cursor:pointer;}
+.navTitles{background:url(../img/navTitlesBg.jpg);height:33px;line-height:33px;color:#4f5656;padding-left:20px;cursor:pointer;}
+
+.userTitle{background:url(../img/navTitlesBg.jpg);height:33px;line-height:33px;color:#2D52A5;padding-left:20px;cursor:pointer;}
+.userTitles{background:url(../img/navTitlesBg.jpg);height:33px;line-height:33px;color:#2D52A5;padding-left:20px;cursor:pointer;}
+
+.navText{padding:10px 0 4px 0;}
+.navText li{background:url(../img/navIcoL.gif) no-repeat 15px 10px;height:24px;line-height:24px;padding-left:30px;color:#b4b4b4;}
+.navText li:hover{background:url(../img/navHover.gif);}
+
+.fontcss1{ font-size:15px; font-weight:bold; color:#000000;}
+.bottomborder{ border-bottom:1px solid #C6D9F4;}
+.f1{ font-size:20px; font-weight:bold; color:#000000;}
+.f2{ font-size:13px;color:#666666;}
+.f3{ font-size:14px;color:#333333; line-height:26px; padding:0px 60px;}
+.daodu{ background:#fafafa; border:1px solid #e5e5e5; padding:10px; margin:10px;}
