@@ -8,7 +8,7 @@
     <description>mystify-ums</description>
 	<context:component-scan base-package="com.mystify.ums" />
 
-     <context:annotation-config />
+    <context:annotation-config />
     <context:property-placeholder location="classpath*:shiro.properties"/>
 
     <!-- Shiro主过滤器本身功能十分强大,其强大之处就在于它支持任何基于URL路径表达式的、自定义的过滤器的执行 -->  
@@ -39,10 +39,10 @@
                 /views/** = upmsSessionForceLogout,authc
                 /common/** = authc
                 /druid/** = user
-                /swagger-ui.html = user
+               <!--  /swagger-ui.html = user -->
                 /resources/** = anon
                 /** = anon
-                 
+                /swagger*=anon
             </value>
         </property>
     </bean>

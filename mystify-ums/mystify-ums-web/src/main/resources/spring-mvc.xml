@@ -35,7 +35,8 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-	
+	 
+	 
 	<!-- AOP式方法级权限检查  -->
 	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
 		depends-on="lifecycleBeanPostProcessor">
@@ -62,7 +63,7 @@
     </bean> 
 
 	<!-- 资源重定向(仅作为后台使用不提供静态资源) -->
-	<!-- <mvc:resources mapping="upload/**" location="/WEB-INF/upload/" cache-period="300" />
+	<!-- <mvc:resources mapping="upload/**" location="/WEB-INF/upload/" cache-period="300" /> -->
 	<mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
-	<mvc:resources mapping="webjars/**" location="classpath:/META-INF/resources/webjars/"/> -->
+	<mvc:resources mapping="webjars/**" location="classpath:/META-INF/resources/webjars/"/> 
 </beans>
