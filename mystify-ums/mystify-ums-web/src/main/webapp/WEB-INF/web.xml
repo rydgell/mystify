@@ -88,6 +88,15 @@
     	<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 	
+	<servlet-mapping>
+		<servlet-name>SpringMVC</servlet-name>
+		<!-- 此处可以可以配置成*.do，对应struts的后缀习惯 -->
+		<url-pattern>*.action</url-pattern>
+    	<url-pattern>*.do</url-pattern>
+    	<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	 
+	
 	 <!-- Session超时30分钟(零或负数表示会话永不超时) -->  
 	<session-config>
 		<session-timeout>30</session-timeout>
