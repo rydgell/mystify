@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * 加载配置
@@ -15,13 +14,13 @@ import org.springframework.context.i18n.LocaleContextHolder;
  */
 public final class Resources {
     /** 第三方登录配置 */
-    public static final ResourceBundle THIRDPARTY = ResourceBundle.getBundle("config/thirdParty");
+   // public static final ResourceBundle THIRDPARTY = ResourceBundle.getBundle("config/thirdParty");
     /** 国际化信息 */
     private static final Map<String, ResourceBundle> MESSAGES = new HashMap<String, ResourceBundle>();
 
     /** 国际化信息 */
-    public static String getMessage(String key, Object... params) {
-        Locale locale = LocaleContextHolder.getLocale();
+    //public static String getMessage(String key, Object... params) {
+       /* Locale locale = LocaleContextHolder.getLocale();
         ResourceBundle message = MESSAGES.get(locale.getLanguage());
         if (message == null) {
             synchronized (MESSAGES) {
@@ -35,8 +34,8 @@ public final class Resources {
         if (params != null && params.length > 0) {
             return String.format(message.getString(key), params);
         }
-        return message.getString(key);
-    }
+        return message.getString(key);*/
+    //}
 
     /** 清除国际化信息 */
     public static void flushMessage() {
