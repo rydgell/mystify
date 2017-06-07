@@ -6,23 +6,24 @@
 	    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <description>mystify-ums</description>
-	<context:component-scan base-package="com.mystify.ums" />
+	 
 
     <context:annotation-config />
     <context:property-placeholder location="classpath*:shiro.properties"/>
 
+ 	<!-- 启用shrio授权注解拦截方式 -->  
     <!-- Shiro主过滤器本身功能十分强大,其强大之处就在于它支持任何基于URL路径表达式的、自定义的过滤器的执行 -->  
     <!-- Web应用中,Shiro可控制的Web请求必须经过Shiro主过滤器的拦截,Shiro对基于Spring的Web应用提供了完美的支持 -->  
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
     	<!-- Shiro的核心安全接口,这个属性是必须的 -->  
         <property name="securityManager" ref="securityManager"/>
         <!-- 要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面 --> 
-        <property name="loginUrl" value="/login.jsp"/>
+        <property name="loginUrl" value="/views/login.jsp"/>
         <!-- 登录成功后要跳转的连接 -->  
-        <property name="successUrl" value="/main.do"/>
+        <property name="successUrl" value="/views/system/systemIndex.jsp"/>
         <!-- 用户访问未对其授权的资源时,所显示的连接 -->  
         <!-- 若想更明显的测试此属性可以修改它的值,如unauthor.jsp,然后用登录后访问/admin/listUser.jsp就看见浏览器会显示unauthor.jsp -->  
-        <property name="unauthorizedUrl" value="/login.jsp"/>
+        <property name="unauthorizedUrl" value="/views/unauthorized.jsp"/>
        
         <property name="filters">
             <util:map>
@@ -41,7 +42,8 @@
                 /druid/** = user
                <!--  /swagger-ui.html = user -->
                 /resources/** = anon
-                /** = anon
+                /images/** = anon 
+                /css/**  = anon 
                 /swagger-ui.html = user
             </value>
         </property>

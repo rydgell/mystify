@@ -85,17 +85,9 @@
 		<servlet-name>SpringMVC</servlet-name>
 		<!-- 此处可以可以配置成*.do，对应struts的后缀习惯 -->
 		<url-pattern>*.action</url-pattern>
-    	<url-pattern>*.do</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>SpringMVC</servlet-name>
-		<!-- 此处可以可以配置成*.do，对应struts的后缀习惯 -->
-		<url-pattern>*.action</url-pattern>
-    	<url-pattern>*.do</url-pattern>
+    	<url-pattern>*.do</url-pattern> 
     	<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	 
 	
 	 <!-- Session超时30分钟(零或负数表示会话永不超时) -->  
 	<session-config>
@@ -105,10 +97,9 @@
 	<!-- 默认欢迎页 -->  
     <!-- Servlet2.5中可直接在此处执行Servlet应用,如<welcome-file>servlet/InitSystemParamServlet</welcome-file> -->  
     <!-- 这里使用了SpringMVC提供的<mvc:view-controller>标签,实现了首页隐藏的目的,详见applicationContext.xml -->  
-	<welcome-file-list>
+	<!-- <welcome-file-list>
 		<welcome-file>/index.jsp</welcome-file>
-	</welcome-file-list>
-	
+	</welcome-file-list> -->
 	<error-page>  
         <error-code>405</error-code>  
         <location>/WEB-INF/405.html</location>  

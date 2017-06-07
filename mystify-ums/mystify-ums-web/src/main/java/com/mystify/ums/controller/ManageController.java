@@ -46,7 +46,7 @@ public class ManageController extends BaseController {
 		UpmsUser upmsUser = upmsApiService.selectUpmsUserByUsername(username);
 		List<UpmsPermission> upmsPermissions = upmsApiService.selectUpmsPermissionByUpmsUserId(upmsUser.getUserId());
 		modelMap.put("upmsPermissions", upmsPermissions);*/
-		return "/manage/index.jsp";
+		return "/system/systemIndex";
 	}
 
 }

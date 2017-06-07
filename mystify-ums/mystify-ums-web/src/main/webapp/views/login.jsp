@@ -82,7 +82,7 @@ var root_path = '${ROOT}';
 			//避免在session失效时，在子页面显示登录界面,在界面一加载后，就检查
 			//当前页面是否与父页面相同
 			//如果不相同,就取父界面，并使父界面重定向到登陆界面
-			 var currentHref="${ROOT}/login.do";  
+			 var currentHref="${ROOT}/sso/login.do";  
 		    var parentPage=window.parent;
 		    var currentPage=window;
 		    var topPage;
@@ -98,7 +98,7 @@ var root_path = '${ROOT}';
 </script>
 	
 	<body  onload="refreshTop()">
-		<form id="form1" name="form1" method="post" onsubmit="check();" action="${ROOT}/login.do" >
+		<form id="form1" name="form1" method="post" onsubmit="check();" action="${ROOT}/sso/login" >
 		<div class="loginMaiin">
 			<br>
 			<br>

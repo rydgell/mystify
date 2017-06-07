@@ -122,7 +122,7 @@
   <!--  <import resource="classpath:applicationContext-timer.xml" />  -->
 	<import resource="classpath:dataSource.xml" />
 	<import resource="classpath:mybatis.xml" />
-	<import resource="classpath:applicationContext-shiro.xml" />
+	<import resource="classpath:spring-shiro.xml" />
 	
 	
 </beans> 

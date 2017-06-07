@@ -16,9 +16,10 @@ $(function(){
         		$.ajax({
         			 async:false,
 					 //dataType:'json',
-					 url:  window.ROOT + '/queryMenus.do',
+					 url:  window.ROOT + '/manage/user/userPermissions',
 					 success:function(data)
 					 {	
+						 alert(data);
         				_menus = eval("(" + data + ")");
 					 },
 	        		error:function() 

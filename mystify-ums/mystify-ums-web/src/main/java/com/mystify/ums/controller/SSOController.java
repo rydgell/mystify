@@ -22,9 +22,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mystify.common.base.BaseController;
+import com.mystify.common.exception.LoginException;
 import com.mystify.ums.service.UmsSystemService;
 import com.mystify.ums.service.UmsUserService;
 import com.mystify.ums.shiro.session.UpmsSessionDao;
+import com.mystify.ums.shiro.session.UpmsSession;
+import com.mystify.ums.utils.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,7 +82,8 @@ public class SSOController extends BaseController {
     @ApiOperation(value = "登录")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(HttpServletRequest request) {
-        /*Subject subject = SecurityUtils.getSubject();
+    	  System.out.println("login get");
+        Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
         String serverSessionId = session.getId().toString();
         // 判断是否已登录，如果已登录，则回跳
@@ -90,7 +94,7 @@ public class SSOController extends BaseController {
             String backurl = request.getParameter("backurl");
             String username = (String) subject.getPrincipal();
             if (StringUtils.isBlank(backurl)) {
-                backurl = "/";
+                backurl = "/manage/index";
             } else {
                 if (backurl.contains("?")) {
                     backurl += "&upms_code=" + code + "&upms_username=" + username;
@@ -100,22 +104,22 @@ public class SSOController extends BaseController {
             }
             _log.debug("认证中心帐号通过，带code回跳：{}", backurl);
             return "redirect:" + backurl;
-        }*/
-        return "/sso/login.jsp";
+        }
+        return "/login";
     }
 
     @ApiOperation(value = "登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseBody
     public Object login(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("rememberMe");
-        /*if (StringUtils.isBlank(username)) {
-            return new UpmsResult(UpmsResultConstant.EMPTY_USERNAME, "帐号不能为空！");
+        System.out.println("login POST");
+        if (StringUtils.isBlank(username)) {
+        	throw new LoginException("username is null");
         }
         if (StringUtils.isBlank(password)) {
-            return new UpmsResult(UpmsResultConstant.EMPTY_PASSWORD, "密码不能为空！");
+        	throw new LoginException("password is null");
         }
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
@@ -134,14 +138,14 @@ public class SSOController extends BaseController {
                 }
                 subject.login(usernamePasswordToken);
             } catch (UnknownAccountException e) {
-                return new UpmsResult(UpmsResultConstant.INVALID_USERNAME, "帐号不存在！");
+                throw new LoginException("INVALID username");
             } catch (IncorrectCredentialsException e) {
-                return new UpmsResult(UpmsResultConstant.INVALID_PASSWORD, "密码错误！");
+            	 throw new LoginException("INVALID PASSWORD");
             } catch (LockedAccountException e) {
-                return new UpmsResult(UpmsResultConstant.INVALID_ACCOUNT, "帐号已锁定！");
+            	throw new LoginException("locking user");
             }
             // 更新session状态
-            upmsSessionDao.updateStatus(sessionId, UpmsSession.OnlineStatus.on_line);
+            umsSessionDao.updateStatus(sessionId, UpmsSession.OnlineStatus.on_line);
             // 全局会话sessionId列表，供会话管理
             RedisUtil.lpush(ZHENG_UPMS_SERVER_SESSION_IDS, sessionId.toString());
             // 默认验证帐号密码正确，创建code
@@ -150,7 +154,7 @@ public class SSOController extends BaseController {
             RedisUtil.set(ZHENG_UPMS_SERVER_SESSION_ID + "_" + sessionId, code, (int) subject.getSession().getTimeout() / 1000);
             // code校验值
             RedisUtil.set(ZHENG_UPMS_SERVER_CODE + "_" + code, code, (int) subject.getSession().getTimeout() / 1000);
-        }*/
+        }
         // 回跳登录前地址
         String backurl = request.getParameter("backurl");
         /*if (StringUtils.isBlank(backurl)) {
@@ -159,7 +163,7 @@ public class SSOController extends BaseController {
             return new UpmsResult(UmsResultConstant.SUCCESS, backurl);
         }*/
         
-        return "";
+        return "/system/systemIndex";
     }
 
     @ApiOperation(value = "校验code")
@@ -187,6 +191,14 @@ public class SSOController extends BaseController {
             redirectUrl = "/";
         }
         return "redirect:" + redirectUrl;
+    }
+    
+    @ApiOperation(value = "测试")
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @ResponseBody
+    public String test(String xx) {
+    	System.out.println("--------------------------------------> "+xx);
+    	return "xxoo";
     }
 
 }

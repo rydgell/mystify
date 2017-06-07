@@ -1,6 +1,5 @@
 package com.mystify.common.support;
 
-import com.mystify.common.config.Resources;
 
 /**
  * Ajax 请求时的自定义查询状态码，主要参考Http状态码，但并不完全对应

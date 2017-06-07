@@ -1,6 +1,5 @@
 ﻿<%@ page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %> 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML>
@@ -12,44 +11,15 @@
 	window.ROOT = '${ROOT}';
 </script>
 <script type="text/javascript" src="${ROOT}/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="js/mainframe.js?<%=new Date().getTime()%>"></script>
-<link rel="stylesheet" type="text/css" href="js/jquery-easyui/themes/icon.css" />
-<link rel="stylesheet" type="text/css" href="js/jquery-easyui/themes/bootstrap/easyui.css">
-<link rel="stylesheet" type="text/css" href="js/jquery-easyui/themes/icon.css">
-<link rel="stylesheet" type="text/css" href="css/style.css">
-<link href="css/default.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="js/jquery-easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ROOT}/js/mainframe.js?<%=new Date().getTime()%>"></script>
+<link rel="stylesheet" type="text/css" href="${ROOT}/js/jquery-easyui/themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="${ROOT}/js/jquery-easyui/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="${ROOT}/js/jquery-easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="${ROOT}/css/style.css">
+<link rel="stylesheet" type="text/css" href="${ROOT}/css/default.css"/>
+<script type="text/javascript" src="${ROOT}/js/jquery-easyui/jquery.easyui.min.js"></script>
 	<SCRIPT type="text/javascript">
-/* var _menus = {
-         'menus':[
-		           {'menuid':'1','icon':'icon-sys','menuname':'项目修改',
-			      'menus':[
-					{'menuid':'12','menuname':'网页','icon':'icon-page','url':'menu1/treegrid.html'},
-					{'menuid':'13','menuname':'类','icon':'icon-class','url':'menu1/class.html'},
-					{'menuid':'14','menuname':'菜单','icon':'icon-role','url':'demo2.html'},
-					{'menuid':'15','menuname':'菜单','icon':'icon-set','url':'demo.html'},
-					{'menuid':'16','menuname':'菜单','icon':'icon-log','url':'demo1.html'}
-				    ]},
-		{'menuid':'8','icon':'icon-sys','menuname':'项目设计',
-			'menus':[{'menuid':'21','menuname':'项目分析','icon':'icon-nav','url':'menu2/tree2.html'},
-					{'menuid':'22','menuname':'菜单','icon':'icon-nav','url':'demo1.html'}
-				]
-		},{'menuid':'56','icon':'icon-sys','menuname':'菜单',
-			'menus':[{'menuid':'31','menuname':'菜单','icon':'icon-nav','url':'demo1.html'},
-					{'menuid':'32','menuname':'菜单','icon':'icon-nav','url':'demo2.html'}
-				]
-		},{'menuid':'28','icon':'icon-sys','menuname':'菜单',
-			'menus':[{'menuid':'41','menuname':'菜单','icon':'icon-nav','url':'demo.html'},
-					{'menuid':'42','menuname':'菜单','icon':'icon-nav','url':'demo1.html'},
-					{'menuid':'43','menuname':'菜单','icon':'icon-nav','url':'demo2.html'}
-				]
-		},{'menuid':'39','icon':'icon-sys','menuname':'菜单',
-			'menus':[{'menuid':'51','menuname':'菜单','icon':'icon-nav','url':'demo.html'},
-					{'menuid':'52','menuname':'菜单','icon':'icon-nav','url':'demo1.html'},
-					{'menuid':'53','menuname':'菜单','icon':'icon-nav','url':'demo2.html'}
-				]
-		}
-]}; */
+
 		 //设置登录窗口
         function openPwd() {
             $('#w').window({
@@ -155,7 +125,7 @@
 			
 					                    if (r) 
 					                    {
-					                        location.href = '${ROOT}/j_spring_security_logout';	//如果点击退出,这里就先直接退出系统，
+					                        location.href = '${ROOT}/sso/logout';	//如果点击退出,这里就先直接退出系统，
 					                    }
                				 });
             })
@@ -174,13 +144,13 @@
 	</noscript>
 	<!-- 系统界面最上面的一行 -->
 	<div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
-        background: url(images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
+        background: url(${ROOT}/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
         line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体"> 
       <span style="float:right; padding-right:20px;" class="head">欢迎您, <sec:authentication property="principal.username"/> 
       <a href="#" id="editpass">修改密码</a> 
       <a href="#" id="loginOut">安全退出</a></span>
        <span style="padding-left:10px; font-size: 16px; ">
-       <img src="images/blocks.gif" width="20" height="20" align="absmiddle" />评测系统管理后台</span> 
+       <img src="${ROOT}/images/blocks.gif" width="20" height="20" align="absmiddle" />评测系统管理后台</span> 
     </div>
     <!-- 最下面的一行 -->
     <div region="south" split="true" style="height: 30px; background: #D2E0F2; ">

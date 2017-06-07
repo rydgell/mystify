@@ -5,6 +5,7 @@ import com.baidu.unbiz.fluentvalidator.ComplexResult;
 import com.baidu.unbiz.fluentvalidator.FluentValidator;
 import com.baidu.unbiz.fluentvalidator.ResultCollectors;
 import com.mystify.common.base.BaseController;
+import com.mystify.common.exception.DataParseException;
 import com.mystify.ums.entity.UmsUser;
 import com.mystify.ums.service.UmsOrganizationService;
 import com.mystify.ums.service.UmsRoleService;
@@ -15,8 +16,11 @@ import com.mystify.ums.service.UmsUserService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang.StringUtils;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 用户controller
@@ -243,5 +245,29 @@ public class UpmsUserController extends BaseController {
         return new UpmsResult(UpmsResultConstant.SUCCESS, count);*/
     	return "";
     }
+    
+    @ApiOperation(value = "获取用户权限列表")
+    @RequiresAuthentication
+    @RequestMapping(value = "/userPermissions")
+	@ResponseBody
+	public String getUserPermissions() {
+    	System.out.println("getUserPermissions");
+    	Subject subject = SecurityUtils.getSubject();
+		String username = (String) subject.getPrincipal();
+		 
+    	String json =null;
+    	
+		try {
+			
+			if (null == json) {
+				// 没有任何权限时
+				json = "{'menus':[{'menuid':'','icon':'icon-sys','menuname':'','menus':[{'menuid':'','menuname':'没有任何权限','icon':'icon-page','url':''}]}]}";
+			}
+		 
+		} catch (Exception e) {
+			throw new DataParseException("获取用户权限错误!,错误原因:  " + e.getMessage());
+		}
+		return json;
+	}
 
 }
