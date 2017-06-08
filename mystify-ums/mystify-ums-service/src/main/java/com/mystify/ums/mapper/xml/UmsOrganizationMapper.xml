@@ -7,7 +7,7 @@
 
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.mystify.ums.entity.UmsOrganization">
-		<id column="organization_id" property="id" />
+		<id column="id" property="id" />
 		<result column="pid" property="pid" />
 		<result column="name" property="name" />
 		<result column="description" property="description" />

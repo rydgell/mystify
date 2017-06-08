@@ -1,6 +1,7 @@
 package com.mystify.ums.entity;
 
 import com.baomidou.mybatisplus.enums.IdType;
+import com.esotericsoftware.kryo.serializers.FieldSerializer.Optional;
 import com.mystify.common.base.BaseModel;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -17,12 +18,13 @@ import com.baomidou.mybatisplus.annotations.TableName;
 public class UmsUser extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-
+   
     /**
      * 编号
      */
-	@TableId(value="user_id", type= IdType.AUTO)
+	@TableId(value="id", type= IdType.AUTO)
 	private Integer id;
+	//private Integer userId;
     /**
      * 帐号
      */
@@ -77,13 +79,13 @@ public class UmsUser extends BaseModel {
 		return username;
 	}
 
-	public Integer getId() {
+	/*public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
+	}*/
 
 	public void setUsername(String username) {
 		this.username = username;

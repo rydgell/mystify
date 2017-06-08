@@ -7,7 +7,7 @@
 
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.mystify.ums.entity.UmsPermission">
-		<id column="permission_id" property="id" />
+		<id column="id" property="id" />
 		<result column="system_id" property="systemId" />
 		<result column="pid" property="pid" />
 		<result column="name" property="name" />

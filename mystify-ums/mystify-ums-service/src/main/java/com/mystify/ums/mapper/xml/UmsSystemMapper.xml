@@ -7,7 +7,7 @@
 
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.mystify.ums.entity.UmsSystem">
-		<id column="system_id" property="id" />
+		<id column="id" property="id" />
 		<result column="icon" property="icon" />
 		<result column="banner" property="banner" />
 		<result column="theme" property="theme" />

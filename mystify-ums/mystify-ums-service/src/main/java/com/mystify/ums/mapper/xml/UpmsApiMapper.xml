@@ -4,7 +4,7 @@
 
 	<!-- 权限 -->
 	<resultMap id="UpmsPermissionResultMap" type="com.mystify.ums.entity.UmsPermission">
-		<id column="permission_id" jdbcType="INTEGER" property="permissionId" />
+		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="system_id" jdbcType="INTEGER" property="systemId" />
 		<result column="pid" jdbcType="INTEGER" property="pid" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
@@ -19,7 +19,7 @@
 
 	<!-- 角色 -->
 	<resultMap id="UpmsRoleResultMap" type="com.mystify.ums.entity.UmsRole">
-		<id column="role_id" jdbcType="INTEGER" property="roleId" />
+		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="title" jdbcType="VARCHAR" property="title" />
 		<result column="description" jdbcType="VARCHAR" property="description" />
@@ -29,26 +29,26 @@
 
 	<!-- 权限字段 -->
 	<sql id="UpmsPermission_Column_List">
-		permission_id, system_id, pid, name, type, permission_value, uri, icon, status, ctime, orders
+		id, system_id, pid, name, type, permission_value, uri, icon, status, ctime, orders
 	</sql>
 
 	<!-- 角色字段 -->
 	<sql id="UpmsRole_Column_List">
-		role_id, name, title, description, ctime, orders
+		id, name, title, description, ctime, orders
 	</sql>
 
 	<!-- 根据用户获取所拥有的权限 -->
 	<select id="selectUpmsPermissionByUpmsUserId" parameterType="java.lang.Integer" resultMap="UpmsPermissionResultMap">
 		select
 			<include refid="UpmsPermission_Column_List" />
-		from ums_permission up where up.`status`=1 and up.permission_id in (
+		from ums_permission up where up.`status`=1 and up.id in (
 			select permission_id from ums_role_permission urp where urp.role_id in (
 				select uur.role_id role_id from ums_user_role uur where uur.user_id=#{umsUserId,jdbcType=INTEGER}
 			)
 			union
 			select permission_id from ums_user_permission uup1 where uup1.user_id=#{umsUserId,jdbcType=INTEGER} and uup1.type=1
 		)
-		and up.permission_id not in (
+		and up.id not in (
 			select permission_id from ums_user_permission uup2 where uup2.user_id=#{umsUserId,jdbcType=INTEGER} and uup2.type=-1
 		) order by up.orders asc
 	</select>
@@ -57,7 +57,7 @@
 	<select id="selectUpmsRoleByUpmsUserId" parameterType="java.lang.Integer" resultMap="UpmsRoleResultMap">
 		select
 			<include refid="UpmsRole_Column_List" />
-		from ums_role ur where ur.role_id in (
+		from ums_role ur where ur.id in (
 			select uur.role_id from ums_user_role uur where uur.user_id=#{umsUserId,jdbcType=INTEGER}
 		)
 	</select>

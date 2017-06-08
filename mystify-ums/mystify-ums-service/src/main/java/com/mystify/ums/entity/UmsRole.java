@@ -21,8 +21,9 @@ public class UmsRole extends BaseModel {
     /**
      * 编号
      */
-	@TableId(value="role_id", type= IdType.AUTO)
+	@TableId(value="id", type= IdType.AUTO)
 	private Integer id;
+	
     /**
      * 角色名称
      */
@@ -44,15 +45,7 @@ public class UmsRole extends BaseModel {
      */
 	private Long orders;
 
-
-	/*public Integer getRoleId() {
-		return roleId;
-	}
-
-	public void setRoleId(Integer roleId) {
-		this.roleId = roleId;
-	}*/
-
+	 
 	public String getName() {
 		return name;
 	}

@@ -21,7 +21,7 @@ public class UmsOrganization extends BaseModel {
     /**
      * 编号
      */
-	@TableId(value="organization_id", type= IdType.AUTO)
+	@TableId(value="id", type= IdType.AUTO)
 	private Integer id;
     /**
      * 所属上级

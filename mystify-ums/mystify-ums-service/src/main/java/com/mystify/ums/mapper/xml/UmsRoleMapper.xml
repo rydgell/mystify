@@ -7,7 +7,7 @@
 
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.mystify.ums.entity.UmsRole">
-		<id column="role_id" property="id" />
+		<id column="id" property="id" />
 		<result column="name" property="name" />
 		<result column="title" property="title" />
 		<result column="description" property="description" />

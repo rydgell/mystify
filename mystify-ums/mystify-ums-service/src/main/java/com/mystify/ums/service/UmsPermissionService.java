@@ -137,11 +137,10 @@ public class UmsPermissionService extends BaseService<UmsPermission> {
     }
 
  
-    public JSONArray getTreeByUserId(Integer usereId, Byte type) {
+    public JSONArray getTreeByUserId(Integer usereId, Integer type) {
         // 角色权限
         EntityWrapper<UmsUserPermission> ew = new EntityWrapper<UmsUserPermission>();
-        ew.orderBy("orders", true);
-        ew.where("userId={0}", usereId).and("type={0}", type);
+        ew.where("user_id={0}", usereId).and("type={0}", type);
         List<UmsUserPermission> umsUserPermissions = umsUserPermissionMapper.selectList(ew);
 
         JSONArray systems = new JSONArray();
@@ -164,7 +163,7 @@ public class UmsPermissionService extends BaseService<UmsPermission> {
             for (Object system: systems) {
                 EntityWrapper<UmsPermission> ewp = new EntityWrapper<UmsPermission>();
                 ewp.orderBy("orders", true);
-                ewp.where("status={0}", 1).and("systemId={0}", ((JSONObject) system).getIntValue("id"));
+                ewp.where("status={0}", 1).and("system_id={0}", ((JSONObject) system).getIntValue("id"));
                 
                 List<UmsPermission> umsPermissions = umsPermissionMapper.selectList(ewp);
                 if (umsPermissions.size() == 0) continue;

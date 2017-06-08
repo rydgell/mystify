@@ -21,7 +21,7 @@ public class UmsSystem extends BaseModel {
     /**
      * 编号
      */
-	@TableId(value="system_id", type= IdType.AUTO)
+	@TableId(value="id", type= IdType.AUTO)
 	private Integer id;
     /**
      * 图标

@@ -137,9 +137,10 @@ public class UpmsUserController extends BaseController {
     @RequestMapping(value = "/permission/{id}", method = RequestMethod.POST)
     @ResponseBody
     public Object permission(@PathVariable("id") int id, HttpServletRequest request) {
-       /* JSONArray datas = JSONArray.parseArray(request.getParameter("datas"));
-        upmsUserPermissionService.permission(datas, id);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, datas.size());*/
+        /*JSONArray datas = JSONArray.parseArray(request.getParameter("datas"));
+        umsUserPermissionService.permission(datas, id);
+        return new UpmsResult(UpmsResultConstant.SUCCESS, datas.size());
+    	return "";*/
     	return "";
     }
 
@@ -254,7 +255,6 @@ public class UpmsUserController extends BaseController {
     	System.out.println("getUserPermissions");
     	Subject subject = SecurityUtils.getSubject();
 		String username = (String) subject.getPrincipal();
-		 
     	String json =null;
     	
 		try {

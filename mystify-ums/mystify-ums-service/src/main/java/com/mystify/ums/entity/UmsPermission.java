@@ -22,8 +22,10 @@ public class UmsPermission extends BaseModel {
     /**
      * 编号
      */
-	@TableId(value="permission_id", type= IdType.AUTO)
+	//@TableId(value="permission_id", type= IdType.AUTO)
+    @TableId(value="id", type= IdType.AUTO)
 	private Integer id;
+	//private Integer permissionId;
     /**
      * 所属系统
      */
@@ -75,7 +77,7 @@ public class UmsPermission extends BaseModel {
 	public void setPermissionId(Integer permissionId) {
 		this.permissionId = permissionId;
 	}*/
-	
+
 	public Integer getSystemId() {
 		return systemId;
 	}
