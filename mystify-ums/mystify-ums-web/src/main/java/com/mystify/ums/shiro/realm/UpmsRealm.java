@@ -42,7 +42,7 @@ public class UpmsRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         String username = (String) principalCollection.getPrimaryPrincipal();
         UmsUser upmsUser = upmsApiService.selectUpmsUserByUsername(username);
-
+        System.out.println("doGetAuthorizationInfo ----------------------------");
         // 当前用户所有角色
         List<UmsRole> upmsRoles = upmsApiService.selectUpmsRoleByUpmsUserId(upmsUser.getId());
         Set<String> roles = new HashSet<>();
@@ -82,7 +82,7 @@ public class UpmsRealm extends AuthorizingRealm {
         if ("client".equals(upmsType)) {
             return new SimpleAuthenticationInfo(username, password, getName());
         }*/
-
+        System.out.println("doGetAuthenticationInfo =======================");
         // 查询用户信息
         UmsUser upmsUser = upmsApiService.selectUpmsUserByUsername(username);
 

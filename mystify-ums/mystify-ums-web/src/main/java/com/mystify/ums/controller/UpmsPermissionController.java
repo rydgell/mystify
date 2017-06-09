@@ -6,8 +6,13 @@ import com.baidu.unbiz.fluentvalidator.ComplexResult;
 import com.baidu.unbiz.fluentvalidator.FluentValidator;
 import com.baidu.unbiz.fluentvalidator.ResultCollectors;
 import com.mystify.common.base.BaseController;
+import com.mystify.common.exception.DataParseException;
 import com.mystify.common.validator.LengthValidator;
 import com.mystify.ums.entity.UmsPermission;
+import com.mystify.ums.entity.UmsUser;
+import com.mystify.ums.model.ParentMenu;
+import com.mystify.ums.model.SubMenu;
+import com.mystify.ums.service.UmsApiService;
 import com.mystify.ums.service.UmsPermissionService;
 import com.mystify.ums.service.UmsSystemService;
 
@@ -15,7 +20,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +32,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +55,8 @@ public class UpmsPermissionController extends BaseController {
     @Autowired
     private UmsSystemService umsSystemService;
 
+    @Autowired
+    private UmsApiService umsApiService;
 
     @ApiOperation(value = "权限首页")
     @RequiresPermissions("upms:permission:read")
@@ -178,5 +190,51 @@ public class UpmsPermissionController extends BaseController {
         return new UpmsResult(UpmsResultConstant.SUCCESS, count);*/
     	return "";
     }
+    
+    @ApiOperation(value = "获取用户权限列表")
+    @RequiresAuthentication
+    @RequestMapping(value = "/userPermissions")
+	@ResponseBody
+	public String getUserPermissions() {
+    	Subject subject = SecurityUtils.getSubject();
+		String username = (String) subject.getPrincipal();
+		UmsUser upmsUser = umsApiService.selectUpmsUserByUsername(username);
+    	String json =null;
+    	List<UmsPermission> parentPermissions = umsPermissionService.getPermissionByUser(upmsUser.getId(), 1,null);
+    	List<ParentMenu> parentMenus = new ArrayList<ParentMenu>();
+    	for(UmsPermission p:parentPermissions){
+    		ParentMenu pm = new ParentMenu();
+    		pm.setMenuid(p.getId().toString());
+    		pm.setMenuname(p.getName());
+    		List<UmsPermission> subPermissions = umsPermissionService.getPermissionByUser(upmsUser.getId(), 2,p.getId());
+    		List<SubMenu> subMenus = new ArrayList<SubMenu>();
+    		for(UmsPermission sp:subPermissions){
+    			SubMenu sm = new SubMenu();
+    			sm.setMenuid(sp.getId().toString());
+    			sm.setMenuname(sp.getName());
+    			sm.setUrl(sp.getUri());
+    			sm.setPid(sp.getPid().toString());
+    			subMenus.add(sm);
+    		}
+    		pm.setMenus(subMenus);
+    		parentMenus.add(pm);
+    	}
+    	
+    	if(parentPermissions!=null&&parentPermissions.size()>0){
+    		Map<String, Object> result = new HashMap<String, Object>();
+    		result.put("menus", parentMenus);
+    		json = JSONObject.toJSONString(result);
+    	}
+		try {
+			if (null == json) {
+				// 没有任何权限时
+				json = "{'menus':[{'menuid':'','icon':'icon-sys','menuname':'','menus':[{'menuid':'','menuname':'没有任何权限','icon':'icon-page','url':''}]}]}";
+			}
+		 
+		} catch (Exception e) {
+			throw new DataParseException("获取用户权限错误!,错误原因:  " + e.getMessage());
+		}
+		return json;
+	}
 
 }

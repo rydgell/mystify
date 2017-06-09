@@ -16,10 +16,10 @@ $(function(){
         		$.ajax({
         			 async:false,
 					 //dataType:'json',
-					 url:  window.ROOT + '/manage/user/userPermissions',
+					 url:  window.ROOT + '/manage/permission/userPermissions',
 					 success:function(data)
 					 {	
-						 alert(data);
+						 
         				_menus = eval("(" + data + ")");
 					 },
 	        		error:function() 

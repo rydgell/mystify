@@ -171,7 +171,7 @@
  
  <div id="usalLink" class="easyui-panel" title="常用功能"   
 	            data-options="iconCls:'icon-tip',closable:false,  
-	                    collapsible:true,minimizable:false,maximizable:true,fit:true,href:'showUsalLink.do'">  
+	                    collapsible:true,minimizable:false,maximizable:true,fit:true">  
     		</div>  
 			   <!--  <div id="p" class="easyui-panel" title="查找菜单"  
 	            data-options="iconCls:'icon-tip',closable:false,  

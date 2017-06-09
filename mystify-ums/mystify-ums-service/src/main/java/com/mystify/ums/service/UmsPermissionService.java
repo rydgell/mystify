@@ -12,8 +12,11 @@ import com.mystify.ums.mapper.UmsPermissionMapper;
 import com.mystify.ums.mapper.UmsSystemMapper;
 import com.mystify.ums.mapper.UmsUserPermissionMapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.redisson.misc.Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +50,7 @@ public class UmsPermissionService extends BaseService<UmsPermission> {
      public JSONArray getTreeByRoleId(Integer roleId) {
         // 角色已有权限
         List<UmsRolePermission> rolePermissions =  null;
-
+         
         JSONArray systems = new JSONArray();
         // 系统
         EntityWrapper<UmsSystem> ew = new EntityWrapper<UmsSystem>();
@@ -230,5 +233,21 @@ public class UmsPermissionService extends BaseService<UmsPermission> {
             }
         }
         return systems;
+    }
+    
+    
+    
+    /**
+     * @param userId 用户id
+     * @param type 类型(1:目录,2:菜单,3:按钮)
+     * @return
+     */
+    public List<UmsPermission> getPermissionByUser(Integer userId,Integer type,Integer pid){
+    	Map<String, Object> param = new HashMap<String, Object>();
+    	param.put("userId", userId);
+    	param.put("type", type);
+    	param.put("pid", pid);
+        List<UmsPermission> umsPermissions = umsPermissionMapper.selectPermissionByUpmsUserId(param);
+    	return umsPermissions;
     }
 }

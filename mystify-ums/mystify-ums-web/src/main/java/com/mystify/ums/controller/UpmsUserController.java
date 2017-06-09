@@ -247,27 +247,6 @@ public class UpmsUserController extends BaseController {
     	return "";
     }
     
-    @ApiOperation(value = "获取用户权限列表")
-    @RequiresAuthentication
-    @RequestMapping(value = "/userPermissions")
-	@ResponseBody
-	public String getUserPermissions() {
-    	System.out.println("getUserPermissions");
-    	Subject subject = SecurityUtils.getSubject();
-		String username = (String) subject.getPrincipal();
-    	String json =null;
-    	
-		try {
-			
-			if (null == json) {
-				// 没有任何权限时
-				json = "{'menus':[{'menuid':'','icon':'icon-sys','menuname':'','menus':[{'menuid':'','menuname':'没有任何权限','icon':'icon-page','url':''}]}]}";
-			}
-		 
-		} catch (Exception e) {
-			throw new DataParseException("获取用户权限错误!,错误原因:  " + e.getMessage());
-		}
-		return json;
-	}
+    
 
 }

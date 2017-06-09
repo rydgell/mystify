@@ -55,7 +55,6 @@ public class UpmsAuthenticationFilter extends AuthenticationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         Subject subject = getSubject(request, response);
-        Session session = subject.getSession();
         // 判断请求类型
 //        String upmsType = PropertiesFileUtil.getInstance("zheng-upms-client").get("upms.type");
 //        session.setAttribute(UpmsConstant.UPMS_TYPE, upmsType);
@@ -66,7 +65,7 @@ public class UpmsAuthenticationFilter extends AuthenticationFilter {
 //            return subject.isAuthenticated();
 //        }
         System.out.println("isAccessAllowed");
-        return subject.isAuthenticated();
+        return validateClient(request, response);
     }
 
     @Override
@@ -89,6 +88,9 @@ public class UpmsAuthenticationFilter extends AuthenticationFilter {
         }
         sso_server_url.append("&").append("backurl").append("=").append(URLEncoder.encode(backurl.toString(), "utf-8"));
         WebUtils.toHttp(response).sendRedirect(sso_server_url.toString());*/
+    	System.out.println(request.getServerName());
+    	WebUtils.toHttp(response).sendRedirect("/mystify/");
+    	System.out.println("onAccessDenied");
         return true;
     }
 
