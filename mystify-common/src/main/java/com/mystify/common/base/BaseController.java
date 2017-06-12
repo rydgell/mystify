@@ -25,6 +25,7 @@ import com.mystify.common.Constants;
 import com.mystify.common.exception.BaseException;
 import com.mystify.common.exception.IllegalParameterException;
 import com.mystify.common.support.HttpCode;
+import com.mystify.common.utils.CacheUtil;
 import com.mystify.common.utils.InstanceUtil;
 import com.mystify.common.utils.WebUtil;
 
@@ -36,6 +37,7 @@ import com.mystify.common.utils.WebUtil;
  */
 public abstract class BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
+	
 	/** 获取当前用户Id */
 	protected Long getCurrUser() {
 		return WebUtil.getCurrentUser();

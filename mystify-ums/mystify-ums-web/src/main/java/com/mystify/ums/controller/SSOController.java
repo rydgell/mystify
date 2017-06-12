@@ -60,7 +60,7 @@ public class SSOController extends BaseController {
     @Autowired
     private UpmsSessionDao umsSessionDao;
 
-    @ApiOperation(value = "认证中心首页")
+   /* @ApiOperation(value = "认证中心首页")
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(HttpServletRequest request) throws Exception {
         String appid = request.getParameter("appid");
@@ -69,15 +69,15 @@ public class SSOController extends BaseController {
             throw new RuntimeException("无效访问！");
         }
         // 判断请求认证系统是否注册
-        /*UpmsSystemExample upmsSystemExample = new UpmsSystemExample();
+        UpmsSystemExample upmsSystemExample = new UpmsSystemExample();
         upmsSystemExample.createCriteria()
                 .andNameEqualTo(appid);
         int count = upmsSystemService.countByExample(upmsSystemExample);
         if (0 == count) {
             throw new RuntimeException(String.format("未注册的系统:%s", appid));
-        }*/
+        }
         return "redirect:/sso/login?backurl=" + URLEncoder.encode(backurl, "utf-8");
-    }
+    }*/
 
     @ApiOperation(value = "登录")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -95,13 +95,7 @@ public class SSOController extends BaseController {
             String username = (String) subject.getPrincipal();
             if (StringUtils.isBlank(backurl)) {
                 backurl = "/manage/index";
-            } else {
-                if (backurl.contains("?")) {
-                    backurl += "&upms_code=" + code + "&upms_username=" + username;
-                } else {
-                    backurl += "?upms_code=" + code + "&upms_username=" + username;
-                }
-            }
+            } 
             _log.debug("认证中心帐号通过，带code回跳：{}", backurl);
             return "redirect:" + backurl;
         }
@@ -163,7 +157,9 @@ public class SSOController extends BaseController {
             return new UpmsResult(UmsResultConstant.SUCCESS, backurl);
         }*/
         
-        return "/system/systemIndex";
+        //return "/system/systemIndex";
+        modelMap.addAttribute("data", "/manage/index");
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "校验code")

@@ -7,6 +7,7 @@
        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
        http://www.springframework.org/schema/context  
        http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
 	<!-- redis连接 -->
 	<bean class="com.mystify.common.config.RedissonConfig">
 		<property name="password" value="${redis.password}" />
@@ -30,6 +31,8 @@
 	<bean id="redisCacheManager" class="org.redisson.spring.cache.RedissonSpringCacheManager">
 		<constructor-arg index="0" ref="redissonClient" />
 	</bean>
+	
+	<bean id="redissonHelper" class="com.mystify.common.support.cache.RedissonHelper" lazy-init="false"></bean>  
 	
 	<!-- Jedis线程 -->
 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">

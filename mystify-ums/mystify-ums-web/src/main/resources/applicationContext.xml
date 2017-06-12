@@ -23,18 +23,25 @@
        http://www.springframework.org/schema/task  
        http://www.springframework.org/schema/task/spring-task.xsd"
        default-lazy-init="false">
-     
-
+    
 	<!--  引入配置文件   数据库属性配置文件 -->  
- 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<!-- locations 属性指定属性文件的位置-->
+ 	<bean id="propertyConfigurer" class="com.mystify.common.utils.PropertiesUtil">
 		<property name="locations">
-		<list>
-			<value>classpath:dbconfig.properties</value>
-			<!--如果有多个属性文件，依次在下面列出来-->
-		</list>
+			<list>
+				 <value>classpath:dbconfig.properties</value>
+				 <value>classpath:redis.properties</value>
+			</list>
+		</property>
+		<property name="decryptProperties">
+			<array>
+				<!-- 需要解密的配置 -->
+				<value>db.writer.password</value>
+				<value>db.reader.password</value>
+			</array>
 		</property>
 	</bean>
+	
+    
 
 	<!-- 加载配置文件到 System.getProperty -->
 	<!-- <bean id="loadConfigToSystemGetProperty" class="com.mystify.ums.base.utils.PropertyConfig">
@@ -121,8 +128,8 @@
 	</context:component-scan>
   <!--  <import resource="classpath:applicationContext-timer.xml" />  -->
 	<import resource="classpath:dataSource.xml" />
+	<import resource="classpath:redis.xml" />
 	<import resource="classpath:mybatis.xml" />
 	<import resource="classpath:spring-shiro.xml" />
-	
 	
 </beans> 

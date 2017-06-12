@@ -146,15 +146,19 @@
 	<div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
         background: url(${ROOT}/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
         line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体"> 
-      <span style="float:right; padding-right:20px;" class="head">欢迎您, <sec:authentication property="principal.username"/> 
-      <a href="#" id="editpass">修改密码</a> 
-      <a href="#" id="loginOut">安全退出</a></span>
+      <span style="float:right; padding-right:20px;" class="head">
+      <shiro:user>
+		欢迎[<shiro:principal/>]登录，<a href="${ROOT}/sso/logout">安全退出</a>
+	  </shiro:user>
+    
+    <!--   <a href="#" id="editpass">修改密码</a> 
+      <a href="#" id="loginOut">安全退出</a> --></span>
        <span style="padding-left:10px; font-size: 16px; ">
-       <img src="${ROOT}/images/blocks.gif" width="20" height="20" align="absmiddle" />评测系统管理后台</span> 
+       <img src="${ROOT}/images/blocks.gif" width="20" height="20" align="absmiddle" />系统管理后台</span> 
     </div>
     <!-- 最下面的一行 -->
     <div region="south" split="true" style="height: 30px; background: #D2E0F2; ">
-      <div class="footer">评测系统管理后台</div>
+      <div class="footer">系统管理后台</div>
     </div>
     
     <!-- 左边的一行 -->
@@ -185,30 +189,7 @@
       <div class="easyui-calendar"></div>
    </div>
     
-   
-<!--修改密码窗口-->
-<div id="w" class="easyui-window" title="修改密码" collapsible="false" minimizable="false"
-        maximizable="false" icon="icon-save"  style="width: 300px; height: 150px; padding: 5px;
-        background: #fafafa;">
-      <div class="easyui-layout" fit="true">
-    <div region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
-          <table cellpadding=3>
-        <tr>
-              <td>新密码：</td>
-              <td><input id="txtNewPass" type="Password" class="txt01" /></td>
-            </tr>
-        <tr>
-              <td>确认密码：</td>
-              <td><input id="txtRePass" type="Password" class="txt01" /></td>
-            </tr>
-      </table>
-        </div>
-    <div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
-     <a id="btnEp" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" > 确定</a> 
-     <a id="btnCancel" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)">取消</a> 
-     </div>
-  </div>
-  </div>
+ 
   <!-- 在标签页上右击时的界面 -->
   <div id="mm" class="easyui-menu" style="width:150px;">
       <div id="mm-tabupdate">刷新</div>

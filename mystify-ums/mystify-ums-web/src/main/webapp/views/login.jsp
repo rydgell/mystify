@@ -38,16 +38,30 @@
 </head>
 
 <script type="text/javascript" src="${ROOT}/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="${ROOT}/js/jquery.form.js"></script>
+<script type="text/javascript" src="${ROOT}/js/jquery.cookie.js"></script>
 <script src="${ROOT}/js/jquery-easyui/jquery.easyui.min.js"></script>	
 <script type="text/javascript">
 var root_path = '${ROOT}';
-		
+var options = {
+	    url: '${ROOT}/sso/login',
+	    success: function(json) {
+	      if (json.httpCode == 200) {
+				location.href = '${ROOT}'+json.data;
+	      }else{
+	    	  alert(json.msg);
+	      }
+	    } };
+	 
+
 		$(function(){
-					var info = '${param.loginerror}';
-					if(info!=null && info=="yes"){
-						$.messager.alert('验证失败','用户名或密码错误','error');
-					}
-				}
+			 
+		/* 	alert($.cookie("rememberMe"));  */
+			/* var info = '${param.loginerror}';
+			if(info!=null && info=="yes"){
+				$.messager.alert('验证失败','用户名或密码错误','error');
+			} */
+			}
 		);
 		
 		function check()
@@ -72,10 +86,12 @@ var root_path = '${ROOT}';
 		
 		function loginSys()
 		{
-		 	 
-			$("#form1").submit();
-				
+			//$("#form1").submit();
+			$('#form1').ajaxForm(options);
+			
 		}
+		
+		
 		
 		function refreshTop()
 		{
@@ -98,7 +114,7 @@ var root_path = '${ROOT}';
 </script>
 	
 	<body  onload="refreshTop()">
-		<form id="form1" name="form1" method="post" onsubmit="check();" action="${ROOT}/sso/login" >
+		<form id="form1" name="form1" method="post" onsubmit="check();" action="${ROOT}/sso/login.do" >
 		<div class="loginMaiin">
 			<br>
 			<br>
@@ -107,11 +123,13 @@ var root_path = '${ROOT}';
 			<br>
 			<br>
 			<div class="loginArea">
-				<div class="loginTitle">用户登录2</div>
+				<div class="loginTitle">用户登录</div>
 				<div class="loginForm">
 						<input type="text" class="loginInput" id="username" name ="username" placeholder="用户名">
 						<input type="password" class="loginInput" id="password" name ="password" placeholder="密码">
+						<input type="checkbox" name="rememberMe" id="rememberMe" style="margin-left: 250px;margin-bottom: 10px;margin-right: 7px;"/>记住我
 						<button class="loginButton" onclick='javascript:loginSys();'>登录</button>
+						
 				</div>
 			</div>
 		</div>

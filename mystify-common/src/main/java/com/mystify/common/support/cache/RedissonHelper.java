@@ -12,6 +12,7 @@ import org.redisson.api.RType;
 import org.redisson.api.RedissonClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import com.mystify.common.utils.InstanceUtil;
 import com.mystify.common.utils.PropertiesUtil;
@@ -22,10 +23,11 @@ import com.mystify.common.utils.PropertiesUtil;
 public class RedissonHelper implements CacheManager, ApplicationContextAware {
 
 	private RedissonClient redisTemplate = null;
-	private Integer EXPIRE = PropertiesUtil.getInt("redis.expiration");
+	private Integer EXPIRE = PropertiesUtil.getInt("redis.expiration",600);
 
 	protected ApplicationContext applicationContext;
-
+	
+	@Override  
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
