@@ -59,6 +59,7 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 	 
+    
 	<!-- AOP式方法级权限检查  -->
 	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
 		depends-on="lifecycleBeanPostProcessor">
@@ -68,7 +69,9 @@
     	<property name="securityManager" ref="securityManager"/>
 	</bean>
 	
-	 <mvc:view-controller path="/" view-name="/login"/>
+	<!--  <mvc:view-controller path="/" view-name="/login"/> -->
+	<mvc:view-controller path="/" view-name="redirect:/sso/login"/>
+	
 	  
 	<!-- 对转向页面的路径解析。prefix：前缀， suffix：后缀 -->
 	<bean

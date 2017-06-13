@@ -46,7 +46,7 @@ if (bar<99)
 {setTimeout("count()",20);}//这里修改载入时间
 else
 {
-	//window.location = "${pageContext.request.contextPath}"+"/main.do";
+	window.location = "${pageContext.request.contextPath}";
 }//这里改成你的网站地址
 }
 </script>
