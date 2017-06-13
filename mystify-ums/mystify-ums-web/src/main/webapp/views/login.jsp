@@ -44,92 +44,77 @@
 <script type="text/javascript">
 var root_path = '${ROOT}';
 var options = {
-   url: '${ROOT}/sso/login',
-   success: function(json) {
-     if (json.httpCode == 200) {
-		location.href = '${ROOT}'+json.data;
-     }else{
-   	  alert(json.msg);
-     }
-   } };
+	    url: '${ROOT}/sso/login',
+	    success: function(json) {
+	      if (json.httpCode == 200) {
+				location.href = '${ROOT}'+json.data;
+	      }else{
+	    	  alert(json.msg);
+	      }
+	    } };
+	 
 
-
-$(function(){
-	//生成验证码         
-	  $('#kaptchaImage').click(function () {  
-	  $(this).hide().attr('src', '${ROOT}/sso/code?' + Math.floor(Math.random()*100) ).fadeIn(); });      
-	}
-);
-
-function check()
-{ 
-	var username = $("#username").val();
-	var password=$("#password").val();
-	var verificationCode = $("#verificationCode").val();
-	if(username==null || username=="")
-	{
-		alert("请输入用户名!"); 
-		return false;
-	}
-	
-	else if(password==null ||password=="")
-	{
-		 alert("请输入密码!");
-		 return false;
-	}
-	
-	else if(verificationCode==null ||verificationCode=="")
-	{
-		 alert("请输入验证码!");
-		 return false;
-	}
-	return true;
-}
-
-function loginSys()
-{	 
-	if(check()==true){
-		$('#form1').ajaxForm(options);
-		$('#form1').submit();
-	}
-}
-
-
-
-function refreshTop()
-{
-	//避免在session失效时，在子页面显示登录界面,在界面一加载后，就检查
-	//当前页面是否与父页面相同
-	//如果不相同,就取父界面，并使父界面重定向到登陆界面
-	 var currentHref="${ROOT}/sso/login";  
-    var parentPage=window.parent;
-    var currentPage=window;
-    var topPage;
-    while(parentPage!=currentPage){
-        topPage=parentPage;
-        currentPage=parentPage;
-        parentPage=parentPage.parent;
-    }
-   if(topPage){
-       topPage.location.href=currentHref;
-   }
-}
-
-window.onbeforeunload = function(){  
-    //关闭窗口时自动退出  
-    if(event.clientX>360&&event.clientY<0||event.altKey){     
-        alert(parent.document.location);  
-    }  
-};  
-
-function changeCode() {  //刷新
-    $('#kaptchaImage').hide().attr('src', '${ROOT}/sso/code?' + Math.floor(Math.random()*100) ).fadeIn();  
-    event.cancelBubble=true;  
-}  
+		$(function(){
+			 
+		/* 	alert($.cookie("rememberMe"));  */
+			/* var info = '${param.loginerror}';
+			if(info!=null && info=="yes"){
+				$.messager.alert('验证失败','用户名或密码错误','error');
+			} */
+			}
+		);
+		
+		function check()
+		{ 
+			var username = $("#username").val();
+			var password=$("#password").val();
+		
+			if(username==null || username=="")
+			{
+				/* alert("请输入用户名!"); */
+				return false;
+			}
+			
+			else if(password==null ||password=="")
+			{
+						
+				/* alert("请输入密码!"); */
+				return false;
+			}
+			return true;
+		}
+		
+		function loginSys()
+		{
+			//$("#form1").submit();
+			$('#form1').ajaxForm(options);
+			
+		}
+		
+		
+		
+		function refreshTop()
+		{
+			//避免在session失效时，在子页面显示登录界面,在界面一加载后，就检查
+			//当前页面是否与父页面相同
+			//如果不相同,就取父界面，并使父界面重定向到登陆界面
+			 var currentHref="${ROOT}/sso/login.do";  
+		    var parentPage=window.parent;
+		    var currentPage=window;
+		    var topPage;
+		    while(parentPage!=currentPage){
+		        topPage=parentPage;
+		        currentPage=parentPage;
+		        parentPage=parentPage.parent;
+		    }
+		   if(topPage){
+		       topPage.location.href=currentHref;
+		   }
+		}
 </script>
 	
 	<body  onload="refreshTop()">
-		<form id="form1" name="form1" method="post" onsubmit="return false;"  >
+		<form id="form1" name="form1" method="post" onsubmit="check();" action="${ROOT}/sso/login.do" >
 		<div class="loginMaiin">
 			<br>
 			<br>
@@ -142,11 +127,7 @@ function changeCode() {  //刷新
 				<div class="loginForm">
 						<input type="text" class="loginInput" id="username" name ="username" placeholder="用户名">
 						<input type="password" class="loginInput" id="password" name ="password" placeholder="密码">
-						<input type="text" class="loginInput" id="verificationCode" name ="verificationCode" placeholder="验证码">
-						<div style="margin-bottom: 10px">  
-						   <img src="${ROOT}/sso/code" id="kaptchaImage"  style="margin-bottom: -3px"/>       
-						   <a href="#" onclick="changeCode()">看不清?换一张</a>  
-						</div>
+						<input type="checkbox" name="rememberMe" id="rememberMe" style="margin-left: 250px;margin-bottom: 10px;margin-right: 7px;"/>记住我
 						<button class="loginButton" onclick='javascript:loginSys();'>登录</button>
 						
 				</div>
