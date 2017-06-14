@@ -8,8 +8,8 @@ import com.mystify.common.utils.InstanceUtil;
 /**
  * 常量表
  * 
- * @author ShenHuaJie
- * @version $Id: Constants.java, v 0.1 2014-2-28 上午11:18:28 ShenHuaJie Exp $
+ * @author rydge
+ * @version $Id: Constants.java, v 0.1 2014-2-28 上午11:18:28 rydge Exp $
  */
 public interface Constants {
     /**

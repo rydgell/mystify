@@ -16,7 +16,7 @@ import javax.net.ssl.TrustManagerFactory;
 /**
  * HTTPS组件
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 1.0
  * @since 1.0
  */

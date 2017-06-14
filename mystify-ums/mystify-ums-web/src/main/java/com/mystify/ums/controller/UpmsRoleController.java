@@ -30,7 +30,7 @@ import java.util.Map;
 
 /**
  * 角色controller
- * Created by shuzheng on 2017/2/6.
+ * Created by rydge on 2017/2/6.
  */
 @Controller
 @Api(value = "角色管理", description = "角色管理")

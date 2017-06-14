@@ -6,8 +6,8 @@ import java.io.UnsupportedEncodingException;
  * Hex encoder and decoder. The charset used for certain operation can be set,
  * the default is set in
  * 
- * @author ShenHuaJie
- * @version $Id: Hex.java, v 0.1 2014年3月25日 上午9:39:07 ShenHuaJie Exp $
+ * @author rydge
+ * @version $Id: Hex.java, v 0.1 2014年3月25日 上午9:39:07 rydge Exp $
  */
 public class Hex {
 

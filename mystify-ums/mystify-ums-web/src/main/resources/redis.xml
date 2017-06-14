@@ -32,7 +32,6 @@
 		<constructor-arg index="0" ref="redissonClient" />
 	</bean>
 	
-	<bean id="redissonHelper" class="com.mystify.common.support.cache.RedissonHelper" lazy-init="false"></bean>  
 	
 	<!-- Jedis线程 -->
 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">

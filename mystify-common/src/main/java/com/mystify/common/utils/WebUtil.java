@@ -24,7 +24,7 @@ import com.mystify.common.base.BaseController;
 /**
  * Web层辅助类
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年4月2日 下午4:19:28
  */
 public final class WebUtil {

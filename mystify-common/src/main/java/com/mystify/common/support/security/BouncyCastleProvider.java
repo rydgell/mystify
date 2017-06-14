@@ -25,8 +25,8 @@ import java.security.Provider;
  * most prefered).
  * <p>Note: JCE algorithm names should be uppercase only so the case insensitive
  * test for getInstance works.
- * @author ShenHuaJie
- * @version $Id: BouncyCastleProvider.java, v 0.1 2014年3月25日 上午9:40:17 ShenHuaJie Exp $
+ * @author rydge
+ * @version $Id: BouncyCastleProvider.java, v 0.1 2014年3月25日 上午9:40:17 rydge Exp $
  */
 @SuppressWarnings("serial")
 public class BouncyCastleProvider extends Provider {

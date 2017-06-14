@@ -14,7 +14,7 @@ import com.mystify.common.support.security.SecurityCoder;
 /**
  * HMAC加密组件
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 1.0
  * @since 1.0
  */

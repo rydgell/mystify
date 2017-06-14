@@ -8,7 +8,7 @@ import java.security.Security;
 /**
  * 加密基类
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 1.0
  * @since 1.0
  */

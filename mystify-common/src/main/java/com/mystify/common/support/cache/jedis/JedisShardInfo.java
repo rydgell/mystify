@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2017年3月27日 下午12:47:53
  */
 public class JedisShardInfo extends redis.clients.jedis.JedisShardInfo {

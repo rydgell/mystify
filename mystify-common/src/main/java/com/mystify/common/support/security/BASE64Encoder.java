@@ -10,7 +10,7 @@ import java.io.PushbackInputStream;
 /**
  * 密码器类
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @since 2011-12-31
  */
 public class BASE64Encoder {

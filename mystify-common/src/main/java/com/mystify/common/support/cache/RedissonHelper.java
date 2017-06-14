@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.redisson.api.RBucket;
 import org.redisson.api.RType;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -20,17 +21,18 @@ import com.mystify.common.utils.PropertiesUtil;
 /**
  * Redis缓存辅助类
  */
+@Component
 public class RedissonHelper implements CacheManager, ApplicationContextAware {
 
 	private RedissonClient redisTemplate = null;
 	private Integer EXPIRE = PropertiesUtil.getInt("redis.expiration",600);
 
-	protected ApplicationContext applicationContext;
-	
-	@Override  
-	public void setApplicationContext(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
-	}
+	private static ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {  
+    	RedissonHelper.applicationContext = applicationContext;  
+    }
 
 	// 获取连接
 	private RedissonClient getRedis() {

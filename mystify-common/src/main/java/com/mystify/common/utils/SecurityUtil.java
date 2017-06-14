@@ -12,7 +12,7 @@ import com.mystify.common.support.security.coder.SHACoder;
 /**
  * 数据加密辅助类(默认编码UTF-8)
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @since 2011-12-31
  */
 public final class SecurityUtil {

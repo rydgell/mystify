@@ -21,7 +21,7 @@ import redis.clients.jedis.Tuple;
 /**
  * Redis缓存辅助类
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年4月2日 下午4:17:22
  */
 @Configuration

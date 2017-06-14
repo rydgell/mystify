@@ -21,7 +21,7 @@ import com.mystify.common.utils.CacheUtil;
 
 /**
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2017年3月24日 下午8:54:08
  */
 public class RedisCache<K, V> implements Cache<K, V> {
