@@ -24,7 +24,7 @@ body {
 <tr>
 <form name=loading>
 <td align=center>
-<p><font color=gray>正在载入首页，请稍候.......</font></p>
+<p id ="info"><font color=gray>正在载入首页，请稍候.......</font></p>
 <p>
 <input type=text name=chart size=46 style="font-family:Arial;
 font-weight:bolder; color:gray;
@@ -46,7 +46,14 @@ if (bar<99)
 {setTimeout("count()",20);}//这里修改载入时间
 else
 {
-	window.location = "${pageContext.request.contextPath}";
+	 	var parentPage=window.parent;
+	    var currentPage=window;
+	    if(parentPage!=currentPage){
+	    	
+	    }else{
+	    	window.location = "${pageContext.request.contextPath}";
+	    }
+	
 }//这里改成你的网站地址
 }
 </script>
