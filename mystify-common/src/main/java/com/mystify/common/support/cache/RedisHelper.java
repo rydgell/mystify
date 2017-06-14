@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import com.mystify.common.utils.InstanceUtil;
 import com.mystify.common.utils.PropertiesUtil;
@@ -16,20 +18,22 @@ import com.mystify.common.utils.PropertiesUtil;
 /**
  * Redis缓存辅助类
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年4月2日 下午4:17:22
  */
+@Component
 public final class RedisHelper implements CacheManager, ApplicationContextAware {
 
     private RedisTemplate<Serializable, Serializable> redisTemplate = null;
-    private Integer EXPIRE = PropertiesUtil.getInt("redis.expiration");
+    private Integer EXPIRE = PropertiesUtil.getInt("redis.expiration",60);
 
-    protected ApplicationContext applicationContext;
+    private static ApplicationContext applicationContext;
 
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {  
+    	RedisHelper.applicationContext = applicationContext;  
     }
-
+    
     // 获取连接
     @SuppressWarnings("unchecked")
     private RedisTemplate<Serializable, Serializable> getRedis() {

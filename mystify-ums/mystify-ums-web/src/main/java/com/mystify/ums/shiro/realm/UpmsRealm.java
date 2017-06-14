@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  * 用户认证和授权
- * Created by shuzheng on 2017/1/20.
+ * Created by rydge on 2017/1/20.
  */
 public class UpmsRealm extends AuthorizingRealm {
 

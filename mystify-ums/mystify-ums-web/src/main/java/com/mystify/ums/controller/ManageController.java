@@ -20,7 +20,7 @@ import com.mystify.ums.service.UmsSystemService;
 
 /**
  * 后台controller
- * Created by ZhangShuzheng on 2017/01/19.
+ * Created by Zhangrydge on 2017/01/19.
  */
 @Controller
 @RequestMapping("/manage")

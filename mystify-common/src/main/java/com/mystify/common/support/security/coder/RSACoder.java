@@ -24,7 +24,7 @@ import com.mystify.common.support.security.SecurityCoder;
 /**
  * RSA安全编码组件
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 1.0
  * @since 1.0
  */

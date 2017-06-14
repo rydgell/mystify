@@ -9,7 +9,7 @@ import javax.servlet.ServletResponse;
 
 /**
  * 强制退出会话过滤器
- * Created by shuzheng on 2017/3/1.
+ * Created by rydge on 2017/3/1.
  */
 public class UpmsSessionForceLogoutFilter extends AccessControlFilter {
 

@@ -10,7 +10,7 @@ import com.mystify.common.support.HttpCode;
 
 /**
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年6月7日 下午8:43:02
  */
 @SuppressWarnings("serial")

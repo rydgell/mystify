@@ -14,8 +14,8 @@ import com.mystify.common.utils.CacheUtil;
 /**
  * 会话监听器
  * 
- * @author ShenHuaJie
- * @version $Id: SessionListener.java, v 0.1 2014年3月28日 上午9:06:12 ShenHuaJie Exp
+ * @author rydge
+ * @version $Id: SessionListener.java, v 0.1 2014年3月28日 上午9:06:12 rydge Exp
  */
 public class SessionListener implements HttpSessionListener {
 	private static final Logger logger = LoggerFactory.getLogger(SessionListener.class);

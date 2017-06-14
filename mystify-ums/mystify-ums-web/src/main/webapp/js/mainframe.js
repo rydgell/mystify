@@ -1,7 +1,4 @@
-﻿
-
-
-var _menus = null;
+﻿var _menus = null;
 $(function(){
 	
 	loadMenuData();	//先查询所有的菜单
@@ -11,24 +8,24 @@ $(function(){
 	tabCloseEven();
 })
 
-    function loadMenuData()
-     {
-        		$.ajax({
-        			 async:false,
-					 //dataType:'json',
-					 url:  window.ROOT + '/manage/permission/userPermissions',
-					 success:function(data)
-					 {	
-						 
-        				_menus = eval("(" + data + ")");
-					 },
-	        		error:function() 
-	        		{
-							 alert("数据错误！" +arguments[1]);
-	        		}
-        		});
-       
-     }
+function loadMenuData()
+ {
+    		$.ajax({
+    			 async:false,
+				 //dataType:'json',
+				 url:  window.ROOT + '/manage/permission/userPermissions',
+				 success:function(data)
+				 {	
+					 
+    				_menus = eval("(" + data + ")");
+				 },
+        		error:function() 
+        		{
+						 alert("数据错误！" +arguments[1]);
+        		}
+    		});
+   
+ }
 
 function addNav(obj){
 	var url = $(obj).attr("rel");
@@ -41,26 +38,11 @@ function InitLeftMenu() {
 	$("#nav").accordion({animate:false});//为id为nav的div增加手风琴效果，并去除动态滑动效果
     $.each(_menus.menus, function(i, n) {//$.each 遍历_menu中的元素
 		var menulist ='';
-		if(n.tree == 1){
-			menulist +='<ul class="easyui-tree">';
-	        $.each(n.games, function(j, o) {
-				menulist += '<li data-options="state:\'closed\'"><span>'+o.gameName+'</span>';//'icon':'icon-nav'
-				menulist += '<ul>';
-				menulist += '<li ><a ref="'+o.gameId+'" href="#" rel="BBSIndex/indexManager.do?gameId='+o.gameId+'" onclick="addNav(this)">首页内容管理</a></li>';
-				menulist += '<li ><a ref="'+o.gameId+'" href="#" rel="BBSContent/contentManagerList.do?gameId='+o.gameId+'" onclick="addNav(this)">详细页内容管理</a></li>';	
-				menulist += '</ul>';
-				menulist += '</li>';
-	        })
-			menulist += '</ul>';
-		}else{
-			menulist +='<ul>';
-	        $.each(n.menus, function(j, o) {
-				menulist += '<li><div><a ref="'+o.menuid+'" href="#" rel="' + o.url + '" ><span class="icon '+o.icon+'" >&nbsp;</span><span class="nav">' + o.menuname + '</span></a></div></li> ';
-	        })
-			menulist += '</ul>';
-		}
-		
-		
+		menulist +='<ul>';
+        $.each(n.menus, function(j, o) {
+			menulist += '<li><div><a ref="'+o.menuid+'" href="#" rel="' +window.ROOT + o.url + '" ><span class="icon '+o.icon+'" >&nbsp;</span><span class="nav">' + o.menuname + '</span></a></div></li> ';
+        })
+		menulist += '</ul>';
         
 		$('#nav').accordion('add', {
             title: n.menuname,
@@ -282,52 +264,8 @@ function opentab(menuid,menuname,menuurl,icon)
 {
 	addTab(menuname,menuurl,'icon icon-log');
 }
-function insertToUsalLink(menuid)
-{
-	var url = "insertToUsalLink.do";
-	var data = "menuid=" + menuid;
-	$.ajax({
-			url:url,
-			data:data,
-			type:'POST',
-			dataType:'text',
-			success:function(msg)
-			{
-				if(msg=='success')
-				{
-					alert('添加常用功能成功');
-					$("#usalLink").panel('refresh','showUsalLink.do');
-				}
-				else
-				{
-					alert('添加常用功能失败');
-				}
-			}
-		});
-}
+ 
 
-function delUsalLink(menuid)
-{
-	var url = "deleteUsalLink.do";
-	var data = "menuid=" + menuid;
-	$.ajax({
-			url:url,
-			data:data,
-			type:'POST',
-			dataType:'text',
-			success:function(msg)
-			{
-				if(msg=='success')
-				{
-					alert('删除常用功能成功');
-					$("#usalLink").panel('refresh','showUsalLink.do');
-				}
-				else
-				{
-					alert('删除常用功能失败');
-				}
-			}
-		});
-}
+ 
 
 

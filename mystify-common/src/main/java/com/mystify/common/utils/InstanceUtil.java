@@ -35,7 +35,7 @@ import com.mystify.common.exception.InstanceException;
 /**
  * 实例辅助类
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @since 2012-07-18
  */
 public final class InstanceUtil {

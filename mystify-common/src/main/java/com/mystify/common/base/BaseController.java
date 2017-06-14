@@ -32,7 +32,7 @@ import com.mystify.common.utils.WebUtil;
 /**
  * 控制器基类
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年5月20日 下午3:47:58
  */
 public abstract class BaseController {

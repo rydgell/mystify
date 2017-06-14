@@ -16,7 +16,7 @@ import com.mystify.common.Constants;
 
 /**
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2017年3月24日 下午8:50:14
  */
 public class RedisCacheManager implements CacheManager {

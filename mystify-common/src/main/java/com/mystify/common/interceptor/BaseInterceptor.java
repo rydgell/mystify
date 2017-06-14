@@ -12,7 +12,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 /**
  * 拦截器基类
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年5月20日 下午3:16:31
  */
 public class BaseInterceptor extends HandlerInterceptorAdapter {

@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * 常见的辅助类
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @since 2011-11-08
  */
 public final class DataUtil {

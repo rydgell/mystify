@@ -3,7 +3,7 @@ package com.mystify.common.exception;
 import com.mystify.common.support.HttpCode;
 
 /**
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年5月20日 下午3:19:19
  */
 @SuppressWarnings("serial")

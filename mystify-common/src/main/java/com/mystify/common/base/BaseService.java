@@ -1,5 +1,6 @@
 package com.mystify.common.base;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -26,11 +27,12 @@ import com.mystify.common.utils.InstanceUtil;
 
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageHelper;
 /**
  * 业务逻辑层基类<br/>
  * 继承基类后必须配置CacheConfig(cacheNames="")
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年5月20日 下午3:19:19
  */
 public abstract class BaseService<T extends BaseModel> implements ApplicationContextAware {
@@ -158,6 +160,17 @@ public abstract class BaseService<T extends BaseModel> implements ApplicationCon
         }
         return new Page<K>();
     }
+    
+   /* public List<T> selectByExampleForStartPage(Wrapper<T> wrapper, Integer pageNum, Integer pageSize) {
+		try {
+			PageHelper.startPage(pageNum, pageSize, false);
+			return mapper.selectList(wrapper);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}*/
 
     /** 根据Id查询(默认类型T) */
     public List<T> getList(List<Integer> ids) {
@@ -225,7 +238,7 @@ public abstract class BaseService<T extends BaseModel> implements ApplicationCon
     }
 
     /*@Transactional*/
-    public void delete(Long id) {
+    public void delete(Integer id) {
         try {
             mapper.deleteById(id);
             CacheUtil.getCache().del(getCacheKey(id));

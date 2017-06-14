@@ -12,7 +12,7 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 /**
  * Parsing The Configuration File
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年7月30日 下午11:41:53
  */
 public final class PropertiesUtil extends PropertyPlaceholderConfigurer {

@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Redis 工具类
- * Created by shuzheng on 2016/11/26.
+ * Created by rydge on 2016/11/26.
  */
 public class RedisUtil {
 

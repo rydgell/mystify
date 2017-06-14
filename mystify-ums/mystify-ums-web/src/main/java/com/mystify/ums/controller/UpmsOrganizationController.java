@@ -3,6 +3,10 @@ package com.mystify.ums.controller;
 import com.baidu.unbiz.fluentvalidator.ComplexResult;
 import com.baidu.unbiz.fluentvalidator.FluentValidator;
 import com.baidu.unbiz.fluentvalidator.ResultCollectors;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
@@ -15,6 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.mystify.common.base.BaseController;
+import com.mystify.common.exception.IllegalParameterException;
 import com.mystify.common.validator.LengthValidator;
 import com.mystify.ums.entity.UmsOrganization;
 import com.mystify.ums.service.UmsOrganizationService;
@@ -25,7 +30,7 @@ import java.util.Map;
 
 /**
  * 组织controller
- * Created by shuzheng on 2017/2/6.
+ * Created by rydge on 2017/2/6.
  */
 @Controller
 @Api(value = "组织管理", description = "组织管理")
@@ -41,12 +46,12 @@ public class UpmsOrganizationController extends BaseController {
     @RequiresPermissions("upms:organization:read")
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
-        return "/manage/organization/index.jsp";
+        return "/organization/index";
     }
 
     @ApiOperation(value = "组织列表")
     @RequiresPermissions("upms:organization:read")
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     public Object list(
             @RequestParam(required = false, defaultValue = "0", value = "offset") int offset,
@@ -54,83 +59,57 @@ public class UpmsOrganizationController extends BaseController {
             @RequestParam(required = false, defaultValue = "", value = "search") String search,
             @RequestParam(required = false, value = "sort") String sort,
             @RequestParam(required = false, value = "order") String order) {
-        /*UpmsOrganizationExample upmsOrganizationExample = new UpmsOrganizationExample();
-        if (!StringUtils.isBlank(sort) && !StringUtils.isBlank(order)) {
-            upmsOrganizationExample.setOrderByClause(sort + " " + order);
-        }
-        if (StringUtils.isNotBlank(search)) {
-            upmsOrganizationExample.or()
-                    .andNameLike("%" + search + "%");
-        }
-        List<UpmsOrganization> rows = upmsOrganizationService.selectByExampleForOffsetPage(upmsOrganizationExample, offset, limit);
-        long total = upmsOrganizationService.countByExample(upmsOrganizationExample);*/
+    	Page<UmsOrganization> page = new Page<UmsOrganization>(offset,limit);
+    	EntityWrapper<UmsOrganization> entity = new EntityWrapper<UmsOrganization>();
+    	page = umsOrganizationService.selectPage(page, entity);
+        //long total = upmsOrganizationService.countByExample(upmsOrganizationExample);*/
         Map<String, Object> result = new HashMap<>();
-        //result.put("rows", rows);
-       // result.put("total", total);
+        result.put("rows", page.getRecords());
+        result.put("total", page.getTotal());
         return result;
-    }
-
-    @ApiOperation(value = "新增组织")
-    @RequiresPermissions("upms:organization:create")
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create() {
-        return "/manage/organization/create.jsp";
     }
 
     @ApiOperation(value = "新增组织")
     @RequiresPermissions("upms:organization:create")
     @ResponseBody
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Object create(UmsOrganization umsOrganization) {
+    public Object create(UmsOrganization umsOrganization,ModelMap modelMap) {
         ComplexResult result = FluentValidator.checkAll()
-                .on(umsOrganization.getName(), new LengthValidator(1, 20, "名称"))
+                .on(umsOrganization.getName(), new LengthValidator(1, 30, "名称"))
                 .doValidate()
                 .result(ResultCollectors.toComplex());
-        /*if (!result.isSuccess()) {
-            return new UpmsResult(UmsResultConstant.INVALID_LENGTH, result.getErrors());
+       if (!result.isSuccess()) {
+    	   throw new IllegalParameterException("INVALID_LENGTH") ;
         }
         long time = System.currentTimeMillis();
-        upmsOrganization.setCtime(time);
-        int count = upmsOrganizationService.insertSelective(upmsOrganization);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, count);*/
-        return "";
+        umsOrganization.setCtime(time);
+        umsOrganizationService.update(umsOrganization);
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "删除组织")
     @RequiresPermissions("upms:organization:delete")
-    @RequestMapping(value = "/delete/{ids}",method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
     @ResponseBody
-    public Object delete(@PathVariable("ids") String ids) {
-        /*int count = upmsOrganizationService.deleteByPrimaryKeys(ids);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, count);*/
-    	return "";
-    }
-
-    @ApiOperation(value = "修改组织")
-    @RequiresPermissions("upms:organization:update")
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String update(@PathVariable("id") int id, ModelMap modelMap) {
-        UmsOrganization organization = umsOrganizationService.queryById(id);
-        modelMap.put("organization", organization);
-        return "/manage/organization/update.jsp";
+    public Object delete(@PathVariable("id") Integer id,ModelMap modelMap) {
+    	umsOrganizationService.delete(id);
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "修改组织")
     @RequiresPermissions("upms:organization:update")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Object update(@PathVariable("id") int id, UmsOrganization umsOrganization) {
+    public Object update(@PathVariable("id") int id, UmsOrganization umsOrganization,ModelMap modelMap) {
         ComplexResult result = FluentValidator.checkAll()
-                .on(umsOrganization.getName(), new LengthValidator(1, 20, "名称"))
+                .on(umsOrganization.getName(), new LengthValidator(1, 30, "名称"))
                 .doValidate()
                 .result(ResultCollectors.toComplex());
-        /*if (!result.isSuccess()) {
-            return new UpmsResult(UpmsResultConstant.INVALID_LENGTH, result.getErrors());
+        if (!result.isSuccess()) {
+        	 throw new IllegalParameterException("INVALID_LENGTH") ;
         }
-        upmsOrganization.setOrganizationId(id);
-        int count = upmsOrganizationService.updateByPrimaryKeySelective(upmsOrganization);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, count);*/
-        return "";
+        umsOrganizationService.update(umsOrganization);
+        return setSuccessModelMap(modelMap);
     }
 
 }

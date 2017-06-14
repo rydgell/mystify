@@ -23,7 +23,7 @@ import com.mystify.common.Constants;
 /**
  * Redis缓存配置
  * 
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年5月20日 下午3:18:41
  */
 @Configuration

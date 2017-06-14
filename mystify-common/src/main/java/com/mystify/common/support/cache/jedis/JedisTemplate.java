@@ -18,7 +18,7 @@ import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
 /**
- * @author ShenHuaJie
+ * @author rydge
  * @version 2016年5月20日 下午3:19:19
  */
 @Component
