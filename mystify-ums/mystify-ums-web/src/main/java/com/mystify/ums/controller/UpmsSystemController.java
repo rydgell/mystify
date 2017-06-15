@@ -40,7 +40,7 @@ public class UpmsSystemController extends BaseController {
 	@RequiresPermissions("upms:system:read")
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String index() {
-		return "/manage/system/index.jsp";
+		return "/manage/system/index";
 	}
 
 	@ApiOperation(value = "系统列表")

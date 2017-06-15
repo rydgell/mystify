@@ -24,7 +24,6 @@
 			{
 			$("body").layout('collapse','east');
 				//得到菜单数据
-				 openPwd();
 				  $('#editpass').click(function() 
 				  	{
                 		$('#w').window('open');

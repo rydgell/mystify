@@ -134,9 +134,6 @@ function changeCode() {  //刷新
 			<br>
 			<br>
 			<br>
-			<br>
-			<br>
-			<br>
 			<div class="loginArea">
 				<div class="loginTitle">用户登录</div>
 				<div class="loginForm">

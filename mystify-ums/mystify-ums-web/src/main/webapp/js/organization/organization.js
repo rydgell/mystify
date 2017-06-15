@@ -6,7 +6,7 @@
 	 $('#dg').datagrid({
 	        title: '组织列表',
 	        singleSelect:false,
-	        pagination: false,
+	        pagination: true,
 	        remoteSort:false,
 	        showFooter:false, 
 	        fit:true,
@@ -15,6 +15,7 @@
 	        toolbar: '#toolbar',
 	        url:root_path+'/manage/organization/list',
 	        pageSize:20,
+	        pageList:[20,30,40,50],
 	        queryParams:{
 			},
 	        columns: [

@@ -54,18 +54,19 @@ public class UpmsOrganizationController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     public Object list(
-            @RequestParam(required = false, defaultValue = "0", value = "offset") int offset,
-            @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
-            @RequestParam(required = false, defaultValue = "", value = "search") String search,
+            @RequestParam(required = false, defaultValue = "0", value = "page") int offset,
+            @RequestParam(required = false, defaultValue = "10", value = "rows") int limit,
+            @RequestParam(required = false, defaultValue = "", value = "name") String name,
             @RequestParam(required = false, value = "sort") String sort,
             @RequestParam(required = false, value = "order") String order) {
     	Page<UmsOrganization> page = new Page<UmsOrganization>(offset,limit);
-    	EntityWrapper<UmsOrganization> entity = new EntityWrapper<UmsOrganization>();
+    	UmsOrganization entity = new UmsOrganization();
+    	entity.setName(name);
     	page = umsOrganizationService.selectPage(page, entity);
-        //long total = upmsOrganizationService.countByExample(upmsOrganizationExample);*/
         Map<String, Object> result = new HashMap<>();
         result.put("rows", page.getRecords());
         result.put("total", page.getTotal());
+        System.out.println(page.getTotal());
         return result;
     }
 
