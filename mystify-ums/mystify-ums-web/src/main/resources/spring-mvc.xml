@@ -47,6 +47,7 @@
 			<mvc:exclude-mapping path="/css/**" />
 			<mvc:exclude-mapping path="/images/**" />
 			<mvc:exclude-mapping path="/js/**" />
+			<mvc:exclude-mapping path="/jsp/**" />
 			<bean class="com.mystify.common.interceptor.MaliciousRequestInterceptor">
 				<property name="minRequestIntervalTime" value="500" />
 				<property name="maxMaliciousTimes" value="0" />
@@ -95,5 +96,6 @@
 	<mvc:resources mapping="webjars/**" location="classpath:/META-INF/resources/webjars/"/> 
 	<mvc:resources location="/css/" mapping="/css/**" />
 	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/plugins/" mapping="/plugins/**" />
 	<mvc:resources location="/images/" mapping="/images/**" />
 </beans>

@@ -1,156 +1,78 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
-<%
-	String path = request.getContextPath();
-	String host = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path;
-  	request.setAttribute("ROOT", host);
-%>
-<%--设置相对路径 --%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
-<HTML xmlns="http://www.w3.org/1999/xhtml">
+<%@ page contentType="text/html; charset=utf-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<c:set var="basePath" value="${pageContext.request.contextPath}"/>
+<!DOCTYPE HTML>
+<html lang="zh-cn">
 <head>
-<title>系统管理后台登录</title>
-<style>
-	body { width:100%; height:100%;margin:0px; padding:0px; font-size:12px;  *text-align:center;  font-family:"微软雅黑", Microsoft YaHei;color:#333333; position: relative; }
-	ol,ul,li,dl,dt,dd,form,p,h1,h2,h3,h4,h5{ margin:0px; padding:0px;}
-	h1,h2,h3,h4,h5 { font-weight:normal;}
-	ol,ul,li{ list-style:none;}
-	img{ border:none;}
-	a{ color:#616161; text-decoration:none;}
-	a:hover{ color:#137fef;}
-	input,textarea{ outline:0; resize:none;}
-	input,td{ margin:0; padding:0;font-family:"微软雅黑", Microsoft YaHei;}
-	body{background-color: #333333;}
-	.loginMaiin {margin: 0 auto; width:380px; padding-top: 95px;}
-	.loginArea {border-radius: 5px; background-color: #FFF;}
-	.loginTitle {height:50px; line-height: 50px; text-align: center; color: #FFF; font-size: 20px; font-family:"微软雅黑", Microsoft YaHei; background-color: #3195B9; border-bottom:1px solid #dfb800; border-top-left-radius: 3px;border-top-right-radius: 3px;}
-	.loginForm {width:320px; margin: 30px auto 0; padding-bottom: 30px;}
-	.loginInput {width:278px; height:43px; *line-height: 43px; padding: 0 5px 0 39px; margin-bottom: 15px; border: 1px solid #dddddd; border-radius: 3px;font-family:"微软雅黑", Microsoft YaHei; font-size: 14px; color: #aaaaaa;}
-	#TxtPassword{background: url(images/login_inputbg01.jpg) no-repeat 15px center;}
-	#TxtUserName{background: url(images/login_inputbg02.png) no-repeat 14px center;}
-	.loginButton {width:320px; height:45px; line-height: 45px; text-align: center; background-color: #3195B9; color: #FFF; font-size: 20px;font-family:"微软雅黑", Microsoft YaHei; border:0; border-radius: 3px; cursor: pointer;}  
-</style>
- 
-	<link rel="stylesheet" type="text/css" href="${ROOT}/js/jquery-easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="${ROOT}/js/jquery-easyui/themes/icon.css">
-	<META http-equiv=Content-Type content="text/html; charset=UTF-8">
-	<META content="MSHTML 6.00.6000.16674" name=GENERATOR>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>权限管理系统</title>
+
+    <link href="${basePath}/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${basePath}/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+    <link href="${basePath}/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="${basePath}/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="${basePath}/plugins/checkbix/css/checkbix.min.css" rel="stylesheet"/>
+    <link href="${basePath}/plugins/bootstrapvalidator/css/bootstrapValidator.min.css" rel="stylesheet"/>
+    <link href="${basePath}/css/login.css" rel="stylesheet"/>
 </head>
+<body>
+<div id="login-window">
+	<form id="form1" name="form1" method="post" onsubmit="return false;"  >
+    <div class="input-group m-b-20">
+        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+        <div class="fg-line">
+            <input id="username" type="text" class="form-control" name="username" placeholder="帐号" required autofocus value="">
+        </div>
+    </div>
+    <div class="input-group m-b-20">
+        <span class="input-group-addon"><i class="zmdi zmdi-lock"></i></span>
+        <div class="fg-line">
+            <input id="password" type="password" class="form-control" name="password" placeholder="密码" required value="">
+        </div>
+    </div>
+    <div class="input-group m-b-20">
+        <span class="input-group-addon"><i class="zmdi zmdi-check-square"></i></span>
+        <div class="fg-line">
+            <input id="verificationCode" type="password" class="form-control" name="verificationCode" placeholder="验证码" required value="">
+       </div>
+    </div>
+     <div class="input-group m-b-20">
+     	<span class="input-group-addon"></span>
+        <div class="fg-line" style="margin-left: 10px">
+            <img src="${basePath}/sso/code" id="kaptchaImage"  />
+            <a href="#" onclick="changeCode()">看不清?换一张</a>  
+       </div>
+    </div>
+   
+    <div class="clearfix">
+    </div>
+   <!--  <div class="checkbox">
+        <input id="rememberMe" type="checkbox" class="checkbix" data-text="自动登录" name="rememberMe">
+    </div> -->
+    <a id="login-bt" href="javascript:;" class="waves-effect waves-button waves-float"><i class="zmdi zmdi-arrow-forward"></i></a>
+    </form>
+</div>
+<script src="${basePath}/plugins/jquery.1.12.4.min.js"></script>
+<script src="${basePath}/plugins/jquery.form.min.js"></script>
+<script src="${basePath}/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="${basePath}/plugins/waves-0.7.5/waves.min.js"></script>
+<script src="${basePath}/plugins/checkbix/js/checkbix.min.js"></script>
+<script src="${basePath}/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+<script>var BASE_PATH = '${basePath}';</script>
+<script src="${basePath}/js/login.js"></script>
 
-<script type="text/javascript" src="${ROOT}/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="${ROOT}/js/jquery.form.js"></script>
-<script type="text/javascript" src="${ROOT}/js/jquery.cookie.js"></script>
-<script src="${ROOT}/js/jquery-easyui/jquery.easyui.min.js"></script>	
-<script type="text/javascript">
-var root_path = '${ROOT}';
-var options = {
-   url: '${ROOT}/sso/login',
-   success: function(json) {
-     if (json.httpCode == 200) {
-		location.href = '${ROOT}'+json.data;
-     }else{
-   	  alert(json.msg);
-     }
-   } };
-
-
-$(function(){
-	//生成验证码         
-	  $('#kaptchaImage').click(function () {  
-	  $(this).hide().attr('src', '${ROOT}/sso/code?' + Math.floor(Math.random()*100) ).fadeIn(); });      
-	}
-);
-
-function check()
-{ 
-	var username = $("#username").val();
-	var password=$("#password").val();
-	var verificationCode = $("#verificationCode").val();
-	if(username==null || username=="")
-	{
-		alert("请输入用户名!"); 
-		return false;
-	}
-	
-	else if(password==null ||password=="")
-	{
-		 alert("请输入密码!");
-		 return false;
-	}
-	
-	else if(verificationCode==null ||verificationCode=="")
-	{
-		 alert("请输入验证码!");
-		 return false;
-	}
-	return true;
-}
-
-function loginSys()
-{	 
-	if(check()==true){
-		$('#form1').ajaxForm(options);
-		$('#form1').submit();
-	}
-}
-
-
-
-function refreshTop()
-{
-	//避免在session失效时，在子页面显示登录界面,在界面一加载后，就检查
-	//当前页面是否与父页面相同
-	//如果不相同,就取父界面，并使父界面重定向到登陆界面
-	 var currentHref="${ROOT}/sso/login";  
-    var parentPage=window.parent;
-    var currentPage=window;
-    var topPage;
-    while(parentPage!=currentPage){
-        topPage=parentPage;
-        currentPage=parentPage;
-        parentPage=parentPage.parent;
-    }
-   if(topPage){
-       topPage.location.href=currentHref;
-   }
-}
-
-window.onbeforeunload = function(){  
-    //关闭窗口时自动退出  
-    if(event.clientX>360&&event.clientY<0||event.altKey){     
-        alert(parent.document.location);  
-    }  
-};  
-
-function changeCode() {  //刷新
-    $('#kaptchaImage').hide().attr('src', '${ROOT}/sso/code?' + Math.floor(Math.random()*100) ).fadeIn();  
-    event.cancelBubble=true;  
-}  
+<script>
+<c:if test="${param.forceLogout == 1}">
+alert('您已被强制下线！');
+top.location.href = '${basePath}/sso/login';
+</c:if>
 </script>
-	
-	<body  onload="refreshTop()">
-		<form id="form1" name="form1" method="post" onsubmit="return false;"  >
-		<div class="loginMaiin">
-			<br>
-			<br>
-			<br>
-			<div class="loginArea">
-				<div class="loginTitle">用户登录</div>
-				<div class="loginForm">
-						<input type="text" class="loginInput" id="username" name ="username" placeholder="用户名">
-						<input type="password" class="loginInput" id="password" name ="password" placeholder="密码">
-						<input type="text" class="loginInput" id="verificationCode" name ="verificationCode" placeholder="验证码">
-						<div style="margin-bottom: 10px">  
-						   <img src="${ROOT}/sso/code" id="kaptchaImage"  style="margin-bottom: -3px"/>       
-						   <a href="#" onclick="changeCode()">看不清?换一张</a>  
-						</div>
-						<button class="loginButton" onclick='javascript:loginSys();'>登录</button>
-						
-				</div>
-			</div>
-		</div>
-	</form>
-		 
-	</body>
- 
-</HTML>
+</body>
+</html>

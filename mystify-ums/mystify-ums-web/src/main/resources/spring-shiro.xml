@@ -43,6 +43,7 @@
              	/images/** = anon 
                 /css/**  = anon 
                 /js/**  = anon
+                /plugins/** = anon
                 /views/** = user
                 /druid/** = user
                 /swagger-ui.html = user
