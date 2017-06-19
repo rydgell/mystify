@@ -19,7 +19,7 @@
     <link href="${basePath}/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
     <link href="${basePath}/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
     <link href="${basePath}/plugins/checkbix/css/checkbix.min.css" rel="stylesheet"/>
-    <link href="${basePath}/plugins/bootstrapvalidator/css/bootstrapValidator.min.css" rel="stylesheet"/>
+    <link href="${basePath}/plugins/jquery-validation/1.11.0/jquery.validate.min.css" type="text/css" rel="stylesheet" />
     <link href="${basePath}/css/login.css" rel="stylesheet"/>
 </head>
 <body>
@@ -28,7 +28,7 @@
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
         <div class="fg-line">
-            <input id="username" type="text" class="form-control" name="username" placeholder="帐号" required autofocus value="">
+            <input id="username" type="text" class="form-control" name="username" placeholder="帐号" autofocus required >
         </div>
     </div>
     <div class="input-group m-b-20">
@@ -59,12 +59,14 @@
     <a id="login-bt" href="javascript:;" class="waves-effect waves-button waves-float"><i class="zmdi zmdi-arrow-forward"></i></a>
     </form>
 </div>
+
+
 <script src="${basePath}/plugins/jquery.1.12.4.min.js"></script>
 <script src="${basePath}/plugins/jquery.form.min.js"></script>
 <script src="${basePath}/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
 <script src="${basePath}/plugins/waves-0.7.5/waves.min.js"></script>
 <script src="${basePath}/plugins/checkbix/js/checkbix.min.js"></script>
-<script src="${basePath}/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+<script src="${basePath}/plugins/jquery-validation/1.11.0/jquery.validate.min.js" type="text/javascript"></script>
 <script>var BASE_PATH = '${basePath}';</script>
 <script src="${basePath}/js/login.js"></script>
 

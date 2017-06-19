@@ -1,3 +1,27 @@
+$(document).ready(function() {
+			$("#form1").validate({
+				rules: {
+					 
+				},
+				messages: {
+					 
+				},
+				errorLabelContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					//alert(error);
+				} 
+			});
+		});
+
+/*$.validator.setDefaults({
+    submitHandler: function() {
+    	 login();
+    }
+});
+$().ready(function() {
+    $("#form1").validate();
+});*/
+
 $(function() {
 	// Waves初始化
 	Waves.displayEffect();
@@ -11,18 +35,19 @@ $(function() {
 	//生成验证码         
     $('#kaptchaImage').click(function () {  
 	$(this).hide().attr('src', '${ROOT}/sso/code?' + Math.floor(Math.random()*100) ).fadeIn(); });      
-	 
+    
+    
+    
 });
 Checkbix.init();
 $(function() {
-	// 点击登录按钮
-	$('#login-bt').click(function() {
-		login();
-	});
+    $("#login-bt").on('click',function(event){
+    	 login();
+    });
 	// 回车事件
 	$('#username, #password').keypress(function (event) {
 		if (13 == event.keyCode) {
-			login();
+			 login();
 		}
 	});
 });
