@@ -26,7 +26,7 @@
 function createSubmit() {
     $.ajax({
         type: 'post',
-        url: '${basePath}/manage/organization/update/${organization.organizationId}',
+        url: '${basePath}/manage/organization/update/${organization.id}',
         data: $('#updateForm').serialize(),
         beforeSend: function() {
             if ($('#name').val() == '') {

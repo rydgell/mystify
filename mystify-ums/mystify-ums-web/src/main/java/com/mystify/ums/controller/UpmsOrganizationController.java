@@ -51,12 +51,12 @@ public class UpmsOrganizationController extends BaseController {
 
     @ApiOperation(value = "组织列表")
     @RequiresPermissions("upms:organization:read")
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public Object list(
-            @RequestParam(required = false, defaultValue = "0", value = "page") int offset,
-            @RequestParam(required = false, defaultValue = "10", value = "rows") int limit,
-            @RequestParam(required = false, defaultValue = "", value = "name") String name,
+            @RequestParam(required = false, defaultValue = "0", value = "offset") int offset,
+            @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
+            @RequestParam(required = false, defaultValue = "", value = "search") String name,
             @RequestParam(required = false, value = "sort") String sort,
             @RequestParam(required = false, value = "order") String order) {
     	Page<UmsOrganization> page = new Page<UmsOrganization>(offset,limit);
@@ -70,6 +70,13 @@ public class UpmsOrganizationController extends BaseController {
         return result;
     }
 
+    @ApiOperation(value = "新增组织")
+    @RequiresPermissions("upms:organization:create")
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public String create() {
+        return "/organization/create";
+    }
+    
     @ApiOperation(value = "新增组织")
     @RequiresPermissions("upms:organization:create")
     @ResponseBody
@@ -95,6 +102,15 @@ public class UpmsOrganizationController extends BaseController {
     public Object delete(@PathVariable("id") Integer id,ModelMap modelMap) {
     	umsOrganizationService.delete(id);
         return setSuccessModelMap(modelMap);
+    }
+    
+    @ApiOperation(value = "修改组织")
+    @RequiresPermissions("upms:organization:update")
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
+    public String update(@PathVariable("id") int id, ModelMap modelMap) {
+        UmsOrganization organization = umsOrganizationService.queryById(id);
+        modelMap.put("organization", organization);
+        return "/organization/update";
     }
 
     @ApiOperation(value = "修改组织")

@@ -36,7 +36,7 @@ public interface Constants {
     /** 非法请求次数 */
     public static final String MALICIOUS_REQUEST_TIMES = "MALICIOUS_REQUEST_TIMES";
     /** 缓存命名空间 */
-    public static final String CACHE_NAMESPACE = "iBase4J:";
+    public static final String CACHE_NAMESPACE = "ums:";
     /** 在线用户数量 */
     public static final String ALLUSER_NUMBER = "SYSTEM:" + CACHE_NAMESPACE + "ALLUSER_NUMBER";
     /** TOKEN */

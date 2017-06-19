@@ -14,9 +14,9 @@ import com.mystify.ums.entity.UmsRole;
 public interface UmsApiMapper {
 
 	// 根据用户id获取所拥有的权限
-	List<UmsPermission> selectUpmsPermissionByUpmsUserId(Integer upmsUserId);
+	List<UmsPermission> selectUmsPermissionByUmsUserId(Integer umsUserId);
 
 	// 根据用户id获取所属的角色
-	List<UmsRole> selectUpmsRoleByUpmsUserId(Integer upmsUserId);
+	List<UmsRole> selectUmsRoleByUmsUserId(Integer umsUserId);
 	
 }

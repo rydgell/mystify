@@ -38,7 +38,7 @@ $(function() {
 		showColumns: true,
 		minimumCountColumns: 2,
 		clickToSelect: true,
-		detailView: true,
+		detailView: false,
 		detailFormatter: 'detailFormatter',
 		pagination: true,
 		paginationLoop: false,
@@ -47,12 +47,12 @@ $(function() {
 		smartDisplay: false,
 		escape: true,
 		searchOnEnterKey: true,
-		idField: 'organizationId',
+		idField: 'id',
 		maintainSelected: true,
 		toolbar: '#toolbar',
 		columns: [
 			{field: 'ck', checkbox: true},
-			{field: 'organizationId', title: '编号', sortable: true, align: 'center'},
+			{field: 'id', title: '编号', sortable: true, align: 'center'},
 			{field: 'name', title: '组织名称'},
             {field: 'description', title: '组织描述'},
 			{field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
@@ -82,6 +82,7 @@ function createAction() {
 var updateDialog;
 function updateAction() {
 	var rows = $table.bootstrapTable('getSelections');
+	
 	if (rows.length != 1) {
 		$.confirm({
 			title: false,
@@ -96,10 +97,11 @@ function updateAction() {
 			}
 		});
 	} else {
+		alert(rows[0].id);
 		updateDialog = $.dialog({
 			animationSpeed: 300,
 			title: '编辑组织',
-			content: 'url:${basePath}/manage/organization/update/' + rows[0].organizationId,
+			content: 'url:${basePath}/manage/organization/update/' + rows[0].id,
 			onContentReady: function () {
 				initMaterialInput();
 			}
@@ -136,7 +138,7 @@ function deleteAction() {
 					action: function () {
 						var ids = new Array();
 						for (var i in rows) {
-							ids.push(rows[i].organizationId);
+							ids.push(rows[i].id);
 						}
 						$.ajax({
 							type: 'get',

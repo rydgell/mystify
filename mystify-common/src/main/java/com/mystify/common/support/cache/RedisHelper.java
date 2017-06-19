@@ -25,7 +25,7 @@ import com.mystify.common.utils.PropertiesUtil;
 public final class RedisHelper implements CacheManager, ApplicationContextAware {
 
     private RedisTemplate<Serializable, Serializable> redisTemplate = null;
-    private Integer EXPIRE = PropertiesUtil.getInt("redis.expiration",60);
+    private Integer EXPIRE = PropertiesUtil.getInt("redis.expiration",600);
 
     private static ApplicationContext applicationContext;
 

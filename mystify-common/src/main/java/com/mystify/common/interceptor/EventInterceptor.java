@@ -8,14 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-/*import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.ibase4j.core.base.BaseProvider;
-import org.ibase4j.core.base.Parameter;
-import org.ibase4j.core.util.DateUtil;
-import org.ibase4j.core.util.ExceptionUtil;
-import org.ibase4j.core.util.WebUtil;
-import org.ibase4j.model.SysEvent;*/
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.NamedThreadLocal;

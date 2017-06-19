@@ -80,12 +80,8 @@ public class SSOController extends BaseController {
         String code = RedisUtil.get(UMS_SERVER_SESSION_ID + "_" + serverSessionId);
         // code校验值
         if (StringUtils.isNotBlank(code)) {
-            // 回跳
-            String backurl = request.getParameter("backurl");
-            if (StringUtils.isBlank(backurl)) {
-                backurl = "/manage/index";
-            } 
-            _log.debug("认证中心帐号通过，带code回跳：{}", backurl);
+            String backurl = "/manage/index";
+            _log.debug("认证通过，带code回跳：{}", backurl);
             return "redirect:" + backurl;
         }
         return "/login";
@@ -93,7 +89,7 @@ public class SSOController extends BaseController {
 
     @ApiOperation(value = "登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Object login(String username, String password,String verificationCode,String backurl, ModelMap modelMap) {
+    public Object login(String username, String password,String verificationCode, ModelMap modelMap) {
         System.out.println("login POST");
         Subject subject = SecurityUtils.getSubject();  
         Session session = subject.getSession();
@@ -130,10 +126,7 @@ public class SSOController extends BaseController {
             // code校验值
             RedisUtil.set(UMS_SERVER_CODE + "_" + code, code, (int) subject.getSession().getTimeout() / 1000);
         }
-        // 回跳登录前地址
-        if(StringUtils.isBlank(backurl)){
-        	backurl = "/manage/index";
-        }
+        String backurl = "/manage/index";
         modelMap.addAttribute("data",backurl );
         return setSuccessModelMap(modelMap);
     }

@@ -12,7 +12,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>权限管理系统</title>
+	<title>管理系统</title>
 
 	<link href="${basePath}/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
 	<link href="${basePath}/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
@@ -21,9 +21,9 @@
 	<link href="${basePath}/css/admin.css" rel="stylesheet"/>
 	<style>
 		/** skins **/
-	#zheng-upms-server #header {background: #29A176;}
-	#zheng-upms-server .content_tab{background: #29A176;}
-	#zheng-upms-server .s-profile>a{background: url(images/zheng-upms.png) left top no-repeat;}
+	#header {background: #55AAAA;}
+	.content_tab{background: #55AAAA;}
+	.s-profile>a{background: #55AAAA left top no-repeat;}
  
 	</style>
 </head>
@@ -41,7 +41,7 @@
 			<a href="${basePath}/manage/index">
 				<img src="${basePath}/images/logo.png"/>
 			</a>
-			<span id="system_title">权限管理系统</span>
+			<span id="system_title">管理系统</span>
 		</li>
 		<li class="pull-right">
 			<ul class="hi-menu">
@@ -61,22 +61,7 @@
 						</form>
 					</ul>
 				</li>
-				<li class="dropdown">
-					<a class="waves-effect waves-light" data-toggle="dropdown" href="javascript:;">
-						<i class="him-icon zmdi zmdi-dropbox"></i>
-					</a>
-					<ul class="dropdown-menu dm-icon pull-right">
-						<li class="skin-switch hidden-xs">
-							请选择系统切换
-						</li>
-						<li class="divider hidden-xs"></li>
-						<c:forEach var="upmsSystem" items="${upmsSystems}">
-						<li>
-							<a class="waves-effect switch-systems" href="javascript:;" systemid="${upmsSystem.systemId}" systemname="${upmsSystem.name}" systemtitle="${upmsSystem.title}"><i class="${upmsSystem.icon}"></i> ${upmsSystem.title}</a>
-						</li>
-						</c:forEach>
-					</ul>
-				</li>
+				 
 				<li class="dropdown">
 					<a class="waves-effect waves-light" data-toggle="dropdown" href="javascript:;">
 						<i class="him-icon zmdi zmdi-more-vert"></i>
@@ -87,9 +72,6 @@
 						</li>
 						<li>
 							<a class="waves-effect" data-ma-action="clear-localstorage" href="javascript:;"><i class="zmdi zmdi-delete"></i> 清除缓存</a>
-						</li>
-						<li>
-							<a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-face"></i> 隐私管理</a>
 						</li>
 						<li>
 							<a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-settings"></i> 系统设置</a>
@@ -113,22 +95,13 @@
 					<img src="${basePath}/images/avatar.jpg"/>
 				</div>
 				<div class="sp-info">
-					${upmsUser.realname}，您好！
+					${umsUser.realname}，您好！
 					<i class="zmdi zmdi-caret-down"></i>
 				</div>
 			</a>
 			<ul class="main-menu">
 				<li>
 					<a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-account"></i> 个人资料</a>
-				</li>
-				<li>
-					<a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-face"></i> 隐私管理</a>
-				</li>
-				<li>
-					<a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-settings"></i> 系统设置</a>
-				</li>
-				<li>
-					<a class="waves-effect" href="${basePath}/sso/logout"><i class="zmdi zmdi-run"></i> 退出登录</a>
 				</li>
 			</ul>
 		</div>
@@ -138,18 +111,14 @@
 			<li>
 				<a class="waves-effect" href="javascript:Tab.addTab('首页', 'home');"><i class="zmdi zmdi-home"></i> 首页</a>
 			</li>
-			<c:forEach var="upmsPermission" items="${upmsPermissions}" varStatus="status">
-				<c:if test="${upmsPermission.pid == 0}">
-				<li class="sub-menu system_menus system_${upmsPermission.systemId} ${status.index}" <c:if test="${upmsPermission.systemId != 1}">style="display:none;"</c:if>>
-					<a class="waves-effect" href="javascript:;"><i class="${upmsPermission.icon}"></i> ${upmsPermission.name}</a>
+			<c:forEach var="umsPermission" items="${umsPermissions}" varStatus="status">
+				<c:if test="${umsPermission.pid == 0}">
+				<li class="sub-menu system_menus system_${umsPermission.systemId} ${status.index}" <c:if test="${umsPermission.systemId != 1}">style="display:none;"</c:if>>
+					<a class="waves-effect" href="javascript:;"><i class="${umsPermission.icon}"></i> ${umsPermission.name}</a>
 					<ul>
-						<c:forEach var="subUpmsPermission" items="${upmsPermissions}">
-							<c:if test="${subUpmsPermission.pid == upmsPermission.permissionId}">
-								<c:forEach var="upmsSystem" items="${upmsSystems}">
-									<c:if test="${subUpmsPermission.systemId == upmsSystem.systemId}">
-									<c:set var="systemBasePath" value="${upmsSystem.basepath}"/></c:if>
-								</c:forEach>
-								<li><a class="waves-effect" href="javascript:Tab.addTab('${subUpmsPermission.name}', '${systemBasePath}${subUpmsPermission.uri}');">${subUpmsPermission.name}</a></li>
+						<c:forEach var="subUmsPermission" items="${umsPermissions}">
+							<c:if test="${subUmsPermission.pid == umsPermission.id}">
+								<li><a class="waves-effect" href="javascript:Tab.addTab('${subUmsPermission.name}', '${basePath}${subUmsPermission.uri}');">${subUmsPermission.name}</a></li>
 							</c:if>
 						</c:forEach>
 					</ul>
@@ -157,7 +126,7 @@
 				</c:if>
 			</c:forEach>
 			<li>
-				<div class="upms-version">&copy; ZHENG-UPMS V1.0.0</div>
+				<div class="ums-version">&copy; UMS V1.0.0</div>
 			</li>
 		</ul>
 		<!-- /菜单区 -->
@@ -179,22 +148,13 @@
 		</div>
 		<div class="content_main">
 			<div id="iframe_home" class="iframe cur">
-				<p><h4>通用用户权限管理系统</h4></p>
-				<p><b>演示地址</b>：<a href="http://www.zhangshuzheng.cn/zhengAdmin" target="_blank">http://www.zhangshuzheng.cn/zhengAdmin</a></p>
-				<p><b>系统简介</b>：本系统是基于RBAC授权和基于用户授权的细粒度权限控制通用平台，并提供单点登录、会话管理和日志管理。接入的系统可自由定义组织、角色、权限、资源等。</p><br/>
-				<p><h4>系统功能概述：</h4></p>
-				<p><b>系统组织管理</b>：系统和组织增加、删除、修改、查询功能。</p>
-				<p><b>用户角色管理</b>：用户和角色增加、删除、修改、查询功能。</p>
-				<p><b>资源权限管理</b>：菜单和按钮增加、删除、修改、查询功能。</p>
-				<p><b>权限分配管理</b>：提供给角色和用户的权限增加、删除、修改、查询功能。</p>
-				<p><b>单点登录(SSO)</b>：提供统一用户单点登录认证、用户鉴权功能。</p>
-				<p><b>用户会话管理</b>：提供分布式用户会话管理</p>
-				<p><b>操作日志管理</b>：提供记录用户登录、操作等日志。</p><br/>
-				<p><h4>对外接口概述：</h4></p>
-				<p><b>系统组织数据接口</b>、<b>用户角色数据接口</b>、<b>资源权限数据接口</b>、<b>单点登录(SSO)接口</b>、<b>用户鉴权接口</b></p><br/>
-				<p><h4>关于作者</h4></p>
-				<p><b>姓　　名</b>：张恕征</p>
-				<p><b>电子邮箱</b>：469741414@qq.com</p>
+				<p><h4>通用管理系统</h4></p>
+				<p>xxxxxxxxxxxxxxxxxxxx</p>
+				<p>xxxxxxxxxxxxxxxxxxxx</p>
+				<p>xxxxxxxxxxxxxxxxxxxx</p>
+				<p>xxxxxxxxxxxxxxxxxxxx</p>
+				<p>xxxxxxxxxxxxxxxxxxxx</p>
+				<p>xxxxxxxxxxxxxxxxxxxx</p>
 			</div>
 		</div>
 	</section>

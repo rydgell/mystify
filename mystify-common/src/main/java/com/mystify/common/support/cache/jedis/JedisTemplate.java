@@ -27,7 +27,7 @@ public class JedisTemplate {
 	
     private static ShardedJedisPool shardedJedisPool = null;
 
-    private static Integer EXPIRE = PropertiesUtil.getInt("redis.expiration");
+    private static Integer EXPIRE = PropertiesUtil.getInt("redis.expiration",600);
     @Autowired
     private JedisConnectionFactory jedisConnectionFactory;
 

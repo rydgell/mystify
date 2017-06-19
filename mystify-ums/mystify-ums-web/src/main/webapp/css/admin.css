@@ -2,12 +2,12 @@ body, html {height: 100%; position: relative; font-family: 'Microsoft yahei'; fo
 img {vertical-align: middle;}
 a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 
-/** 头部 **/
+/** 澶撮儴 **/
 #header {width: 100%; height: 70px; padding: 0 20px; position: fixed; z-index: 11; left: 0; top: 0; box-shadow: 0 1px 4px rgba(0,0,0,.3);}
 #menu {position: relative; list-style: none; padding: 17px 0; margin-bottom: 0; height: 70px;}
 #menu>li {float: left;}
 
-/* 头部左侧侧边栏操作按钮 */
+/* 澶撮儴宸︿晶渚ц竟鏍忔搷浣滄寜閽� */
 .line-trigger{margin-left:-5px;cursor:pointer;position:relative;display:none!important}
 .line-trigger:before{content:"";position:absolute;top:50%;left:50%;width:45px;height:45px;border-radius:50%;background:rgba(255,255,255,.22);-webkit-transition:all;-o-transition:all;transition:all;-webkit-transition-duration:.3s;transition-duration:.3s;transform:scale(0);z-index:0;margin-top:-22px;margin-left:-22px}
 .line-trigger.toggled:before{-webkit-transform:scale(1);-ms-transform:scale(1);-o-transform:scale(1);transform:scale(1)}
@@ -18,12 +18,12 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 .line-wrap .line.center{margin:3px 0}
 .toggled .line-wrap .line.bottom{width:12px;transform:translateX(8px) translateY(-1px) rotate(-45deg);-webkit-transform:translateX(8px) translateY(-1px) rotate(-45deg)}
 
-/* 头部左侧logo */
+/* 澶撮儴宸︿晶logo */
 #logo a {margin-left: 10px!important;}
 #logo a img{vertical-align: top;}
 #system_title{color: #fff; height:33px; line-height: 33px; font-size: 16px;}
 
-/* 头部右侧工具按钮 */
+/* 澶撮儴鍙充晶宸ュ叿鎸夐挳 */
 .pull-right {float: right!important;}
 .hi-menu {list-style: none; padding:0;}
 .hi-menu>li {display: inline-block; margin: 0 1px; vertical-align: top; min-width: 50px;}
@@ -38,10 +38,10 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 #search-form{margin: 6px 15px;}
 #keywords{min-width:150px}
 
-/** 正文 **/
+/** 姝ｆ枃 **/
 #main {height: 100%; padding-top: 70px; padding-bottom: 0;}
 
-/* 侧边栏响应式 */
+/* 渚ц竟鏍忓搷搴斿紡 */
 @media (max-width: 1279px) {
     #sidebar {-webkit-transform:translate3d(-288px,0,0); transform: translate3d(-288px,0,0); box-shadow: 0 0 20px rgba(14,18,21,.38) }
     #sidebar.toggled {-webkit-transform: translate3d(0,0,0); transform: translate3d(0,0,0);}
@@ -51,10 +51,10 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
     #header{padding: 0 8px;}
 }
 
-/** 侧边栏 **/
+/** 渚ц竟鏍� **/
 #sidebar {position: fixed; width: 268px; background: #fff; height: calc(100% - 70px); top: 70px; transition: all; -webkit-transition-duration: .3s; transition-duration: .3s; z-index: 10; overflow-y: auto; box-shadow: 1px 0 4px rgba(0,0,0,.3);}
 
-/* 侧边栏个人信息 */
+/* 渚ц竟鏍忎釜浜轰俊鎭� */
 .s-profile>a{display:block;height:129px;margin-bottom:5px;width:100%;background-size:100%;text-decoration:none}
 .s-profile>a .sp-pic{padding:12px}
 .s-profile>a .sp-pic>img{width:47px;height:47px;border-radius:50%;border:3px solid rgba(0,0,0,.14);box-sizing:content-box}
@@ -65,7 +65,7 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 .zmdi{display:inline-block;font:normal normal normal 14px/1 Material-Design-Iconic-Font;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .zmdi-caret-down:before{content:'\f2f2'}
 
-/* 侧边栏菜单 */
+/* 渚ц竟鏍忚彍鍗� */
 .main-menu{list-style:none;padding-left:0;margin:20px 0 0}
 .main-menu a{-webkit-transition:color;-o-transition:color;transition:color;-webkit-transition-duration:.3s;transition-duration:.3s}
 .main-menu>li>a{padding:14px 20px 14px 65px;display:block;font-weight:500;position:relative;color:#4C4C4C}
@@ -82,9 +82,9 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 .sub-menu>a:after{content:"\f273";transform:scale(0)}
 .sub-menu.toggled>a:after{content:"\f273";-webkit-transform:scale(1);-ms-transform:scale(1);-o-transform:scale(1);transform:scale(1)}
 .main-menu a:hover{color:#262626}
-.upms-version{margin-top: 10px; height: 46px; line-height: 46px; font-size: 12px; color: #777; text-align: center; border-top: 1px solid #eee;}
+.ums-version{margin-top: 10px; height: 46px; line-height: 46px; font-size: 12px; color: #777; text-align: center; border-top: 1px solid #eee;}
 
-/* 内容区响应式 */
+/* 鍐呭鍖哄搷搴斿紡 */
 @media (min-width: 768px) {
     #content {padding-left: 0;}
 }
@@ -96,7 +96,7 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 }
 #content {height: 100%; padding-right: 0; transition: all;}
 
-/* 内容区 */
+/* 鍐呭鍖� */
 .container, .container-fluid{height:100%;padding:0;}
 @media (min-width: 1280px) {
     #content:not(.content-alt) {padding-left: 268px;padding-right: 0}
@@ -112,7 +112,7 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 }
 #content {height: 100%;}
 
-/* 选项卡 */
+/* 閫夐」鍗� */
 .content_tab{width:100%;height:48px;overflow:hidden;}
 .content_tab>ul{padding:0;font-size:0;display:block;white-space:nowrap;-webkit-overflow-scrolling:touch;overflow-x:scroll;}
 .scroll>ul{margin:0 40px;}
@@ -138,10 +138,10 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 #iframe_home{padding: 15px 30px; font-size: 13px;overflow:auto;}
 #iframe_home p{margin-bottom: 5px; line-height: 2em;}
 
-/* 底部 */
+/* 搴曢儴 */
 #footer {display:none;}
 
-/* 滚动条 */
+/* 婊氬姩鏉� */
 .mCSB_scrollTools{width:5px}
 .mCSB_scrollTools .mCSB_dragger_bar{border-radius:0!important}
 .mCSB_scrollTools.mCSB_scrollTools_horizontal,.mCSB_scrollTools.mCSB_scrollTools_vertical{margin:0!important}

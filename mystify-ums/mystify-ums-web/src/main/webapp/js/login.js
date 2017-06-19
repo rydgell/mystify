@@ -56,7 +56,7 @@ var options = {
    url: BASE_PATH + '/sso/login',
    success: function(json) {
      if (json.httpCode == 200) {
-		location.href = '${ROOT}'+json.data;
+		location.href = BASE_PATH+json.data;
      }else{
    	  alert(json.msg);
      }

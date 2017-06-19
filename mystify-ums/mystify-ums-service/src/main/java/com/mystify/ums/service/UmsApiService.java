@@ -55,7 +55,7 @@ public class UmsApiService  {
             _log.info("selectUpmsPermissionByUpmsUserId : upmsUserId={}", upmsUserId);
             return null;
         }
-        List<UmsPermission> upmsPermissions = umsApiMapper.selectUpmsPermissionByUpmsUserId(upmsUserId);
+        List<UmsPermission> upmsPermissions = umsApiMapper.selectUmsPermissionByUmsUserId(upmsUserId);
         return upmsPermissions;
     }
 
@@ -71,7 +71,7 @@ public class UmsApiService  {
             _log.info("selectUpmsRoleByUpmsUserId : upmsUserId={}", upmsUserId);
             return null;
         }
-        List<UmsRole> upmsRoles = umsApiMapper.selectUpmsRoleByUpmsUserId(upmsUserId);
+        List<UmsRole> upmsRoles = umsApiMapper.selectUmsRoleByUmsUserId(upmsUserId);
         return upmsRoles;
     }
 
