@@ -36,8 +36,25 @@ public class UmsLogService extends BaseService<UmsLog> {
 		 	/*if(StringUtils.isNotBlank(entity.getName())){
 		 		ew.like("name", entity.getName());
 		 	}*/
-		 	
-		    page.setRecords(umsLogMapper.selectPage(page, null));
+		 	if(entity!=null){
+		 		ew.where("1=1", "");
+		 		if(StringUtils.isNotBlank(entity.getUsername())){
+			 		ew.andNew("username={0}", entity.getUsername());
+			 	}
+		 		if(StringUtils.isNotBlank(entity.getDescription())){
+		 			ew.and().like("description", entity.getDescription());
+			 	}
+		 		if(StringUtils.isNotBlank(entity.getUrl())){
+		 			ew.and().like("url", entity.getUrl());
+			 	}
+		 		if(StringUtils.isNotBlank(entity.getIp())){
+		 			ew.andNew("ip={0}", entity.getIp());
+			 	}
+		 		if(StringUtils.isNotBlank(entity.getPermissions())){
+		 			ew.andNew("permissions={0}", entity.getPermissions());
+			 	}
+		 	}
+		    page.setRecords(umsLogMapper.selectPage(page, ew));
 		    return page;
 	 }
 }

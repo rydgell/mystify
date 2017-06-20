@@ -17,7 +17,11 @@
 </head>
 <body>
 <div id="main">
-	 <div class="panel panel-default">
+<!-- <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" 
+				    data-target="#toolbar">
+				日志记录
+		</div> -->
+	 <!-- <div class="panel panel-default">
 		<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" 
 				    data-target="#collapseTwo">
 			<h6 class="panel-title">
@@ -25,15 +29,30 @@
 			</h6>
 		</div>
 		<div id="collapseTwo" class="panel-collapse collapse">
-			<div class="panel-body form-horizontal" id="searchTools">
+			<div class="panel-body form-inline" id="searchTools">
                            <div class="form-group">
                                <div class="col-lg-2">
-                                   <input type="text" id="description" name="description" class="form-control input-sm m-bot3" placeholder="描述 "> 
+                                   <input type="text" id="description" name="description" class="form-control input-sm m-bot3" placeholder="操作 "> 
                                </div>
                            </div>
                            <div class="form-group">
                                <div class="col-lg-2">
-                                   <input type="text" id="description" name="description" class="form-control input-sm m-bot3" placeholder="描述 "> 
+                                   <input type="text" id="username" name="username" class="form-control input-sm m-bot3" placeholder="用户 "> 
+                               </div>
+                           </div>
+                            <div class="form-group">
+                               <div class="col-lg-2">
+                                   <input type="text" id="url" name="url" class="form-control input-sm m-bot3" placeholder="请求路径 "> 
+                               </div>
+                           </div>
+                           <div class="form-group">
+                               <div class="col-lg-2">
+                                   <input type="text" id="ip" name="ip" class="form-control input-sm m-bot3" placeholder="请求IP "> 
+                               </div>
+                           </div>
+                            <div class="form-group">
+                               <div class="col-lg-2">
+                                   <input type="text" id="permissions" name="permissions" class="form-control input-sm m-bot3" placeholder="权限"> 
                                </div>
                            </div>
                            <div class="form-group">
@@ -44,9 +63,38 @@
                            </div>
                        </div>
 		</div>
-	</div> 
-	<div id="toolbar">
-		<shiro:hasPermission name="upms:log:delete"><a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除日志</a></shiro:hasPermission>                 
+	</div>  -->
+	<div id="toolbar" class=" form-inline">
+		<div class="panel-collapse collapse form-inline" id="searchTools">
+		  <div class="form-group">
+              <div class="col-lg-2">
+                  <input type="text" id="description" name="description" class="form-control input-sm m-bot3" placeholder="操作 "> 
+              </div>
+          </div>
+          <div class="form-group">
+              <div class="col-lg-2">
+                  <input type="text" id="username" name="username" class="form-control input-sm m-bot3" placeholder="用户 "> 
+              </div>
+          </div>
+           <div class="form-group">
+              <div class="col-lg-2">
+                  <input type="text" id="url" name="url" class="form-control input-sm m-bot3" placeholder="请求路径 "> 
+              </div>
+          </div>
+          <div class="form-group">
+              <div class="col-lg-2">
+                  <input type="text" id="ip" name="ip" class="form-control input-sm m-bot3" placeholder="请求IP "> 
+              </div>
+          </div>
+           <div class="form-group">
+              <div class="col-lg-2">
+                  <input type="text" id="permissions" name="permissions" class="form-control input-sm m-bot3" placeholder="权限"> 
+              </div>
+          </div>
+         </div>
+	<shiro:hasPermission name="upms:log:delete"><a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除日志</a></shiro:hasPermission>
+	<a class="waves-effect waves-button" href="javascript:;" onclick="searchData()" ><i class="zmdi zmdi-search"></i> 查询</a>
+	<a class="waves-effect waves-button" href="javascript:;" onclick="resetSearch()"><i class="zmdi zmdi-redo"></i> 重置</a>
 	</div>
 	 
 	<table id="table"></table>
@@ -54,7 +102,16 @@
 <jsp:include page="/views/common/footer.jsp" flush="true"/>
 <script>
 var $table = $('#table');
+var isCollapse = false;
 $(function() {
+	$('#searchTools').on('hide.bs.collapse', function () {
+		isCollapse = false;
+	});
+	
+	$('#searchTools').on('show.bs.collapse', function () {
+		isCollapse = true;
+	});
+	
 	// bootstrap table初始化
 	$table.bootstrapTable({
 		url: '${basePath}/manage/log/list',
@@ -64,19 +121,18 @@ $(function() {
 		sidePagination: 'server',
 		striped: true,
 		search: false,
-		showRefresh: true,
+		showRefresh: false,
 		showColumns: true,
 		minimumCountColumns: 2,
 		clickToSelect: true,
 		silentSort: false,
 		escape: true,
-		searchOnEnterKey: true,
 		idField: 'id',
 	    pageSize: 10,  //每页显示的记录数  
 	    pageNumber:1, //当前第几页  
 	    pageList: [10, 20, 30,50],  //记录数可选列表  
 	    toolbar: '#toolbar', 
-	    //queryParams:queryParams,
+	    queryParams:queryParams,
 	    mobileResponsive:true,
         checkOnInit:true,
 		columns: [
@@ -102,7 +158,39 @@ $(function() {
 	});
 });
 
- 
+
+//配置参数
+function queryParams(params) {
+    var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+    	limit: params.limit,   //每页显示数量
+        offset: params.offset,  //页码
+        username: $("#searchTools #username").val(),
+        description: $("#searchTools #description").val(),
+        url:$("#searchTools #url").val(),
+        ip:$("#searchTools #ip").val(),
+        permissions:$("#searchTools #permissions").val(),
+    };
+    return temp;
+}
+
+function searchData() {
+	if(isCollapse){
+		$table.bootstrapTable('refresh');
+	}else{
+		$('#searchTools').collapse('show');
+	}
+}
+
+function resetSearch() {
+	$("#searchTools #username").val("");
+    $("#searchTools #description").val("") ;
+    $("#searchTools #url").val("") ;
+    $("#searchTools #permissions").val("") ;
+    $("#searchTools #ip").val("") ;
+    $table.bootstrapTable('refresh');
+    $('#searchTools').collapse('hide');
+}
+
 function dateFormatter(value, row, index){
 	if(value==null||value==""){ 
 		return "";

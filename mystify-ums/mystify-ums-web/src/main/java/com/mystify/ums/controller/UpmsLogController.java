@@ -53,11 +53,10 @@ public class UpmsLogController extends BaseController {
             @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
             @RequestParam(required = false, defaultValue = "", value = "search") String search,
             @RequestParam(required = false, defaultValue = "id",value = "sort") String sort,
-            @RequestParam(required = false,value = "order") String order) {
+            @RequestParam(required = false,value = "order") String order,UmsLog log) {
     	BasePage<UmsLog> page = new BasePage<UmsLog>(offset,limit,sort);
     	page.setAsc(false);
-        UmsLog entity = new UmsLog();
-    	page = umsLogService.selectPage(page, entity);
+    	page = umsLogService.selectPage(page, log);
     	Map<String, Object> result = new HashMap<>();
     	result.put("rows", page.getRecords());
         result.put("total", page.getTotal());
@@ -69,7 +68,6 @@ public class UpmsLogController extends BaseController {
     @RequestMapping(value = "/delete/{ids}", method = RequestMethod.GET)
     @ResponseBody
     public Object delete(@PathVariable("ids") String ids,ModelMap modelMap) {
-    	 System.out.println(ids);
     	 String[] idList = ids.split("-");
     	 for(String id:idList){
     		 umsLogService.delete(Integer.valueOf(id));
