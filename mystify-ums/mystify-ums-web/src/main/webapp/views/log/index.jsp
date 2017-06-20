@@ -17,12 +17,42 @@
 </head>
 <body>
 <div id="main">
+	<!-- <div class="panel panel-default">
+		<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" 
+				    data-target="#collapseTwo">
+			<h6 class="panel-title">
+				日志记录
+			</h6>
+		</div>
+		<div id="collapseTwo" class="panel-collapse collapse">
+			<div class="panel-body form-horizontal" id="searchTools">
+                           <div class="form-group">
+                               <div class="col-lg-2">
+                                   <input type="text" id="description" name="description" class="form-control input-sm m-bot3" placeholder="描述 "> 
+                               </div>
+                           </div>
+                           <div class="form-group">
+                               <div class="col-lg-2">
+                                   <input type="text" id="description" name="description" class="form-control input-sm m-bot3" placeholder="描述 "> 
+                               </div>
+                           </div>
+                           <div class="form-group">
+                               <div class="col-lg-offset-2 col-lg-10">
+                                   <button type="button" class="btn btn-primary" onclick="searchData()">查询</button>
+                                   <button type="button" class="btn btn-default" onclick="resetSearch()">重置</button>
+                               </div>
+                           </div>
+                       </div>
+		</div>
+	</div> -->
 	<div id="toolbar">
-		<shiro:hasPermission name="upms:log:delete"><a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除日志</a></shiro:hasPermission>
+		<shiro:hasPermission name="upms:log:delete"><a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除日志</a></shiro:hasPermission>                 
 	</div>
+	
 	<table id="table"></table>
 </div>
 <jsp:include page="/views/common/footer.jsp" flush="true"/>
+<script src="${basePath}/plugins/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js"></script>
 <script>
 var $table = $('#table');
 $(function() {
@@ -30,30 +60,34 @@ $(function() {
 	$table.bootstrapTable({
 		url: '${basePath}/manage/log/list',
 		height: getHeight(),
+		pagination: true,
+		paginationLoop: true,
+		sidePagination: 'server',
 		striped: true,
 		search: true,
 		showRefresh: true,
 		showColumns: true,
 		minimumCountColumns: 2,
 		clickToSelect: true,
-		detailView: true,
-		detailFormatter: 'detailFormatter',
-		pagination: true,
-		paginationLoop: false,
-		sidePagination: 'server',
 		silentSort: false,
-		smartDisplay: false,
 		escape: true,
 		searchOnEnterKey: true,
-		idField: 'logId',
-		maintainSelected: true,
-		toolbar: '#toolbar',
+		idField: 'id',
+	    pageSize: 10,  //每页显示的记录数  
+	    pageNumber:1, //当前第几页  
+	    pageList: [10, 20, 30,50],  //记录数可选列表  
+	    toolbar: '#toolbar', 
+	    //queryParams:queryParams,
+	    mobileResponsive:true,
+        checkOnInit:true,
+        advancedSearch:true,
+        idTable:'advancedTable',
 		columns: [
 			{field: 'ck', checkbox: true},
-			{field: 'logId', title: '编号', sortable: true, align: 'center'},
+			{field: 'id', title: '编号', sortable: false, width:20},
 			{field: 'description', title: '操作'},
             {field: 'username', title: '操作用户'},
-			{field: 'startTime', title: '操作时间'},
+			{field: 'startTime', title: '操作时间', formatter: 'dateFormatter',width:150},
 			{field: 'spendTime', title: '耗时'},
 			{field: 'url', title: '请求路径'},
 			{field: 'method', title: '请求类型'},
@@ -61,9 +95,23 @@ $(function() {
 			{field: 'userAgent', title: '用户标识'},
 			{field: 'ip', title: 'IP地址'},
 			{field: 'permissions', title: '权限值'}
-		]
+		],
+		onLoadSuccess: function(){  //加载成功时执行  
+            // layer.msg("加载成功");  
+        },  
+        onLoadError: function(){  //加载失败时执行  
+             //layer.msg("加载数据失败", {time : 1500, icon : 2});  
+        } 
 	});
 });
+
+ 
+function dateFormatter(value, row, index){
+	if(value==null||value==""){ 
+		return "";
+	}
+	return getSmpFormatDateByLong(parseInt(value) ,true);
+}
 // 删除
 var deleteDialog;
 function deleteAction() {
@@ -86,7 +134,7 @@ function deleteAction() {
 			type: 'red',
 			animationSpeed: 300,
 			title: false,
-			content: '确认删除该系统吗？',
+			content: '确认删除该日志吗？',
 			buttons: {
 				confirm: {
 					text: '确认',
@@ -94,44 +142,26 @@ function deleteAction() {
 					action: function () {
 						var ids = new Array();
 						for (var i in rows) {
-							ids.push(rows[i].logId);
+							ids.push(rows[i].id);
 						}
 						$.ajax({
 							type: 'get',
 							url: '${basePath}/manage/log/delete/' + ids.join("-"),
 							success: function(result) {
-								if (result.code != 1) {
-									if (result.data instanceof Array) {
-										$.each(result.data, function(index, value) {
-											$.confirm({
-												theme: 'dark',
-												animation: 'rotateX',
-												closeAnimation: 'rotateX',
-												title: false,
-												content: value.errorMsg,
-												buttons: {
-													confirm: {
-														text: '确认',
-														btnClass: 'waves-effect waves-button waves-light'
-													}
-												}
-											});
-										});
-									} else {
-										$.confirm({
-											theme: 'dark',
-											animation: 'rotateX',
-											closeAnimation: 'rotateX',
-											title: false,
-											content: result.data.errorMsg,
-											buttons: {
-												confirm: {
-													text: '确认',
-													btnClass: 'waves-effect waves-button waves-light'
-												}
+								if (result.httpCode != 200) {
+									$.confirm({
+										theme: 'dark',
+										animation: 'rotateX',
+										closeAnimation: 'rotateX',
+										title: false,
+										content: result.msg,
+										buttons: {
+											confirm: {
+												text: '确认',
+												btnClass: 'waves-effect waves-button waves-light'
 											}
-										});
-									}
+										}
+									});
 								} else {
 									deleteDialog.close();
 									$table.bootstrapTable('refresh');

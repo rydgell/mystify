@@ -19,6 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.mystify.common.base.BaseController;
+import com.mystify.common.base.BasePage;
 import com.mystify.common.exception.IllegalParameterException;
 import com.mystify.common.validator.LengthValidator;
 import com.mystify.ums.entity.UmsOrganization;
@@ -59,14 +60,13 @@ public class UpmsOrganizationController extends BaseController {
             @RequestParam(required = false, defaultValue = "", value = "search") String name,
             @RequestParam(required = false, value = "sort") String sort,
             @RequestParam(required = false, value = "order") String order) {
-    	Page<UmsOrganization> page = new Page<UmsOrganization>(offset,limit);
+    	BasePage<UmsOrganization> page = new BasePage<UmsOrganization>(offset,limit);
     	UmsOrganization entity = new UmsOrganization();
     	entity.setName(name);
     	page = umsOrganizationService.selectPage(page, entity);
         Map<String, Object> result = new HashMap<>();
         result.put("rows", page.getRecords());
         result.put("total", page.getTotal());
-        System.out.println(page.getTotal());
         return result;
     }
 

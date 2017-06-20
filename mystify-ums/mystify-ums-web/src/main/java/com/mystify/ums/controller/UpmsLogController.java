@@ -9,9 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.mystify.common.base.BaseController;
+import com.mystify.common.base.BasePage;
+import com.mystify.ums.entity.UmsLog;
+import com.mystify.ums.entity.UmsOrganization;
 import com.mystify.ums.service.UmsLogService;
 
 import java.util.HashMap;
@@ -29,14 +34,14 @@ public class UpmsLogController extends BaseController {
 
     private static Logger log = LoggerFactory.getLogger(UpmsLogController.class);
 
-    /*@Autowired
-    private UmsLogService umsLogService;*/
+    @Autowired
+    private UmsLogService umsLogService;
 
     @ApiOperation(value = "日志首页")
     @RequiresPermissions("upms:log:read")
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
-        return "/manage/log/index.jsp";
+        return "/log/index";
     }
 
     @ApiOperation(value = "日志列表")
@@ -47,21 +52,15 @@ public class UpmsLogController extends BaseController {
             @RequestParam(required = false, defaultValue = "0", value = "offset") int offset,
             @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
             @RequestParam(required = false, defaultValue = "", value = "search") String search,
-            @RequestParam(required = false, value = "sort") String sort,
-            @RequestParam(required = false, value = "order") String order) {
-       /* UpmsLogExample upmsLogExample = new UpmsLogExample();
-        if (!StringUtils.isBlank(sort) && !StringUtils.isBlank(order)) {
-            upmsLogExample.setOrderByClause(sort + " " + order);
-        }
-        if (StringUtils.isNotBlank(search)) {
-            upmsLogExample.or()
-                    .andDescriptionLike("%" + search + "%");
-        }
-        List<UpmsLog> rows = upmsLogService.selectByExampleForOffsetPage(upmsLogExample, offset, limit);
-        long total = upmsLogService.countByExample(upmsLogExample);*/
+            @RequestParam(required = false, defaultValue = "id",value = "sort") String sort,
+            @RequestParam(required = false,value = "order") String order) {
+    	BasePage<UmsLog> page = new BasePage<UmsLog>(offset,limit,sort);
+    	page.setAsc(false);
+        UmsLog entity = new UmsLog();
+    	page = umsLogService.selectPage(page, entity);
     	Map<String, Object> result = new HashMap<>();
-        //result.put("rows", rows);
-        //result.put("total", total);
+    	result.put("rows", page.getRecords());
+        result.put("total", page.getTotal());
         return result;
     }
 
@@ -69,10 +68,13 @@ public class UpmsLogController extends BaseController {
     @RequiresPermissions("upms:log:delete")
     @RequestMapping(value = "/delete/{ids}", method = RequestMethod.GET)
     @ResponseBody
-    public Object delete(@PathVariable("ids") String ids) {
-        //int count = umsLogService.delete(ids);
-        //return new UmsResult(UmsResultConstant.SUCCESS, count);
-        return "";
+    public Object delete(@PathVariable("ids") String ids,ModelMap modelMap) {
+    	 System.out.println(ids);
+    	 String[] idList = ids.split("-");
+    	 for(String id:idList){
+    		 umsLogService.delete(Integer.valueOf(id));
+    	 }
+    	 return setSuccessModelMap(modelMap);
     }
 
 }

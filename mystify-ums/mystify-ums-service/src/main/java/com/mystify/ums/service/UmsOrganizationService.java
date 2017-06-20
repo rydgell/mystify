@@ -1,16 +1,13 @@
 package com.mystify.ums.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.mystify.common.base.BasePage;
 import com.mystify.common.base.BaseService;
 import com.mystify.ums.entity.UmsOrganization;
 import com.mystify.ums.mapper.UmsOrganizationMapper;
 
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +32,7 @@ public class UmsOrganizationService extends BaseService<UmsOrganization> {
 	 private UmsOrganizationMapper umsOrganizationMapper;
 	 
 	 
-	 public Page<UmsOrganization> selectPage(Page<UmsOrganization> page, UmsOrganization entity) {
+	 public BasePage<UmsOrganization> selectPage(BasePage<UmsOrganization> page, UmsOrganization entity) {
 		 	EntityWrapper<UmsOrganization> ew = new EntityWrapper<UmsOrganization>();
 		 	if(StringUtils.isNotBlank(entity.getName())){
 		 		ew.like("name", entity.getName());

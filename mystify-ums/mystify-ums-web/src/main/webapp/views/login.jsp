@@ -40,7 +40,7 @@
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-check-square"></i></span>
         <div class="fg-line">
-            <input id="verificationCode" type="password" class="form-control" name="verificationCode" placeholder="验证码" required value="">
+            <input id="verificationCode" type="text" class="form-control" name="verificationCode" placeholder="验证码" required value="">
        </div>
     </div>
      <div class="input-group m-b-20">

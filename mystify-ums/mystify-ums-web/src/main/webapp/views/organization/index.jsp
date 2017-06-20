@@ -19,8 +19,6 @@
 <div id="main">
 	<div id="toolbar">
 		<shiro:hasPermission name="upms:organization:create"><a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增组织</a></shiro:hasPermission>
-		<shiro:hasPermission name="upms:organization:update"><a class="waves-effect waves-button" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑组织</a></shiro:hasPermission>
-		<shiro:hasPermission name="upms:organization:delete"><a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除组织</a></shiro:hasPermission>
 	</div>
 	<table id="table"></table>
 </div>
@@ -51,8 +49,7 @@ $(function() {
 		maintainSelected: true,
 		toolbar: '#toolbar',
 		columns: [
-			{field: 'ck', checkbox: true},
-			{field: 'id', title: '编号', sortable: true, align: 'center'},
+			{field: 'id', title: '编号', sortable: false, align: 'center'},
 			{field: 'name', title: '组织名称'},
             {field: 'description', title: '组织描述'},
 			{field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
@@ -62,8 +59,8 @@ $(function() {
 // 格式化操作按钮
 function actionFormatter(value, row, index) {
     return [
-		'<a class="update" href="javascript:;" onclick="updateAction()" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
-		'<a class="delete" href="javascript:;" onclick="deleteAction()" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
+		'<a class="update" href="javascript:;" onclick="updateAction('+row.id+')" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
+		'<a class="delete" href="javascript:;" onclick="deleteAction('+row.id+')" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
     ].join('');
 }
 // 新增
@@ -80,114 +77,41 @@ function createAction() {
 }
 // 编辑
 var updateDialog;
-function updateAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	
-	if (rows.length != 1) {
-		$.confirm({
-			title: false,
-			content: '请选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		alert(rows[0].id);
-		updateDialog = $.dialog({
-			animationSpeed: 300,
-			title: '编辑组织',
-			content: 'url:${basePath}/manage/organization/update/' + rows[0].id,
-			onContentReady: function () {
-				initMaterialInput();
-			}
-		});
-	}
+function updateAction(id) {
+	updateDialog = $.dialog({
+		animationSpeed: 300,
+		title: '编辑组织',
+		content: 'url:${basePath}/manage/organization/update/' + id,
+		onContentReady: function () {
+			initMaterialInput();
+		}
+	});
+	 
 }
 // 删除
 var deleteDialog;
-function deleteAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	if (rows.length == 0) {
-		$.confirm({
-			title: false,
-			content: '请至少选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		deleteDialog = $.confirm({
-			type: 'red',
-			animationSpeed: 300,
-			title: false,
-			content: '确认删除该组织吗？',
-			buttons: {
-				confirm: {
-					text: '确认',
-					btnClass: 'waves-effect waves-button',
-					action: function () {
-						var ids = new Array();
-						for (var i in rows) {
-							ids.push(rows[i].id);
-						}
-						$.ajax({
-							type: 'get',
-							url: '${basePath}/manage/organization/delete/' + ids.join("-"),
-							success: function(result) {
-								if (result.code != 1) {
-									if (result.data instanceof Array) {
-										$.each(result.data, function(index, value) {
-											$.confirm({
-												theme: 'dark',
-												animation: 'rotateX',
-												closeAnimation: 'rotateX',
-												title: false,
-												content: value.errorMsg,
-												buttons: {
-													confirm: {
-														text: '确认',
-														btnClass: 'waves-effect waves-button waves-light'
-													}
-												}
-											});
-										});
-									} else {
-										$.confirm({
-											theme: 'dark',
-											animation: 'rotateX',
-											closeAnimation: 'rotateX',
-											title: false,
-											content: result.data.errorMsg,
-											buttons: {
-												confirm: {
-													text: '确认',
-													btnClass: 'waves-effect waves-button waves-light'
-												}
-											}
-										});
-									}
-								} else {
-									deleteDialog.close();
-									$table.bootstrapTable('refresh');
-								}
-							},
-							error: function(XMLHttpRequest, textStatus, errorThrown) {
+function deleteAction(id) {
+	deleteDialog = $.confirm({
+		type: 'red',
+		animationSpeed: 300,
+		title: false,
+		content: '确认删除该组织吗？',
+		buttons: {
+			confirm: {
+				text: '确认',
+				btnClass: 'waves-effect waves-button',
+				action: function () {
+					$.ajax({
+						type: 'get',
+						url: '${basePath}/manage/organization/delete/' + id,
+						success: function(result) {
+							if (result.httpCode != 200) {
 								$.confirm({
 									theme: 'dark',
 									animation: 'rotateX',
 									closeAnimation: 'rotateX',
 									title: false,
-									content: textStatus,
+									content: result.msg,
 									buttons: {
 										confirm: {
 											text: '确认',
@@ -195,17 +119,35 @@ function deleteAction() {
 										}
 									}
 								});
+							} else {
+								deleteDialog.close();
+								$table.bootstrapTable('refresh');
 							}
-						});
-					}
-				},
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							$.confirm({
+								theme: 'dark',
+								animation: 'rotateX',
+								closeAnimation: 'rotateX',
+								title: false,
+								content: textStatus,
+								buttons: {
+									confirm: {
+										text: '确认',
+										btnClass: 'waves-effect waves-button waves-light'
+									}
+								}
+							});
+						}
+					});
 				}
+			},
+			cancel: {
+				text: '取消',
+				btnClass: 'waves-effect waves-button'
 			}
-		});
-	}
+		}
+	});
 }
 </script>
 </body>
