@@ -20,7 +20,7 @@ $(function() {
 });
 // 动态高度
 function getHeight() {
-	return $(window).height() - 20;
+	return $(window).height() - 80;
 }
 // 数据表格展开内容
 function detailFormatter(index, row) {

@@ -17,7 +17,7 @@
 </head>
 <body>
 <div id="main">
-	<!-- <div class="panel panel-default">
+	 <div class="panel panel-default">
 		<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" 
 				    data-target="#collapseTwo">
 			<h6 class="panel-title">
@@ -44,15 +44,14 @@
                            </div>
                        </div>
 		</div>
-	</div> -->
+	</div> 
 	<div id="toolbar">
 		<shiro:hasPermission name="upms:log:delete"><a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除日志</a></shiro:hasPermission>                 
 	</div>
-	
+	 
 	<table id="table"></table>
 </div>
 <jsp:include page="/views/common/footer.jsp" flush="true"/>
-<script src="${basePath}/plugins/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js"></script>
 <script>
 var $table = $('#table');
 $(function() {
@@ -64,7 +63,7 @@ $(function() {
 		paginationLoop: true,
 		sidePagination: 'server',
 		striped: true,
-		search: true,
+		search: false,
 		showRefresh: true,
 		showColumns: true,
 		minimumCountColumns: 2,
@@ -80,8 +79,6 @@ $(function() {
 	    //queryParams:queryParams,
 	    mobileResponsive:true,
         checkOnInit:true,
-        advancedSearch:true,
-        idTable:'advancedTable',
 		columns: [
 			{field: 'ck', checkbox: true},
 			{field: 'id', title: '编号', sortable: false, width:20},
