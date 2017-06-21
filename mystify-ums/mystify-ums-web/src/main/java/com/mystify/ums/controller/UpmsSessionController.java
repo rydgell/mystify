@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.mystify.common.base.BaseController;
@@ -30,7 +31,7 @@ public class UpmsSessionController extends BaseController {
     @RequiresPermissions("upms:session:read")
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
-        return "/manage/session/index.jsp";
+        return "/session/index";
     }
 
     @ApiOperation(value = "会话列表")
@@ -47,10 +48,9 @@ public class UpmsSessionController extends BaseController {
     @RequiresPermissions("upms:session:forceout")
     @RequestMapping(value = "/forceout/{ids}", method = RequestMethod.GET)
     @ResponseBody
-    public Object forceout(@PathVariable("ids") String ids) {
-        int count = sessionDAO.forceout(ids);
-        //return new UpmsResult(UpmsResultConstant.SUCCESS, count);
-        return "";
+    public Object forceout(@PathVariable("ids") String ids,ModelMap modelMap) {
+        sessionDAO.forceout(ids);
+        return setSuccessModelMap(modelMap);
     }
 
 }

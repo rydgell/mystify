@@ -44,8 +44,8 @@
 	<bean id="redissonHelper" class="com.mystify.common.support.cache.RedissonHelper" />
 	
 	<bean id="redisHelper" class="com.mystify.common.support.cache.RedisHelper" />  
-    
-<!--kaptcha 验证码 -->
+	
+	<!--kaptcha 验证码 -->
 	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">  
         <property name="config">  
             <bean class="com.google.code.kaptcha.util.Config">  

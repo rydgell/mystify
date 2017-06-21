@@ -1,9 +1,13 @@
 package com.mystify.ums.service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.mystify.common.base.BasePage;
 import com.mystify.common.base.BaseService;
+import com.mystify.ums.entity.UmsRole;
 import com.mystify.ums.entity.UmsUser;
 import com.mystify.ums.mapper.UmsUserMapper;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,4 +41,19 @@ public class UmsUserService extends BaseService<UmsUser> {
          umsUserMapper.insert(upmsUser);
          	return upmsUser;
 	    }
+	 
+	 public BasePage<UmsUser> selectPage(BasePage<UmsUser> page, UmsUser entity) {
+		 	EntityWrapper<UmsUser> ew = new EntityWrapper<UmsUser>();
+		 	if(entity!=null){
+		 		ew.where("1=1", "");
+		 		if(StringUtils.isNotBlank(entity.getUsername())){
+			 		ew.and().like("username", entity.getUsername());
+			 	}
+		 		/*if(StringUtils.isNotBlank(entity.getIp())){
+		 			ew.andNew("ip={0}", entity.getIp());
+			 	}*/
+		 	}
+		    page.setRecords(umsUserMapper.selectPage(page, ew));
+		    return page;
+	 }
 }

@@ -55,7 +55,7 @@ $(function() {
 		toolbar: '#toolbar',
 		columns: [
 			{field: 'ck', checkbox: true},
-			{field: 'userId', title: '编号', sortable: true, align: 'center'},
+			{field: 'id', title: '编号', sortable: true, align: 'center'},
             {field: 'username', title: '帐号'},
 			{field: 'realname', title: '姓名'},
 			{field: 'avatar', title: '头像', align: 'center', formatter: 'avatarFormatter'},
@@ -110,112 +110,40 @@ function createAction() {
 }
 // 编辑
 var updateDialog;
-function updateAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	if (rows.length != 1) {
-		$.confirm({
-			title: false,
-			content: '请选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		updateDialog = $.dialog({
-			animationSpeed: 300,
-			title: '编辑用户',
-			content: 'url:${basePath}/manage/user/update/' + rows[0].userId,
-			onContentReady: function () {
-				initMaterialInput();
-			}
-		});
-	}
+function updateAction(userId) {
+	updateDialog = $.dialog({
+		animationSpeed: 300,
+		title: '编辑用户',
+		content: 'url:${basePath}/manage/user/update/' + userId,
+		onContentReady: function () {
+			initMaterialInput();
+		}
+	});
 }
 // 删除
 var deleteDialog;
-function deleteAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	if (rows.length == 0) {
-		$.confirm({
-			title: false,
-			content: '请至少选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		deleteDialog = $.confirm({
-			type: 'red',
-			animationSpeed: 300,
-			title: false,
-			content: '确认删除该用户吗？',
-			buttons: {
-				confirm: {
-					text: '确认',
-					btnClass: 'waves-effect waves-button',
-					action: function () {
-						var ids = new Array();
-						for (var i in rows) {
-							ids.push(rows[i].userId);
-						}
-						$.ajax({
-							type: 'get',
-							url: '${basePath}/manage/user/delete/' + ids.join("-"),
-							success: function(result) {
-								if (result.code != 1) {
-									if (result.data instanceof Array) {
-										$.each(result.data, function(index, value) {
-											$.confirm({
-												theme: 'dark',
-												animation: 'rotateX',
-												closeAnimation: 'rotateX',
-												title: false,
-												content: value.errorMsg,
-												buttons: {
-													confirm: {
-														text: '确认',
-														btnClass: 'waves-effect waves-button waves-light'
-													}
-												}
-											});
-										});
-									} else {
-										$.confirm({
-											theme: 'dark',
-											animation: 'rotateX',
-											closeAnimation: 'rotateX',
-											title: false,
-											content: result.data.errorMsg,
-											buttons: {
-												confirm: {
-													text: '确认',
-													btnClass: 'waves-effect waves-button waves-light'
-												}
-											}
-										});
-									}
-								} else {
-									deleteDialog.close();
-									$table.bootstrapTable('refresh');
-								}
-							},
-							error: function(XMLHttpRequest, textStatus, errorThrown) {
+function deleteAction(userId) {
+	deleteDialog = $.confirm({
+		type: 'red',
+		animationSpeed: 300,
+		title: false,
+		content: '确认删除该用户吗？',
+		buttons: {
+			confirm: {
+				text: '确认',
+				btnClass: 'waves-effect waves-button',
+				action: function () {
+					$.ajax({
+						type: 'get',
+						url: '${basePath}/manage/user/delete/' + userId,
+						success: function(result) {
+							if (result.httpCode != 200) {
 								$.confirm({
 									theme: 'dark',
 									animation: 'rotateX',
 									closeAnimation: 'rotateX',
 									title: false,
-									content: textStatus,
+									content: result.msg,
 									buttons: {
 										confirm: {
 											text: '确认',
@@ -223,17 +151,35 @@ function deleteAction() {
 										}
 									}
 								});
+							} else {
+								deleteDialog.close();
+								$table.bootstrapTable('refresh');
 							}
-						});
-					}
-				},
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							$.confirm({
+								theme: 'dark',
+								animation: 'rotateX',
+								closeAnimation: 'rotateX',
+								title: false,
+								content: textStatus,
+								buttons: {
+									confirm: {
+										text: '确认',
+										btnClass: 'waves-effect waves-button waves-light'
+									}
+								}
+							});
+						}
+					});
 				}
+			},
+			cancel: {
+				text: '取消',
+				btnClass: 'waves-effect waves-button'
 			}
-		});
-	}
+		}
+	});
 }
 // 用户组织
 var organizationDialog;

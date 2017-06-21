@@ -190,13 +190,6 @@ function resetSearch() {
     $table.bootstrapTable('refresh');
     $('#searchTools').collapse('hide');
 }
-
-function dateFormatter(value, row, index){
-	if(value==null||value==""){ 
-		return "";
-	}
-	return getSmpFormatDateByLong(parseInt(value) ,true);
-}
 // 删除
 var deleteDialog;
 function deleteAction() {

@@ -124,3 +124,10 @@ function getFormatDate(date, pattern) {
     }
     return date.format(pattern);
 }
+
+function dateFormatter(value, row, index){
+	if(value==null||value==""){ 
+		return "";
+	}
+	return getSmpFormatDateByLong(parseInt(value) ,true);
+}

@@ -14,6 +14,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -31,6 +32,7 @@ import java.lang.reflect.Method;
  * Created by rydge on 2017/3/14.
  */
 @Aspect
+@Component
 public class LogAspect {
 
 	private final static Logger log = LoggerFactory.getLogger(LogAspect.class);
@@ -45,13 +47,13 @@ public class LogAspect {
 
 	@Before("execution(* *..controller..*.*(..))")
 	public void doBeforeInServiceLayer(JoinPoint joinPoint) {
-		log.debug("doBeforeInServiceLayer");
+		log.info("doBeforeInServiceLayer");
 		startTime = System.currentTimeMillis();
 	}
 
 	@After("execution(* *..controller..*.*(..))")
 	public void doAfterInServiceLayer(JoinPoint joinPoint) {
-		log.debug("doAfterInServiceLayer");
+		log.info("doAfterInServiceLayer");
 	}
 
 	@Around("execution(* *..controller..*.*(..))")
@@ -79,7 +81,7 @@ public class LogAspect {
 			}
 		}
 		endTime = System.currentTimeMillis();
-		log.debug("doAround>>>result={},耗时：{}", result, endTime - startTime);
+		log.info("doAround>>>result={},耗时：{}", result, endTime - startTime);
 
 		upmsLog.setBasePath(RequestUtil.getBasePath(request));
 		upmsLog.setIp(RequestUtil.getIpAddr(request));

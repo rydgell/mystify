@@ -36,8 +36,6 @@ $(function() {
 		showColumns: true,
 		minimumCountColumns: 2,
 		clickToSelect: true,
-		detailView: true,
-		detailFormatter: 'detailFormatter',
 		pagination: true,
 		paginationLoop: false,
 		sidePagination: 'server',
@@ -50,8 +48,8 @@ $(function() {
 		toolbar: '#toolbar',
 		columns: [
 			{field: 'ck', checkbox: true},
-			{field: 'id', title: '编号', sortable: true, align: 'center'},
-			{field: 'startTimestamp', title: '创建时间', sortable: true, align: 'center'},
+			{field: 'id', title: '编号', sortable: false,align: 'center'},
+			{field: 'startTimestamp', title: '创建时间', sortable: false, align: 'center'},
 			{field: 'lastAccessTime', title: '最后访问时间'},
 			{field: 'expired', title: '是否过期', align: 'center'},
 			{field: 'host', title: '访问者IP', align: 'center'},
@@ -108,38 +106,20 @@ function forceoutAction() {
 							type: 'get',
 							url: '${basePath}/manage/session/forceout/' + ids.join(","),
 							success: function(result) {
-								if (result.code != 1) {
-									if (result.data instanceof Array) {
-										$.each(result.data, function(index, value) {
-											$.confirm({
-												theme: 'dark',
-												animation: 'rotateX',
-												closeAnimation: 'rotateX',
-												title: false,
-												content: value.errorMsg,
-												buttons: {
-													confirm: {
-														text: '确认',
-														btnClass: 'waves-effect waves-button waves-light'
-													}
-												}
-											});
-										});
-									} else {
-										$.confirm({
-											theme: 'dark',
-											animation: 'rotateX',
-											closeAnimation: 'rotateX',
-											title: false,
-											content: result.data.errorMsg,
-											buttons: {
-												confirm: {
-													text: '确认',
-													btnClass: 'waves-effect waves-button waves-light'
-												}
+								if (result.httpCode != 200) {
+									$.confirm({
+										theme: 'dark',
+										animation: 'rotateX',
+										closeAnimation: 'rotateX',
+										title: false,
+										content: result.msg,
+										buttons: {
+											confirm: {
+												text: '确认',
+												btnClass: 'waves-effect waves-button waves-light'
 											}
-										});
-									}
+										}
+									});
 								} else {
 									forceoutDialog.close();
 									$table.bootstrapTable('refresh');

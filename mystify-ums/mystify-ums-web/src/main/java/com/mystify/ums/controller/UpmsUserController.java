@@ -5,7 +5,13 @@ import com.baidu.unbiz.fluentvalidator.ComplexResult;
 import com.baidu.unbiz.fluentvalidator.FluentValidator;
 import com.baidu.unbiz.fluentvalidator.ResultCollectors;
 import com.mystify.common.base.BaseController;
+import com.mystify.common.base.BasePage;
 import com.mystify.common.exception.DataParseException;
+import com.mystify.common.exception.IllegalParameterException;
+import com.mystify.common.utils.MD5Util;
+import com.mystify.common.validator.LengthValidator;
+import com.mystify.common.validator.NotNullValidator;
+import com.mystify.ums.entity.UmsRole;
 import com.mystify.ums.entity.UmsUser;
 import com.mystify.ums.service.UmsOrganizationService;
 import com.mystify.ums.service.UmsRoleService;
@@ -31,6 +37,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 用户controller
@@ -65,7 +72,7 @@ public class UpmsUserController extends BaseController {
     @RequiresPermissions("upms:user:read")
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
-        return "/manage/user/index.jsp";
+        return "/user/index";
     }
 
     @ApiOperation(value = "用户组织")
@@ -81,7 +88,7 @@ public class UpmsUserController extends BaseController {
         List<UpmsUserOrganization> upmsUserOrganizations = upmsUserOrganizationService.selectByExample(upmsUserOrganizationExample);
         modelMap.put("upmsOrganizations", upmsOrganizations);
         modelMap.put("upmsUserOrganizations", upmsUserOrganizations);*/
-        return "/manage/user/organization.jsp";
+        return "/user/organization";
     }
 
     @ApiOperation(value = "用户组织")
@@ -108,7 +115,7 @@ public class UpmsUserController extends BaseController {
         List<UpmsUserRole> upmsUserRoles = upmsUserRoleService.selectByExample(upmsUserRoleExample);
         modelMap.put("upmsRoles", upmsRoles);
         modelMap.put("upmsUserRoles", upmsUserRoles);*/
-        return "/manage/user/role.jsp";
+        return "/user/role";
     }
 
     @ApiOperation(value = "用户角色")
@@ -127,9 +134,8 @@ public class UpmsUserController extends BaseController {
     @RequestMapping(value = "/permission/{id}", method = RequestMethod.GET)
     public String permission(@PathVariable("id") int id, ModelMap modelMap) {
         /*UpmsUser user = upmsUserService.selectByPrimaryKey(id);
-        modelMap.put("user", user);
-        return "/manage/user/permission.jsp";*/
-    	return "";
+        modelMap.put("user", user);*/
+        return "/user/permission";
     }
 
     @ApiOperation(value = "用户权限")
@@ -151,24 +157,13 @@ public class UpmsUserController extends BaseController {
     public Object list(
             @RequestParam(required = false, defaultValue = "0", value = "offset") int offset,
             @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
-            @RequestParam(required = false, defaultValue = "", value = "search") String search,
             @RequestParam(required = false, value = "sort") String sort,
-            @RequestParam(required = false, value = "order") String order) {
-    	/* UpmsUserExample upmsUserExample = new UpmsUserExample();
-        if (!StringUtils.isBlank(sort) && !StringUtils.isBlank(order)) {
-            upmsUserExample.setOrderByClause(sort + " " + order);
-        }
-        if (StringUtils.isNotBlank(search)) {
-            upmsUserExample.or()
-                    .andRealnameLike("%" + search + "%");
-            upmsUserExample.or()
-                    .andUsernameLike("%" + search + "%");
-        }
-        List<UpmsUser> rows = upmsUserService.selectByExampleForOffsetPage(upmsUserExample, offset, limit);
-        long total = upmsUserService.countByExample(upmsUserExample);*/
-        Map<String, Object> result = new HashMap<>();
-        //result.put("rows", rows);
-        //result.put("total", total);
+            @RequestParam(required = false, value = "order") String order,UmsUser umsUser) {
+        BasePage<UmsUser> page = new BasePage<UmsUser>(offset,limit,sort);
+    	page = umsUserService.selectPage(page, umsUser);
+    	Map<String, Object> result = new HashMap<>();
+    	result.put("rows", page.getRecords());
+        result.put("total", page.getTotal());
         return result;
     }
 
@@ -176,45 +171,43 @@ public class UpmsUserController extends BaseController {
     @RequiresPermissions("upms:user:create")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create() {
-        return "/manage/user/create.jsp";
+        return "/user/create";
     }
 
     @ApiOperation(value = "新增用户")
     @RequiresPermissions("upms:user:create")
     @ResponseBody
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Object create(UmsUser umsUser) {
-        /*ComplexResult result = FluentValidator.checkAll()
-                .on(upmsUser.getUsername(), new LengthValidator(1, 20, "帐号"))
-                .on(upmsUser.getPassword(), new LengthValidator(5, 32, "密码"))
-                .on(upmsUser.getRealname(), new NotNullValidator("姓名"))
+    public Object create(UmsUser umsUser,ModelMap modelMap) {
+        ComplexResult result = FluentValidator.checkAll()
+                .on(umsUser.getUsername(), new LengthValidator(1, 20, "帐号"))
+                .on(umsUser.getPassword(), new LengthValidator(5, 32, "密码"))
+                .on(umsUser.getRealname(), new NotNullValidator("姓名"))
                 .doValidate()
                 .result(ResultCollectors.toComplex());
         if (!result.isSuccess()) {
-            return new UpmsResult(UpmsResultConstant.INVALID_LENGTH, result.getErrors());
+        	throw new IllegalParameterException("INVALID_LENGTH") ;
         }
         long time = System.currentTimeMillis();
         String salt = UUID.randomUUID().toString().replaceAll("-", "");
-        upmsUser.setSalt(salt);
-        upmsUser.setPassword(MD5Util.MD5(upmsUser.getPassword() + upmsUser.getSalt()));
-        upmsUser.setCtime(time);
-        upmsUser = upmsUserService.createUser(upmsUser);
-        if (null == upmsUser) {
-            return new UpmsResult(UpmsResultConstant.FAILED, "帐号名已存在！");
+        umsUser.setSalt(salt);
+        umsUser.setPassword(MD5Util.MD5(umsUser.getPassword() + umsUser.getSalt()));
+        umsUser.setCtime(time);
+        umsUser = umsUserService.createUser(umsUser);
+        if (null == umsUser) {
+        	throw new DataParseException("user already exists") ;
         }
-        _log.info("新增用户，主键：userId={}", upmsUser.getUserId());
-        return new UpmsResult(UpmsResultConstant.SUCCESS, 1);*/
-    	return "";
+        _log.info("新增用户，主键：userId={}", umsUser.getId());
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "删除用户")
     @RequiresPermissions("upms:user:delete")
-    @RequestMapping(value = "/delete/{ids}",method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
     @ResponseBody
-    public Object delete(@PathVariable("ids") String ids) {
-        //int count = upmsUserService.deleteByPrimaryKeys(ids);
-        //return new UpmsResult(UpmsResultConstant.SUCCESS, count);
-    	return "";
+    public Object delete(@PathVariable("id") Integer id,ModelMap modelMap) {
+        umsUserService.delete(id);
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "修改用户")
@@ -223,28 +216,26 @@ public class UpmsUserController extends BaseController {
     public String update(@PathVariable("id") int id, ModelMap modelMap) {
         UmsUser user = umsUserService.queryById(id);
         modelMap.put("user", user);
-        return "/manage/user/update.jsp";
+        return "/user/update";
     }
 
     @ApiOperation(value = "修改用户")
     @RequiresPermissions("upms:user:update")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Object update(@PathVariable("id") int id, UmsUser umsUser) {
-        /*ComplexResult result = FluentValidator.checkAll()
-                .on(upmsUser.getUsername(), new LengthValidator(1, 20, "帐号"))
-                .on(upmsUser.getRealname(), new NotNullValidator("姓名"))
+    public Object update(@PathVariable("id") int id, UmsUser umsUser,ModelMap modelMap) {
+        ComplexResult result = FluentValidator.checkAll()
+                .on(umsUser.getUsername(), new LengthValidator(1, 20, "帐号"))
+                .on(umsUser.getRealname(), new NotNullValidator("姓名"))
                 .doValidate()
                 .result(ResultCollectors.toComplex());
         if (!result.isSuccess()) {
-            return new UpmsResult(UpmsResultConstant.INVALID_LENGTH, result.getErrors());
+        	throw new IllegalParameterException("INVALID_LENGTH") ;
         }
         // 不允许直接改密码
-        upmsUser.setPassword(null);
-        upmsUser.setUserId(id);
-        int count = upmsUserService.updateByPrimaryKeySelective(upmsUser);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, count);*/
-    	return "";
+        umsUser.setPassword(null);
+        umsUserService.update(umsUser);
+        return setSuccessModelMap(modelMap);
     }
     
     

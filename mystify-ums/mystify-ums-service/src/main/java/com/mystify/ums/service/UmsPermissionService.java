@@ -9,6 +9,7 @@ import com.mystify.ums.entity.UmsRolePermission;
 import com.mystify.ums.entity.UmsSystem;
 import com.mystify.ums.entity.UmsUserPermission;
 import com.mystify.ums.mapper.UmsPermissionMapper;
+import com.mystify.ums.mapper.UmsRolePermissionMapper;
 import com.mystify.ums.mapper.UmsSystemMapper;
 import com.mystify.ums.mapper.UmsUserPermissionMapper;
 
@@ -43,100 +44,89 @@ public class UmsPermissionService extends BaseService<UmsPermission> {
 	 @Autowired
 	 private UmsSystemMapper umsSystemMapper;
 
-
      @Autowired
      private UmsUserPermissionMapper umsUserPermissionMapper;
+     
+     @Autowired
+     private UmsRolePermissionMapper umsRolePermissionMapper;
+     
 
      public JSONArray getTreeByRoleId(Integer roleId) {
         // 角色已有权限
-        List<UmsRolePermission> rolePermissions =  null;
-         
-        JSONArray systems = new JSONArray();
-        // 系统
-        EntityWrapper<UmsSystem> ew = new EntityWrapper<UmsSystem>();
-        ew.orderBy("orders", true);
-        ew.where("status={0}", 1);
-        List<UmsSystem> umsSystems =  umsSystemMapper.selectList(ew);
-        for (UmsSystem umsSystem : umsSystems) {
-            JSONObject node = new JSONObject();
-            node.put("id", umsSystem.getId());
-            node.put("name", umsSystem.getTitle());
-            node.put("nocheck", true);
-            node.put("open", true);
-            systems.add(node);
-        }
+    	EntityWrapper<UmsRolePermission> rew = new EntityWrapper<UmsRolePermission>();
+    	rew.where("role_id={0}", roleId);
+        List<UmsRolePermission> rolePermissions = umsRolePermissionMapper.selectList(rew);
+        
+        JSONArray folders = new JSONArray();
 
-        if (systems.size() > 0) {
-            for (Object system: systems) {
-                EntityWrapper<UmsPermission> ewp = new EntityWrapper<UmsPermission>();
-                ewp.orderBy("orders", true);
-                ewp.where("status={0}", 1).and("systemId={0}", ((JSONObject) system).getIntValue("id"));
-               
-                List<UmsPermission> umsPermissions =  umsPermissionMapper.selectList(ewp);
-                if (umsPermissions.size() == 0) continue;
-                // 目录
-                JSONArray folders = new JSONArray();
-                for (UmsPermission umsPermission: umsPermissions) {
-                    if (umsPermission.getPid().intValue() != 0 || umsPermission.getType() != 1) continue;
-                    JSONObject node = new JSONObject();
-                    node.put("id", umsPermission.getId());
-                    node.put("name", umsPermission.getName());
-                    node.put("open", true);
+        EntityWrapper<UmsPermission> ewp = new EntityWrapper<UmsPermission>();
+        ewp.orderBy("orders", true);
+        ewp.where("status={0}", 1);
+       
+        List<UmsPermission> umsPermissions =  umsPermissionMapper.selectList(ewp);
+        if (umsPermissions.size() == 0) {
+        	return folders;
+        }
+        
+        // 目录
+      
+        for (UmsPermission umsPermission: umsPermissions) {
+            if (umsPermission.getPid().intValue() != 0 || umsPermission.getType() != 1) continue;
+            JSONObject node = new JSONObject();
+            node.put("id", umsPermission.getId());
+            node.put("name", umsPermission.getName());
+            node.put("open", true);
+            for (UmsRolePermission rolePermission : rolePermissions) {
+                if (rolePermission.getPermissionId().intValue() == umsPermission.getId().intValue()) {
+                    node.put("checked", true);
+                }
+            }
+            folders.add(node);
+            // 菜单
+            JSONArray menus = new JSONArray();
+            for (Object folder : folders) {
+                for (UmsPermission umsPermission2: umsPermissions) {
+                    if (umsPermission2.getPid().intValue() != ((JSONObject) folder).getIntValue("id") || umsPermission2.getType() != 2) continue;
+                    JSONObject node2 = new JSONObject();
+                    node2.put("id", umsPermission2.getId());
+                    node2.put("name", umsPermission2.getName());
+                    node2.put("open", true);
                     for (UmsRolePermission rolePermission : rolePermissions) {
-                        if (rolePermission.getPermissionId().intValue() == umsPermission.getId().intValue()) {
-                            node.put("checked", true);
+                        if (rolePermission.getPermissionId().intValue() == umsPermission2.getId().intValue()) {
+                            node2.put("checked", true);
                         }
                     }
-                    folders.add(node);
-                    // 菜单
-                    JSONArray menus = new JSONArray();
-                    for (Object folder : folders) {
-                        for (UmsPermission umsPermission2: umsPermissions) {
-                            if (umsPermission2.getPid().intValue() != ((JSONObject) folder).getIntValue("id") || umsPermission2.getType() != 2) continue;
-                            JSONObject node2 = new JSONObject();
-                            node2.put("id", umsPermission2.getId());
-                            node2.put("name", umsPermission2.getName());
-                            node2.put("open", true);
+                    menus.add(node2);
+                    // 按钮
+                    JSONArray buttons = new JSONArray();
+                    for (Object menu : menus) {
+                        for (UmsPermission upmsPermission3: umsPermissions) {
+                            if (upmsPermission3.getPid().intValue() != ((JSONObject) menu).getIntValue("id") || upmsPermission3.getType() != 3) continue;
+                            JSONObject node3 = new JSONObject();
+                            node3.put("id", upmsPermission3.getId());
+                            node3.put("name", upmsPermission3.getName());
+                            node3.put("open", true);
                             for (UmsRolePermission rolePermission : rolePermissions) {
-                                if (rolePermission.getPermissionId().intValue() == umsPermission2.getId().intValue()) {
-                                    node2.put("checked", true);
+                                if (rolePermission.getPermissionId().intValue() == upmsPermission3.getId().intValue()) {
+                                    node3.put("checked", true);
                                 }
                             }
-                            menus.add(node2);
-                            // 按钮
-                            JSONArray buttons = new JSONArray();
-                            for (Object menu : menus) {
-                                for (UmsPermission upmsPermission3: umsPermissions) {
-                                    if (upmsPermission3.getPid().intValue() != ((JSONObject) menu).getIntValue("id") || upmsPermission3.getType() != 3) continue;
-                                    JSONObject node3 = new JSONObject();
-                                    node3.put("id", upmsPermission3.getId());
-                                    node3.put("name", upmsPermission3.getName());
-                                    node3.put("open", true);
-                                    for (UmsRolePermission rolePermission : rolePermissions) {
-                                        if (rolePermission.getPermissionId().intValue() == upmsPermission3.getId().intValue()) {
-                                            node3.put("checked", true);
-                                        }
-                                    }
-                                    buttons.add(node3);
-                                }
-                                if (buttons.size() > 0) {
-                                    ((JSONObject) menu).put("children", buttons);
-                                    buttons = new JSONArray();
-                                }
-                            }
+                            buttons.add(node3);
                         }
-                        if (menus.size() > 0) {
-                            ((JSONObject) folder).put("children", menus);
-                            menus = new JSONArray();
+                        if (buttons.size() > 0) {
+                            ((JSONObject) menu).put("children", buttons);
+                            buttons = new JSONArray();
                         }
                     }
                 }
-                if (folders.size() > 0) {
-                    ((JSONObject) system).put("children", folders);
+                if (menus.size() > 0) {
+                    ((JSONObject) folder).put("children", menus);
+                    menus = new JSONArray();
                 }
             }
         }
-        return systems;
+        
+        return folders;
     }
 
  

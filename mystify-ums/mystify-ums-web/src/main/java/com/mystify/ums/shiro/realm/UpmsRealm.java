@@ -12,11 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.mystify.common.utils.MD5Util;
 import com.mystify.ums.entity.UmsPermission;
 import com.mystify.ums.entity.UmsRole;
 import com.mystify.ums.entity.UmsUser;
 import com.mystify.ums.service.UmsApiService;
-import com.mystify.ums.utils.MD5Util;
 
 import java.util.HashSet;
 import java.util.List;

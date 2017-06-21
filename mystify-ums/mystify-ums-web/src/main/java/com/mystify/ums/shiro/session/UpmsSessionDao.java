@@ -7,6 +7,8 @@ import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONObject;
+import com.mystify.ums.model.SessionView;
 import com.mystify.ums.utils.RedisUtil;
 import com.mystify.ums.utils.SerializableUtil;
 import com.mystify.ums.utils.UpmsConstant;
@@ -113,13 +115,14 @@ public class UpmsSessionDao extends CachingSessionDAO {
      * @return
      */
     public Map getActiveSessions(int offset, int limit) {
-        Map sessions = new HashMap();
+
+    	Map sessions = new HashMap();
         Jedis jedis = RedisUtil.getJedis();
         // 获取在线会话总数
         long total = jedis.llen(UMS_SERVER_SESSION_IDS);
         // 获取当前页会话详情
         List<String> ids = jedis.lrange(UMS_SERVER_SESSION_IDS, offset, (offset + limit - 1));
-        List<Session> rows = new ArrayList<>();
+        List<SessionView> rows = new ArrayList<>();
         for (String id : ids) {
             String session = RedisUtil.get(UMS_SHIRO_SESSION_ID + "_" + id);
             // 过滤redis过期session
@@ -128,11 +131,14 @@ public class UpmsSessionDao extends CachingSessionDAO {
                 total = total - 1;
                 continue;
             }
-             rows.add(SerializableUtil.deserialize(session));
+            UpmsSession sn = (UpmsSession) SerializableUtil.deserialize(session);
+            SessionView sview = new SessionView(sn);
+            rows.add(sview);
         }
         jedis.close();
         sessions.put("total", total);
         sessions.put("rows", rows);
+        System.out.println(JSONObject.toJSONString(sessions));
         return sessions;
     }
 
