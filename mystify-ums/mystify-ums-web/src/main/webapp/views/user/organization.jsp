@@ -11,7 +11,7 @@
 		<div class="form-group">
 			<select id="organizationId" name="organizationId" multiple="multiple" style="width: 100%">
 				<c:forEach var="upmsOrganization" items="${upmsOrganizations}">
-					<option value="${upmsOrganization.organizationId}" <c:forEach var="upmsUserOrganization" items="${upmsUserOrganizations}"><c:if test="${upmsOrganization.organizationId==upmsUserOrganization.organizationId}">selected="selected"</c:if></c:forEach>>${upmsOrganization.name}</option>
+					<option value="${upmsOrganization.id}" <c:forEach var="upmsUserOrganization" items="${upmsUserOrganizations}"><c:if test="${upmsOrganization.id==upmsUserOrganization.organizationId}">selected="selected"</c:if></c:forEach>>${upmsOrganization.name}</option>
 				</c:forEach>
 			</select>
 		</div>

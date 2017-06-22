@@ -24,7 +24,7 @@ public class UmsUser extends BaseModel {
      */
 	@TableId(value="id", type= IdType.AUTO)
 	private Integer id;
-	//private Integer userId;
+	
     /**
      * 帐号
      */
@@ -67,25 +67,17 @@ public class UmsUser extends BaseModel {
 	private Long ctime;
 
 
-	/*public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}*/
-
 	public String getUsername() {
 		return username;
 	}
 
-	/*public Integer getId() {
+	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}*/
+	}
 
 	public void setUsername(String username) {
 		this.username = username;

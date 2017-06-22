@@ -10,8 +10,8 @@
 	<form id="roleForm" method="post">
 		<div class="form-group">
 			<select id="roleId" name="roleId" multiple="multiple" style="width: 100%">
-				<c:forEach var="upmsRole" items="${upmsRoles}">
-					<option value="${upmsRole.roleId}" <c:forEach var="upmsUserRole" items="${upmsUserRoles}"><c:if test="${upmsRole.roleId==upmsUserRole.roleId}">selected="selected"</c:if></c:forEach>>${upmsRole.title}</option>
+				<c:forEach var="umsRole" items="${umsRoles}">
+					<option value="${umsRole.id}" <c:forEach var="umsUserRole" items="${umsUserRoles}"><c:if test="${umsRole.id==umsUserRole.roleId}">selected="selected"</c:if></c:forEach>>${umsRole.title}</option>
 				</c:forEach>
 			</select>
 		</div>
@@ -31,38 +31,21 @@ function roleSubmit() {
 
 		},
         success: function(result) {
-			if (result.code != 1) {
-				if (result.data instanceof Array) {
-					$.each(result.data, function(index, value) {
-						$.confirm({
-							theme: 'dark',
-							animation: 'rotateX',
-							closeAnimation: 'rotateX',
-							title: false,
-							content: value.errorMsg,
-							buttons: {
-								confirm: {
-									text: '确认',
-									btnClass: 'waves-effect waves-button waves-light'
-								}
-							}
-						});
-					});
-				} else {
-						$.confirm({
-							theme: 'dark',
-							animation: 'rotateX',
-							closeAnimation: 'rotateX',
-							title: false,
-							content: result.data.errorMsg,
-							buttons: {
-								confirm: {
-									text: '确认',
-									btnClass: 'waves-effect waves-button waves-light'
-								}
-							}
-						});
-				}
+			if (result.httpCode != 200) {
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: result.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
+				
 			} else {
 				roleDialog.close();
 				$table.bootstrapTable('refresh');

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.baidu.unbiz.fluentvalidator.ComplexResult;
 import com.baidu.unbiz.fluentvalidator.FluentValidator;
 import com.baidu.unbiz.fluentvalidator.ResultCollectors;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.mystify.common.base.BaseController;
 import com.mystify.common.base.BasePage;
 import com.mystify.common.exception.DataParseException;
@@ -11,8 +12,11 @@ import com.mystify.common.exception.IllegalParameterException;
 import com.mystify.common.utils.MD5Util;
 import com.mystify.common.validator.LengthValidator;
 import com.mystify.common.validator.NotNullValidator;
+import com.mystify.ums.entity.UmsOrganization;
 import com.mystify.ums.entity.UmsRole;
 import com.mystify.ums.entity.UmsUser;
+import com.mystify.ums.entity.UmsUserOrganization;
+import com.mystify.ums.entity.UmsUserRole;
 import com.mystify.ums.service.UmsOrganizationService;
 import com.mystify.ums.service.UmsRoleService;
 import com.mystify.ums.service.UmsUserOrganizationService;
@@ -36,6 +40,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -80,14 +85,13 @@ public class UpmsUserController extends BaseController {
     @RequestMapping(value = "/organization/{id}", method = RequestMethod.GET)
     public String organization(@PathVariable("id") int id, ModelMap modelMap) {
         // 所有组织
-       /* List<UmsOrganization> upmsOrganizations = umsOrganizationService.selectByExample(new UmsOrganizationExample());
+        List<UmsOrganization> upmsOrganizations = umsOrganizationService.selectList(null);
         // 用户拥有组织
-        UpmsUserOrganizationExample upmsUserOrganizationExample = new UpmsUserOrganizationExample();
-        upmsUserOrganizationExample.createCriteria()
-                .andUserIdEqualTo(id);
-        List<UpmsUserOrganization> upmsUserOrganizations = upmsUserOrganizationService.selectByExample(upmsUserOrganizationExample);
+        EntityWrapper<UmsUserOrganization> ew = new EntityWrapper<UmsUserOrganization>();
+        ew.where("user_id={0}", id);
+        List<UmsUserOrganization> upmsUserOrganizations = umsUserOrganizationService.selectList(ew);
         modelMap.put("upmsOrganizations", upmsOrganizations);
-        modelMap.put("upmsUserOrganizations", upmsUserOrganizations);*/
+        modelMap.put("upmsUserOrganizations", upmsUserOrganizations);
         return "/user/organization";
     }
 
@@ -95,11 +99,10 @@ public class UpmsUserController extends BaseController {
     @RequiresPermissions("upms:user:organization")
     @RequestMapping(value = "/organization/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Object organization(@PathVariable("id") int id, HttpServletRequest request) {
-        /*String[] organizationIds = request.getParameterValues("organizationId");
-        upmsUserOrganizationService.organization(organizationIds, id);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, "");*/
-    	return "";
+    public Object organization(@PathVariable("id") int id, HttpServletRequest request, ModelMap modelMap) {
+        String[] organizationIds = request.getParameterValues("organizationId");
+        umsUserOrganizationService.organization(organizationIds, id);
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "用户角色")
@@ -107,14 +110,13 @@ public class UpmsUserController extends BaseController {
     @RequestMapping(value = "/role/{id}", method = RequestMethod.GET)
     public String role(@PathVariable("id") int id, ModelMap modelMap) {
         // 所有角色
-        /*List<UpmsRole> upmsRoles = upmsRoleService.selectByExample(new UpmsRoleExample());
+        List<UmsRole> umsRoles = umsRoleService.selectList(null);
         // 用户拥有角色
-        UpmsUserRoleExample upmsUserRoleExample = new UpmsUserRoleExample();
-        upmsUserRoleExample.createCriteria()
-                .andUserIdEqualTo(id);
-        List<UpmsUserRole> upmsUserRoles = upmsUserRoleService.selectByExample(upmsUserRoleExample);
-        modelMap.put("upmsRoles", upmsRoles);
-        modelMap.put("upmsUserRoles", upmsUserRoles);*/
+        EntityWrapper<UmsUserRole> ew = new EntityWrapper<UmsUserRole>();
+        ew.where("user_id={0}", id);
+        List<UmsUserRole> umsUserRoles = umsUserRoleService.selectList(ew);
+        modelMap.put("umsRoles", umsRoles);
+        modelMap.put("umsUserRoles", umsUserRoles);
         return "/user/role";
     }
 
@@ -122,19 +124,18 @@ public class UpmsUserController extends BaseController {
     @RequiresPermissions("upms:user:role")
     @RequestMapping(value = "/role/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Object role(@PathVariable("id") int id, HttpServletRequest request) {
-       /* String[] roleIds = request.getParameterValues("roleId");
-        upmsUserRoleService.role(roleIds, id);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, "");*/
-    	return "";
+    public Object role(@PathVariable("id") int id, String[] roleIds, ModelMap modelMap) {
+    	System.out.println(roleIds);
+        umsUserRoleService.role(roleIds, id);
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "用户权限")
     @RequiresPermissions("upms:user:permission")
     @RequestMapping(value = "/permission/{id}", method = RequestMethod.GET)
     public String permission(@PathVariable("id") int id, ModelMap modelMap) {
-        /*UpmsUser user = upmsUserService.selectByPrimaryKey(id);
-        modelMap.put("user", user);*/
+        UmsUser user = umsUserService.queryById(id);
+        modelMap.put("user", user);
         return "/user/permission";
     }
 
@@ -142,12 +143,10 @@ public class UpmsUserController extends BaseController {
     @RequiresPermissions("upms:user:permission")
     @RequestMapping(value = "/permission/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Object permission(@PathVariable("id") int id, HttpServletRequest request) {
-        /*JSONArray datas = JSONArray.parseArray(request.getParameter("datas"));
-        umsUserPermissionService.permission(datas, id);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, datas.size());
-    	return "";*/
-    	return "";
+    public Object permission(@PathVariable("id") int id, String datas, ModelMap modelMap) {
+        JSONArray permissions = JSONArray.parseArray(datas);
+        umsUserPermissionService.permission(permissions, id);
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "用户列表")
@@ -157,9 +156,10 @@ public class UpmsUserController extends BaseController {
     public Object list(
             @RequestParam(required = false, defaultValue = "0", value = "offset") int offset,
             @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
-            @RequestParam(required = false, value = "sort") String sort,
+            @RequestParam(required = false,defaultValue = "id", value = "sort") String sort,
             @RequestParam(required = false, value = "order") String order,UmsUser umsUser) {
         BasePage<UmsUser> page = new BasePage<UmsUser>(offset,limit,sort);
+        page.setAsc(false);
     	page = umsUserService.selectPage(page, umsUser);
     	Map<String, Object> result = new HashMap<>();
     	result.put("rows", page.getRecords());

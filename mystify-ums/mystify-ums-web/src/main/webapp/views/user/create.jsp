@@ -8,6 +8,7 @@
 <c:set var="basePath" value="${pageContext.request.contextPath}"/>
 <div id="createDialog" class="crudDialog">
 	<form id="createForm" method="post">
+		<input id="avatar" type="hidden" class="form-control" name="avatar" value="/images/avatar.jpg" maxlength="50">
 		<div class="form-group">
 			<label for="username">帐号</label>
 			<input id="username" type="text" class="form-control" name="username" maxlength="20">
@@ -20,10 +21,10 @@
 			<label for="realname">姓名</label>
 			<input id="realname" type="text" class="form-control" name="realname" maxlength="20">
 		</div>
-		<div class="form-group">
+		<!-- <div class="form-group">
 			<label for="avatar">头像</label>
 			<input id="avatar" type="text" class="form-control" name="avatar" maxlength="50">
-		</div>
+		</div> -->
 		<div class="form-group">
 			<label for="phone">电话</label>
 			<input id="phone" type="text" class="form-control" name="phone" maxlength="20">

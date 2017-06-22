@@ -16,10 +16,10 @@
 			<label for="realname">姓名</label>
 			<input id="realname" type="text" class="form-control" name="realname" maxlength="20" value="${user.realname}">
 		</div>
-		<div class="form-group">
+		<%-- <div class="form-group">
 			<label for="avatar">头像</label>
 			<input id="avatar" type="text" class="form-control" name="avatar" maxlength="50" value="${user.avatar}">
-		</div>
+		</div> --%>
 		<div class="form-group">
 			<label for="phone">电话</label>
 			<input id="phone" type="text" class="form-control" name="phone" maxlength="20" value="${user.phone}">
