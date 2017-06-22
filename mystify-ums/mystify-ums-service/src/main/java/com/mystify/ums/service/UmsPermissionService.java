@@ -13,11 +13,12 @@ import com.mystify.ums.mapper.UmsRolePermissionMapper;
 import com.mystify.ums.mapper.UmsSystemMapper;
 import com.mystify.ums.mapper.UmsUserPermissionMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
-import org.redisson.misc.Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -239,5 +240,42 @@ public class UmsPermissionService extends BaseService<UmsPermission> {
     	param.put("pid", pid);
         List<UmsPermission> umsPermissions = umsPermissionMapper.selectPermissionByUpmsUserId(param);
     	return umsPermissions;
+    }
+    
+    
+    public static List<UmsPermission> formatUmsPermissions(List<UmsPermission> sourcelist){
+    	TreeMap<Integer,List<UmsPermission>> umsPermissions = new TreeMap<Integer,List<UmsPermission>>();
+    	List<UmsPermission> parentPermission = new ArrayList<UmsPermission>();
+    	for(UmsPermission permission:sourcelist){
+    		if(permission.getPid().equals(0)){
+    			parentPermission.add(permission);
+    		}else{
+    			List<UmsPermission> temp = null;
+        		if(umsPermissions.containsKey(permission.getPid())){
+        			temp = umsPermissions.get(permission.getPid());
+        		}else{
+        			temp = new ArrayList<UmsPermission>();
+        		}
+        		temp.add(permission);
+        		umsPermissions.put(permission.getPid(), temp);
+    		}
+    	}
+    	List<UmsPermission> result = new ArrayList<UmsPermission>();
+    	for(UmsPermission p:parentPermission){
+    		result.add(p);
+    		if(umsPermissions.containsKey(p.getId())){
+    			List<UmsPermission> menuPermission = umsPermissions.get(p.getId());
+    			for(UmsPermission mp:menuPermission){
+    				result.add(mp);
+    				if(umsPermissions.containsKey(mp.getId())){
+    					List<UmsPermission> buttonPermission = umsPermissions.get(mp.getId());
+    					for(UmsPermission bp:buttonPermission){
+    						result.add(bp);
+    					}
+    				}
+    			}
+    		}
+    	}
+    	return result;
     }
 }

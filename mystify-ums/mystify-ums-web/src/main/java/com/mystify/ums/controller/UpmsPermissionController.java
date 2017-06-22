@@ -5,9 +5,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.baidu.unbiz.fluentvalidator.ComplexResult;
 import com.baidu.unbiz.fluentvalidator.FluentValidator;
 import com.baidu.unbiz.fluentvalidator.ResultCollectors;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.mystify.common.base.BaseController;
 import com.mystify.common.exception.DataParseException;
+import com.mystify.common.exception.IllegalParameterException;
 import com.mystify.common.validator.LengthValidator;
+import com.mystify.ums.entity.UmsOrganization;
 import com.mystify.ums.entity.UmsPermission;
 import com.mystify.ums.entity.UmsUser;
 import com.mystify.ums.model.ParentMenu;
@@ -61,7 +64,10 @@ public class UpmsPermissionController extends BaseController {
     @ApiOperation(value = "权限首页")
     @RequiresPermissions("upms:permission:read")
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String index() {
+    public String index( ModelMap modelMap) {
+    	EntityWrapper<UmsPermission> ew = new EntityWrapper<UmsPermission>();
+    	List<UmsPermission> rows =UmsPermissionService.formatUmsPermissions(umsPermissionService.selectList(ew)); 
+    	modelMap.put("umsPermissions", rows);
         return "/permission/index";
     }
 
@@ -77,9 +83,8 @@ public class UpmsPermissionController extends BaseController {
             @RequestParam(required = false, defaultValue = "0", value = "systemId") int systemId,
             @RequestParam(required = false, value = "sort") String sort,
             @RequestParam(required = false, value = "order") String order) {
-       /* UpmsPermissionExample upmsPermissionExample = new UpmsPermissionExample();
-        UpmsPermissionExample.Criteria criteria = upmsPermissionExample.createCriteria();
-        if (0 != type) {
+      
+        /*if (0 != type) {
             criteria.andTypeEqualTo((byte) type);
         }
         if (0 != systemId) {
@@ -91,12 +96,13 @@ public class UpmsPermissionController extends BaseController {
         if (StringUtils.isNotBlank(search)) {
             upmsPermissionExample.or()
                     .andNameLike("%" + search + "%");
-        }
-        List<UpmsPermission> rows = upmsPermissionService.selectByExampleForOffsetPage(upmsPermissionExample, offset, limit);
-        long total = upmsPermissionService.countByExample(upmsPermissionExample);*/
+        }*/
+    	System.out.println("type="+type);
+    	EntityWrapper<UmsPermission> ew = new EntityWrapper<UmsPermission>();
+    	List<UmsPermission> rows = umsPermissionService.selectList(ew);
         Map<String, Object> result = new HashMap<>();
-        //result.put("rows", rows);
-        //result.put("total", total);
+        result.put("rows", rows);
+        result.put("total", rows.size());
         return result;
     }
 
@@ -120,11 +126,6 @@ public class UpmsPermissionController extends BaseController {
     @RequiresPermissions("upms:permission:create")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(ModelMap modelMap) {
-       /* UpmsSystemExample upmsSystemExample = new UpmsSystemExample();
-        upmsSystemExample.createCriteria()
-                .andStatusEqualTo((byte) 1);
-        List<UpmsSystem> upmsSystems = upmsSystemService.selectByExample(upmsSystemExample);
-        modelMap.put("upmsSystems", upmsSystems);*/
         return "/permission/create";
     }
 
@@ -132,43 +133,38 @@ public class UpmsPermissionController extends BaseController {
     @RequiresPermissions("upms:permission:create")
     @ResponseBody
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Object create(UmsPermission umsPermission) {
+    public Object create(UmsPermission umsPermission,ModelMap modelMap) {
         ComplexResult result = FluentValidator.checkAll()
                 .on(umsPermission.getName(), new LengthValidator(1, 20, "名称"))
                 .doValidate()
                 .result(ResultCollectors.toComplex());
-        /*if (!result.isSuccess()) {
-            return new UpmsResult(UpmsResultConstant.INVALID_LENGTH, result.getErrors());
+        if (!result.isSuccess()) {
+        	throw new IllegalParameterException("INVALID_LENGTH") ;
         }
         long time = System.currentTimeMillis();
         umsPermission.setCtime(time);
-        umsPermission.setOrders(time);
-        int count = umsPermissionService.insertSelective(upmsPermission);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, count);*/
-        return "";
+        umsPermission.setOrders(1l);
+        umsPermissionService.update(umsPermission);
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "删除权限")
     @RequiresPermissions("upms:permission:delete")
-    @RequestMapping(value = "/delete/{ids}",method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
     @ResponseBody
-    public Object delete(@PathVariable("ids") String ids) {
-       /* int count = upmsPermissionService.deleteByPrimaryKeys(ids);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, count);*/
-    	return "";
+    public Object delete(@PathVariable("id") Integer id,ModelMap modelMap) {
+        umsPermissionService.delete(id);
+        return setSuccessModelMap(modelMap);
     }
 
     @ApiOperation(value = "修改权限")
     @RequiresPermissions("upms:permission:update")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
     public String update(@PathVariable("id") int id, ModelMap modelMap) {
-        /*UpmsSystemExample upmsSystemExample = new UpmsSystemExample();
-        upmsSystemExample.createCriteria()
-                .andStatusEqualTo((byte) 1);
-        List<UpmsSystem> upmsSystems = upmsSystemService.selectByExample(upmsSystemExample);
-        UpmsPermission permission = upmsPermissionService.selectByPrimaryKey(id);
+        UmsPermission permission = new UmsPermission();
+        permission.setStatus(1);
+        permission = umsPermissionService.selectOne(permission);
         modelMap.put("permission", permission);
-        modelMap.put("upmsSystems", upmsSystems);*/
         return "/permission/update";
     }
 
@@ -176,18 +172,16 @@ public class UpmsPermissionController extends BaseController {
     @RequiresPermissions("upms:permission:update")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Object update(@PathVariable("id") int id, UmsPermission umsPermission) {
-       /* ComplexResult result = FluentValidator.checkAll()
-                .on(upmsPermission.getName(), new LengthValidator(1, 20, "名称"))
+    public Object update(@PathVariable("id") int id, UmsPermission umsPermission,ModelMap modelMap) {
+        ComplexResult result = FluentValidator.checkAll()
+                .on(umsPermission.getName(), new LengthValidator(1, 20, "名称"))
                 .doValidate()
                 .result(ResultCollectors.toComplex());
         if (!result.isSuccess()) {
-            return new UpmsResult(UpmsResultConstant.INVALID_LENGTH, result.getErrors());
+        	throw new IllegalParameterException("INVALID_LENGTH") ;
         }
-        upmsPermission.setPermissionId(id);
-        int count = upmsPermissionService.updateByPrimaryKeySelective(upmsPermission);
-        return new UpmsResult(UpmsResultConstant.SUCCESS, count);*/
-    	return "";
+        umsPermissionService.update(umsPermission);
+        return setSuccessModelMap(modelMap);
     }
     
     @ApiOperation(value = "获取用户权限列表")

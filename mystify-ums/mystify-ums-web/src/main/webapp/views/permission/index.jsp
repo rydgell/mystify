@@ -15,44 +15,87 @@
 	<title>权限管理</title>
 	<jsp:include page="/views/common/head.jsp" flush="true"/>
 </head>
+<link href="${basePath}/plugins/treeTable/themes/vsStyle/treeTable.min.css" rel="stylesheet" />
 <body>
 <div id="main">
 	<div id="toolbar">
 		<shiro:hasPermission name="upms:permission:create"><a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增权限</a></shiro:hasPermission>
-		<shiro:hasPermission name="upms:permission:update"><a class="waves-effect waves-button" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑权限</a></shiro:hasPermission>
-		<shiro:hasPermission name="upms:permission:delete"><a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除权限</a></shiro:hasPermission>
 	</div>
-	<table id="table"></table>
+	<!--  <table id="table"></table>  -->
+	<table id="table" class="table table-bordered table-striped table-responsive "  data-mobile-responsive="true"
+           data-check-on-init="true">
+			<thead><tr>
+			<th>权限名称</th>
+			<th>id</th>
+			<th>父id</th>
+			<th>路径</th>
+			<th>排序</th>
+			<th>可见</th>
+			<th>类型</th>
+			<th>图标</th>
+			<th>权限标识</th>
+			<th>操作</th>
+			</thead>
+			<tbody><c:forEach items="${umsPermissions}" var="menu">
+				<tr id="${menu.id}" pId="${menu.pid}">
+					<td nowrap><i class=""></i>${menu.name}</td>
+					<td width="50px">${menu.id}</td>
+					<td width="50px">${menu.pid}</td>
+					<td>${menu.uri}</td>
+					<td width="50px">${menu.orders}</td>
+					<td width="50px">${menu.status eq '1'?'<span class="label label-success">正常</span>':'<span class="label label-default">锁定</span>'}</td>
+					<td width="50px">
+						<c:choose>
+						    <c:when test="${menu.type == 1}">
+						       		目录
+						    </c:when>
+						    <c:when test="${menu.type == 2}">
+						        	菜单
+						    </c:when>
+						    <c:when test="${menu.type == 3}">
+						       		按钮
+						    </c:when>
+						    <c:otherwise>
+						       		-
+						    </c:otherwise>
+						</c:choose></td>
+					<td width="50px"><i class="${menu.icon}"></i></td>
+					<td>${menu.permissionValue}</td>
+					<td width="300px">
+						 <shiro:hasPermission name="upms:permission:create"><a  href="javascript:;" onclick="createAction()" data-toggle="tooltip" title="添加"><i class="glyphicon glyphicon-plus"></i> &nbsp</a>  </shiro:hasPermission>
+						 <shiro:hasPermission name="upms:permission:update"><a class="update" href="javascript:;" onclick="updateAction()" data-toggle="tooltip" title="编辑"><i class="glyphicon glyphicon-edit"></i></a>　</shiro:hasPermission>
+						 <shiro:hasPermission name="upms:permission:delete"><a class="delete" href="javascript:;" onclick="deleteAction()" data-toggle="tooltip" title="删除"><i class="glyphicon glyphicon-remove"></i></a></shiro:hasPermission>
+					</td>
+				</tr>
+			</c:forEach></tbody>
+		</table> 
 </div>
 <jsp:include page="/views/common/footer.jsp" flush="true"/>
+<script src="${basePath}/plugins/treeTable/jquery.treeTable.min.js" type="text/javascript"></script>
 <script>
 var $table = $('#table');
 $(function() {
+	/* $('#table').treeTable({expandLevel : 3}).show();  */
 	// bootstrap table初始化
-	$table.bootstrapTable({
+	/* $table.bootstrapTable({
 		url: '${basePath}/manage/permission/list',
 		height: getHeight(),
 		striped: true,
-		search: true,
-		showRefresh: true,
+		search: false,
+		showRefresh: false,
 		showColumns: true,
 		minimumCountColumns: 2,
 		clickToSelect: true,
-		detailView: true,
-		detailFormatter: 'detailFormatter',
-		pagination: true,
+		pagination: false,
 		paginationLoop: false,
 		sidePagination: 'server',
 		silentSort: false,
 		smartDisplay: false,
 		escape: true,
-		searchOnEnterKey: true,
-		idField: 'permissionId',
-		maintainSelected: true,
+		idField: 'id',
 		toolbar: '#toolbar',
 		columns: [
-			{field: 'ck', checkbox: true},
-			{field: 'permissionId', title: '编号', sortable: true, align: 'center'},
+			{field: 'id', title: '编号', sortable: true, align: 'center'},
             {field: 'systemId', title: '所属系统'},
 			{field: 'pid', title: '所属上级'},
 			{field: 'name', title: '权限名称'},
@@ -63,8 +106,12 @@ $(function() {
 			{field: 'status', title: '状态', sortable: true, align: 'center', formatter: 'statusFormatter'},
 			{field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
 		]
-	});
+	});  */
+	
+	$('#table').treeTable({expandLevel : 3}).show(); 
 });
+
+ 
 // 格式化操作按钮
 function actionFormatter(value, row, index) {
     return [
@@ -113,94 +160,48 @@ function createAction() {
 // 编辑
 var updateDialog;
 function updateAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	if (rows.length != 1) {
-		$.confirm({
-			title: false,
-			content: '请选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		updateDialog = $.dialog({
-			animationSpeed: 300,
-			title: '编辑权限',
-			content: 'url:${basePath}/manage/permission/update/' + rows[0].permissionId,
-			onContentReady: function () {
-				initMaterialInput();
-				$('select').select2();
-				initType();
-				initSelect2();
-			}
-		});
-	}
+	updateDialog = $.dialog({
+		animationSpeed: 300,
+		title: '编辑权限',
+		content: 'url:${basePath}/manage/permission/update/' + rows[0].permissionId,
+		onContentReady: function () {
+			initMaterialInput();
+			$('select').select2();
+			initType();
+			initSelect2();
+		}
+	});
 }
 // 删除
 var deleteDialog;
 function deleteAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	if (rows.length == 0) {
-		$.confirm({
-			title: false,
-			content: '请至少选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		deleteDialog = $.confirm({
-			type: 'red',
-			animationSpeed: 300,
-			title: false,
-			content: '确认删除该权限吗？',
-			buttons: {
-				confirm: {
-					text: '确认',
-					btnClass: 'waves-effect waves-button',
-					action: function () {
-						var ids = new Array();
-						for (var i in rows) {
-							ids.push(rows[i].permissionId);
-						}
-						$.ajax({
-							type: 'get',
-							url: '${basePath}/manage/permission/delete/' + ids.join("-"),
-							success: function(result) {
-								if (result.code != 1) {
-									if (result.data instanceof Array) {
-										$.each(result.data, function(index, value) {
-											$.confirm({
-												theme: 'dark',
-												animation: 'rotateX',
-												closeAnimation: 'rotateX',
-												title: false,
-												content: value.errorMsg,
-												buttons: {
-													confirm: {
-														text: '确认',
-														btnClass: 'waves-effect waves-button waves-light'
-													}
-												}
-											});
-										});
-									} else {
+	deleteDialog = $.confirm({
+		type: 'red',
+		animationSpeed: 300,
+		title: false,
+		content: '确认删除该权限吗？',
+		buttons: {
+			confirm: {
+				text: '确认',
+				btnClass: 'waves-effect waves-button',
+				action: function () {
+					var ids = new Array();
+					for (var i in rows) {
+						ids.push(rows[i].permissionId);
+					}
+					$.ajax({
+						type: 'get',
+						url: '${basePath}/manage/permission/delete/' + ids.join("-"),
+						success: function(result) {
+							if (result.code != 1) {
+								if (result.data instanceof Array) {
+									$.each(result.data, function(index, value) {
 										$.confirm({
 											theme: 'dark',
 											animation: 'rotateX',
 											closeAnimation: 'rotateX',
 											title: false,
-											content: result.data.errorMsg,
+											content: value.errorMsg,
 											buttons: {
 												confirm: {
 													text: '确认',
@@ -208,37 +209,51 @@ function deleteAction() {
 												}
 											}
 										});
-									}
+									});
 								} else {
-									deleteDialog.close();
-									$table.bootstrapTable('refresh');
-								}
-							},
-							error: function(XMLHttpRequest, textStatus, errorThrown) {
-								$.confirm({
-									theme: 'dark',
-									animation: 'rotateX',
-									closeAnimation: 'rotateX',
-									title: false,
-									content: textStatus,
-									buttons: {
-										confirm: {
-											text: '确认',
-											btnClass: 'waves-effect waves-button waves-light'
+									$.confirm({
+										theme: 'dark',
+										animation: 'rotateX',
+										closeAnimation: 'rotateX',
+										title: false,
+										content: result.data.errorMsg,
+										buttons: {
+											confirm: {
+												text: '确认',
+												btnClass: 'waves-effect waves-button waves-light'
+											}
 										}
-									}
-								});
+									});
+								}
+							} else {
+								deleteDialog.close();
+								$table.bootstrapTable('refresh');
 							}
-						});
-					}
-				},
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							$.confirm({
+								theme: 'dark',
+								animation: 'rotateX',
+								closeAnimation: 'rotateX',
+								title: false,
+								content: textStatus,
+								buttons: {
+									confirm: {
+										text: '确认',
+										btnClass: 'waves-effect waves-button waves-light'
+									}
+								}
+							});
+						}
+					});
 				}
+			},
+			cancel: {
+				text: '取消',
+				btnClass: 'waves-effect waves-button'
 			}
-		});
-	}
+		}
+	});
 }
 </script>
 </body>

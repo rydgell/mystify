@@ -23,16 +23,8 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<span class="type1 type2 type3">
-				<select id="systemId" name="systemId">
-					<option value="0">请选择系统</option>
-					<c:forEach var="upmsSystem" items="${upmsSystems}">
-					<option value="${upmsSystem.systemId}" <c:if test="${permission.systemId==upmsSystem.systemId}">selected="selected"</c:if>>${upmsSystem.title}</option>
-					</c:forEach>
-				</select>
-			</span>
-			<span class="type2 type3" hidden>
-				<select id="pid" name="pid">
+			<span class="type2 type3">
+				<select id="pid" name="pid"  >
 					<option value="0">请选择上级</option>
 				</select>
 			</span>
@@ -90,6 +82,11 @@ function initType() {
 	$('.type1,.type2,.type3').hide(0, function () {
 		$('.type' + type).show();
 	});
+	
+	$('.type1').show(0, function () {
+		$('.type' + type).hide();
+	});
+	
 	// 级联菜单
 	if (type == 2) {
 		pidType = 1;
@@ -132,7 +129,7 @@ function initSelect2() {
 	if (type == 3) {
 		pidType = 2
 	}
-	initPid(${permission.pid});
+	initPid('${permission.pid}');
 }
 function updateSubmit() {
     $.ajax({

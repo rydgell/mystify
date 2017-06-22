@@ -22,17 +22,9 @@
 				<label for="type_3">按钮 </label>
 			</div>
 		</div>
-		<div class="form-group">
-			<span class="type1 type2 type3">
-				<select id="systemId" name="systemId">
-					<option value="0">请选择系统</option>
-					<c:forEach var="upmsSystem" items="${upmsSystems}">
-					<option value="${upmsSystem.systemId}">${upmsSystem.title}</option>
-					</c:forEach>
-				</select>
-			</span>
-			<span class="type2 type3" hidden>
-				<select id="pid" name="pid">
+		<div class="form-group ">
+			<span class=" type2 type3" hidden>
+				<select id="pid" name="pid" class="col-sm-12">
 					<option value="0">请选择上级</option>
 				</select>
 			</span>
@@ -80,16 +72,14 @@ $(function() {
 		initType();
 	});
 	// 选择系统
-	$('#systemId').change(function() {
-		systemId = $(this).val();
-		initPid();
-	});
+	
 });
 function initType() {
 	// 显示对应必填项
 	$('.type1,.type2,.type3').hide(0, function () {
 		$('.type' + type).show();
 	});
+	 
 	// 级联菜单
 	if (type == 2) {
 		pidType = 1;
@@ -101,26 +91,20 @@ function initType() {
 	}
 }
 function initPid() {
-	if (systemId != 0) {
-		$.getJSON('${basePath}/manage/permission/list', {systemId: systemId, type: pidType, limit: 10000}, function(json) {
-			var datas = [{id: 0, text: '请选择上级'}];
-			for (var i = 0; i < json.rows.length; i ++) {
-				var data = {};
-				data.id = json.rows[i].permissionId;
-				data.text = json.rows[i].name;
-				datas.push(data);
-			}
-			$('#pid').empty();
-			$('#pid').select2({
-				data : datas
-			});
-		});
-	} else {
+	$.getJSON('${basePath}/manage/permission/list', {systemId: systemId, type: pidType, limit: 10000}, function(json) {
+		var datas = [{id: 0, text: '请选择上级'}];
+		for (var i = 0; i < json.rows.length; i ++) {
+			var data = {};
+			data.id = json.rows[i].id;
+			data.text = json.rows[i].name;
+			datas.push(data);
+		}
 		$('#pid').empty();
 		$('#pid').select2({
-			data : [{id: 0, text: '请选择上级'}]
+			data : datas,
+			width:'330px'
 		});
-	}
+	});
 }
 function createSubmit() {
     $.ajax({
