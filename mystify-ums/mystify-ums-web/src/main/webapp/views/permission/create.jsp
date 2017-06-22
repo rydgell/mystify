@@ -22,8 +22,8 @@
 				<label for="type_3">按钮 </label>
 			</div>
 		</div>
-		<div class="form-group ">
-			<span class=" type2 type3" hidden>
+		<div class="form-group "  >
+			<span class=" type2 type3 " hidden style="width: 100%">
 				<select id="pid" name="pid" class="col-sm-12">
 					<option value="0">请选择上级</option>
 				</select>
@@ -32,6 +32,10 @@
 		<div class="form-group">
 			<label for="name">名称</label>
 			<input id="name" type="text" class="form-control" name="name" maxlength="20">
+		</div>
+		<div class="form-group">
+			<label for="orders">排序</label>
+			<input id="orders" type="text" class="form-control" name="orders" maxlength="20">
 		</div>
 		<div class="form-group type2 type3" hidden>
 			<label for="permissionValue">权限值</label>
@@ -102,7 +106,7 @@ function initPid() {
 		$('#pid').empty();
 		$('#pid').select2({
 			data : datas,
-			width:'330px'
+			width:'100%'
 		});
 	});
 }
@@ -112,21 +116,6 @@ function createSubmit() {
         url: '${basePath}/manage/permission/create',
         data: $('#createForm').serialize(),
         beforeSend: function() {
-			if ($('#systemId').val() == 0) {
-				$.confirm({
-					title: false,
-					content: '请选择系统！',
-					autoClose: 'cancel|3000',
-					backgroundDismiss: true,
-					buttons: {
-						cancel: {
-							text: '取消',
-							btnClass: 'waves-effect waves-button'
-						}
-					}
-				});
-				return false;
-			}
 			if (type == 1) {
 				if ($('#name').val() == '') {
 					$('#name').focus();
@@ -164,41 +153,24 @@ function createSubmit() {
 			}
         },
         success: function(result) {
-			if (result.code != 1) {
-				if (result.data instanceof Array) {
-					$.each(result.data, function(index, value) {
-						$.confirm({
-							theme: 'dark',
-							animation: 'rotateX',
-							closeAnimation: 'rotateX',
-							title: false,
-							content: value.errorMsg,
-							buttons: {
-								confirm: {
-									text: '确认',
-									btnClass: 'waves-effect waves-button waves-light'
-								}
-							}
-						});
-					});
-				} else {
-						$.confirm({
-							theme: 'dark',
-							animation: 'rotateX',
-							closeAnimation: 'rotateX',
-							title: false,
-							content: result.data.errorMsg,
-							buttons: {
-								confirm: {
-									text: '确认',
-									btnClass: 'waves-effect waves-button waves-light'
-								}
-							}
-						});
-				}
+			if (result.httpCode != 200) {
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: result.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
 			} else {
 				createDialog.close();
-				$table.bootstrapTable('refresh');
+				//$table.bootstrapTable('refresh');
+				window.location.reload();
 			}
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {

@@ -71,10 +71,15 @@
 <script src="${basePath}/js/login.js"></script>
 
 <script>
+if(window !=top){  
+    top.location.href=location.href;  
+}  
+
 <c:if test="${param.forceLogout == 1}">
 alert('您已被强制下线！');
 top.location.href = '${basePath}/sso/login';
 </c:if>
+ 
 </script>
 </body>
 </html>

@@ -22,9 +22,9 @@
 				<label for="type_3">按钮 </label>
 			</div>
 		</div>
-		<div class="form-group">
-			<span class="type2 type3">
-				<select id="pid" name="pid"  >
+		<div class="form-group "  >
+			<span class=" type2 type3 " hidden style="width: 100%">
+				<select id="pid" name="pid" class="col-sm-12">
 					<option value="0">请选择上级</option>
 				</select>
 			</span>
@@ -32,6 +32,10 @@
 		<div class="form-group">
 			<label for="name">名称</label>
 			<input id="name" type="text" class="form-control" name="name" maxlength="20" value="${permission.name}">
+		</div>
+		<div class="form-group">
+			<label for="orders">排序</label>
+			<input id="orders" type="text" class="form-control" name="orders" maxlength="20" value="${permission.orders}">
 		</div>
 		<div class="form-group type2 type3" hidden>
 			<label for="permissionValue">权限值</label>
@@ -71,56 +75,46 @@ $(function() {
 		type = $(this).val();
 		initType();
 	});
-	// 选择系统
-	$('#systemId').change(function() {
-		systemId = $(this).val();
-		initPid();
-	});
 });
 function initType() {
 	// 显示对应必填项
 	$('.type1,.type2,.type3').hide(0, function () {
 		$('.type' + type).show();
 	});
-	
-	$('.type1').show(0, function () {
-		$('.type' + type).hide();
-	});
-	
 	// 级联菜单
+	var temp = pidType;
 	if (type == 2) {
 		pidType = 1;
-		initPid();
+		if(temp!='0'){
+			initPid();
+		}
 	}
 	if (type == 3) {
 		pidType = 2
-		initPid();
+		if(temp!='0'){
+			initPid();
+		}
 	}
 }
 function initPid(val) {
-	if (systemId != 0) {
 		$.getJSON('${basePath}/manage/permission/list', {systemId: systemId, type: pidType, limit: 10000}, function(json) {
 			var datas = [{id: 0, text: '请选择上级'}];
 			for (var i = 0; i < json.rows.length; i ++) {
 				var data = {};
-				data.id = json.rows[i].permissionId;
+				data.id = json.rows[i].id;
 				data.text = json.rows[i].name;
 				datas.push(data);
 			}
 			$('#pid').empty();
 			$('#pid').select2({
-				data : datas
+				data : datas,
+				width:'100%'
 			});
+			
 			if (!!val) {
 				$('#pid').select2().val(val).trigger('change');
 			}
 		});
-	} else {
-		$('#pid').empty();
-		$('#pid').select2({
-			data : [{id: 0, text: '请选择上级'}]
-		});
-	}
 }
 function initSelect2() {
 	if (type == 2) {
@@ -129,29 +123,15 @@ function initSelect2() {
 	if (type == 3) {
 		pidType = 2
 	}
+    
 	initPid('${permission.pid}');
 }
 function updateSubmit() {
     $.ajax({
         type: 'post',
-        url: '${basePath}/manage/permission/update/${permission.permissionId}',
+        url: '${basePath}/manage/permission/update/${permission.id}',
         data: $('#updateForm').serialize(),
         beforeSend: function() {
-			if ($('#systemId').val() == 0) {
-				$.confirm({
-					title: false,
-					content: '请选择系统！',
-					autoClose: 'cancel|3000',
-					backgroundDismiss: true,
-					buttons: {
-						cancel: {
-							text: '取消',
-							btnClass: 'waves-effect waves-button'
-						}
-					}
-				});
-				return false;
-			}
 			if (type == 1) {
 				if ($('#name').val() == '') {
 					$('#name').focus();
@@ -189,41 +169,24 @@ function updateSubmit() {
 			}
         },
         success: function(result) {
-			if (result.code != 1) {
-				if (result.data instanceof Array) {
-					$.each(result.data, function(index, value) {
-						$.confirm({
-							theme: 'dark',
-							animation: 'rotateX',
-							closeAnimation: 'rotateX',
-							title: false,
-							content: value.errorMsg,
-							buttons: {
-								confirm: {
-									text: '确认',
-									btnClass: 'waves-effect waves-button waves-light'
-								}
-							}
-						});
-					});
-				} else {
-						$.confirm({
-							theme: 'dark',
-							animation: 'rotateX',
-							closeAnimation: 'rotateX',
-							title: false,
-							content: result.data.errorMsg,
-							buttons: {
-								confirm: {
-									text: '确认',
-									btnClass: 'waves-effect waves-button waves-light'
-								}
-							}
-						});
-				}
+			if (result.httpCode != 200) {
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: result.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
 			} else {
 				updateDialog.close();
-				$table.bootstrapTable('refresh');
+				//$table.bootstrapTable('refresh');
+				window.location.reload();
 			}
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {

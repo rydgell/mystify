@@ -22,8 +22,7 @@
 		<shiro:hasPermission name="upms:permission:create"><a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增权限</a></shiro:hasPermission>
 	</div>
 	<!--  <table id="table"></table>  -->
-	<table id="table" class="table table-bordered table-striped table-responsive "  data-mobile-responsive="true"
-           data-check-on-init="true">
+	<table id="table" class="table table-bordered table-striped table-responsive " >
 			<thead><tr>
 			<th>权限名称</th>
 			<th>id</th>
@@ -63,8 +62,8 @@
 					<td>${menu.permissionValue}</td>
 					<td width="300px">
 						 <shiro:hasPermission name="upms:permission:create"><a  href="javascript:;" onclick="createAction()" data-toggle="tooltip" title="添加"><i class="glyphicon glyphicon-plus"></i> &nbsp</a>  </shiro:hasPermission>
-						 <shiro:hasPermission name="upms:permission:update"><a class="update" href="javascript:;" onclick="updateAction()" data-toggle="tooltip" title="编辑"><i class="glyphicon glyphicon-edit"></i></a>　</shiro:hasPermission>
-						 <shiro:hasPermission name="upms:permission:delete"><a class="delete" href="javascript:;" onclick="deleteAction()" data-toggle="tooltip" title="删除"><i class="glyphicon glyphicon-remove"></i></a></shiro:hasPermission>
+						 <shiro:hasPermission name="upms:permission:update"><a class="update" href="javascript:;" onclick="updateAction(${menu.id})" data-toggle="tooltip" title="编辑"><i class="glyphicon glyphicon-edit"></i></a>　</shiro:hasPermission>
+						 <shiro:hasPermission name="upms:permission:delete"><a class="delete" href="javascript:;" onclick="deleteAction(${menu.id})" data-toggle="tooltip" title="删除"><i class="glyphicon glyphicon-remove"></i></a></shiro:hasPermission>
 					</td>
 				</tr>
 			</c:forEach></tbody>
@@ -115,8 +114,8 @@ $(function() {
 // 格式化操作按钮
 function actionFormatter(value, row, index) {
     return [
-		'<a class="update" href="javascript:;" onclick="updateAction()" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
-		'<a class="delete" href="javascript:;" onclick="deleteAction()" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
+		'<a class="update" href="javascript:;" onclick="updateAction('+row.id+')" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
+		'<a class="delete" href="javascript:;" onclick="deleteAction('+row.id+')" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
     ].join('');
 }
 // 格式化图标
@@ -159,11 +158,11 @@ function createAction() {
 }
 // 编辑
 var updateDialog;
-function updateAction() {
+function updateAction(id) {
 	updateDialog = $.dialog({
 		animationSpeed: 300,
 		title: '编辑权限',
-		content: 'url:${basePath}/manage/permission/update/' + rows[0].permissionId,
+		content: 'url:${basePath}/manage/permission/update/' + id,
 		onContentReady: function () {
 			initMaterialInput();
 			$('select').select2();
@@ -174,7 +173,7 @@ function updateAction() {
 }
 // 删除
 var deleteDialog;
-function deleteAction() {
+function deleteAction(id) {
 	deleteDialog = $.confirm({
 		type: 'red',
 		animationSpeed: 300,
@@ -185,49 +184,28 @@ function deleteAction() {
 				text: '确认',
 				btnClass: 'waves-effect waves-button',
 				action: function () {
-					var ids = new Array();
-					for (var i in rows) {
-						ids.push(rows[i].permissionId);
-					}
 					$.ajax({
 						type: 'get',
-						url: '${basePath}/manage/permission/delete/' + ids.join("-"),
+						url: '${basePath}/manage/permission/delete/' + id,
 						success: function(result) {
-							if (result.code != 1) {
-								if (result.data instanceof Array) {
-									$.each(result.data, function(index, value) {
-										$.confirm({
-											theme: 'dark',
-											animation: 'rotateX',
-											closeAnimation: 'rotateX',
-											title: false,
-											content: value.errorMsg,
-											buttons: {
-												confirm: {
-													text: '确认',
-													btnClass: 'waves-effect waves-button waves-light'
-												}
-											}
-										});
-									});
-								} else {
-									$.confirm({
-										theme: 'dark',
-										animation: 'rotateX',
-										closeAnimation: 'rotateX',
-										title: false,
-										content: result.data.errorMsg,
-										buttons: {
-											confirm: {
-												text: '确认',
-												btnClass: 'waves-effect waves-button waves-light'
-											}
+							if (result.httpCode != 200) {
+								$.confirm({
+									theme: 'dark',
+									animation: 'rotateX',
+									closeAnimation: 'rotateX',
+									title: false,
+									content: result.msg,
+									buttons: {
+										confirm: {
+											text: '确认',
+											btnClass: 'waves-effect waves-button waves-light'
 										}
-									});
-								}
+									}
+								});
 							} else {
 								deleteDialog.close();
-								$table.bootstrapTable('refresh');
+								//$table.bootstrapTable('refresh');
+								window.location.reload();
 							}
 						},
 						error: function(XMLHttpRequest, textStatus, errorThrown) {

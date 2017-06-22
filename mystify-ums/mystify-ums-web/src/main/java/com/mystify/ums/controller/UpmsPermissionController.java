@@ -83,22 +83,11 @@ public class UpmsPermissionController extends BaseController {
             @RequestParam(required = false, defaultValue = "0", value = "systemId") int systemId,
             @RequestParam(required = false, value = "sort") String sort,
             @RequestParam(required = false, value = "order") String order) {
-      
-        /*if (0 != type) {
-            criteria.andTypeEqualTo((byte) type);
-        }
-        if (0 != systemId) {
-            criteria.andSystemIdEqualTo(systemId);
-        }
-        if (!StringUtils.isBlank(sort) && !StringUtils.isBlank(order)) {
-            upmsPermissionExample.setOrderByClause(sort + " " + order);
-        }
-        if (StringUtils.isNotBlank(search)) {
-            upmsPermissionExample.or()
-                    .andNameLike("%" + search + "%");
-        }*/
-    	System.out.println("type="+type);
     	EntityWrapper<UmsPermission> ew = new EntityWrapper<UmsPermission>();
+        if (0 != type) {
+            ew.where("type={0}", type);
+        }
+    	System.out.println("type="+type);
     	List<UmsPermission> rows = umsPermissionService.selectList(ew);
         Map<String, Object> result = new HashMap<>();
         result.put("rows", rows);
@@ -143,7 +132,6 @@ public class UpmsPermissionController extends BaseController {
         }
         long time = System.currentTimeMillis();
         umsPermission.setCtime(time);
-        umsPermission.setOrders(1l);
         umsPermissionService.update(umsPermission);
         return setSuccessModelMap(modelMap);
     }
@@ -161,9 +149,7 @@ public class UpmsPermissionController extends BaseController {
     @RequiresPermissions("upms:permission:update")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
     public String update(@PathVariable("id") int id, ModelMap modelMap) {
-        UmsPermission permission = new UmsPermission();
-        permission.setStatus(1);
-        permission = umsPermissionService.selectOne(permission);
+        UmsPermission permission = umsPermissionService.queryById(id);
         modelMap.put("permission", permission);
         return "/permission/update";
     }
