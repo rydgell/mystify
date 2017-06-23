@@ -34,6 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.enterprise.context.Destroyed;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
@@ -170,6 +171,7 @@ public class UpmsPermissionController extends BaseController {
         return setSuccessModelMap(modelMap);
     }
     
+   
     @ApiOperation(value = "获取用户权限列表")
     @RequiresAuthentication
     @RequestMapping(value = "/userPermissions")

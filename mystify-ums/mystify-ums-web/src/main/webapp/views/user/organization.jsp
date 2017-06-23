@@ -9,7 +9,7 @@
 <div id="organizationDialog" class="crudDialog">
 	<form id="organizationForm" method="post">
 		<div class="form-group">
-			<select id="organizationId" name="organizationId" multiple="multiple" style="width: 100%">
+			<select id="organizationId" name="organizationId"  style="width: 100%">
 				<c:forEach var="upmsOrganization" items="${upmsOrganizations}">
 					<option value="${upmsOrganization.id}" <c:forEach var="upmsUserOrganization" items="${upmsUserOrganizations}"><c:if test="${upmsOrganization.id==upmsUserOrganization.organizationId}">selected="selected"</c:if></c:forEach>>${upmsOrganization.name}</option>
 				</c:forEach>
@@ -31,38 +31,20 @@ function organizationSubmit() {
 
 		},
         success: function(result) {
-			if (result.code != 1) {
-				if (result.data instanceof Array) {
-					$.each(result.data, function(index, value) {
-						$.confirm({
-							theme: 'dark',
-							animation: 'rotateX',
-							closeAnimation: 'rotateX',
-							title: false,
-							content: value.errorMsg,
-							buttons: {
-								confirm: {
-									text: '确认',
-									btnClass: 'waves-effect waves-button waves-light'
-								}
-							}
-						});
-					});
-				} else {
-						$.confirm({
-							theme: 'dark',
-							animation: 'rotateX',
-							closeAnimation: 'rotateX',
-							title: false,
-							content: result.data.errorMsg,
-							buttons: {
-								confirm: {
-									text: '确认',
-									btnClass: 'waves-effect waves-button waves-light'
-								}
-							}
-						});
-				}
+			if (result.httpCode != 200) {
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: result.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
 			} else {
 				organizationDialog.close();
 				$table.bootstrapTable('refresh');

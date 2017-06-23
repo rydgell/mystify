@@ -35,7 +35,7 @@ public class UmsUserOrganizationService extends BaseService<UmsUserOrganization>
         int result = 0;
         // 删除旧记录
         HashMap<String, Object> columnMap = new HashMap<String, Object>();
-        columnMap.put("userId", id);
+        columnMap.put("user_id", id);
         umsUserOrganizationMapper.deleteByMap(columnMap);
         // 增加新记录
         if (null != organizationIds) {

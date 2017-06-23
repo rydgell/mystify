@@ -136,94 +136,74 @@ public class UmsPermissionService extends BaseService<UmsPermission> {
         EntityWrapper<UmsUserPermission> ew = new EntityWrapper<UmsUserPermission>();
         ew.where("user_id={0}", usereId).and("type={0}", type);
         List<UmsUserPermission> umsUserPermissions = umsUserPermissionMapper.selectList(ew);
-
-        JSONArray systems = new JSONArray();
-        // 系统
-        EntityWrapper<UmsSystem> ewsys = new EntityWrapper<UmsSystem>();
-        ewsys.orderBy("orders", true);
-        ewsys.where("status={0}", 1);
-      
-        List<UmsSystem> umsSystems = umsSystemMapper.selectList(ewsys);
-        for (UmsSystem umsSystem : umsSystems) {
-            JSONObject node = new JSONObject();
-            node.put("id", umsSystem.getId());
-            node.put("name", umsSystem.getTitle());
-            node.put("nocheck", true);
-            node.put("open", true);
-            systems.add(node);
+        JSONArray folders = new JSONArray();
+        
+        EntityWrapper<UmsPermission> ewp = new EntityWrapper<UmsPermission>();
+        ewp.orderBy("orders", true);
+        ewp.where("status={0}", 1);
+        
+        List<UmsPermission> umsPermissions = umsPermissionMapper.selectList(ewp);
+        if (umsPermissions.size() == 0) {
+        	return folders;
         }
-
-        if (systems.size() > 0) {
-            for (Object system: systems) {
-                EntityWrapper<UmsPermission> ewp = new EntityWrapper<UmsPermission>();
-                ewp.orderBy("orders", true);
-                ewp.where("status={0}", 1).and("system_id={0}", ((JSONObject) system).getIntValue("id"));
-                
-                List<UmsPermission> umsPermissions = umsPermissionMapper.selectList(ewp);
-                if (umsPermissions.size() == 0) continue;
-                // 目录
-                JSONArray folders = new JSONArray();
-                for (UmsPermission umsPermission: umsPermissions) {
-                    if (umsPermission.getPid().intValue() != 0 || umsPermission.getType() != 1) continue;
-                    JSONObject node = new JSONObject();
-                    node.put("id", umsPermission.getId());
-                    node.put("name", umsPermission.getName());
-                    node.put("open", true);
+        // 目录
+        for (UmsPermission umsPermission: umsPermissions) {
+            if (umsPermission.getPid().intValue() != 0 || umsPermission.getType() != 1) continue;
+            JSONObject node = new JSONObject();
+            node.put("id", umsPermission.getId());
+            node.put("name", umsPermission.getName());
+            node.put("open", true);
+            for (UmsUserPermission umsUserPermission : umsUserPermissions) {
+                if (umsUserPermission.getPermissionId().intValue() == umsPermission.getId().intValue()) {
+                    node.put("checked", true);
+                }
+            }
+            folders.add(node);
+            // 菜单
+            JSONArray menus = new JSONArray();
+            for (Object folder : folders) {
+                for (UmsPermission upmsPermission2: umsPermissions) {
+                    if (upmsPermission2.getPid().intValue() != ((JSONObject) folder).getIntValue("id") || upmsPermission2.getType() != 2) continue;
+                    JSONObject node2 = new JSONObject();
+                    node2.put("id", upmsPermission2.getId());
+                    node2.put("name", upmsPermission2.getName());
+                    node2.put("open", true);
                     for (UmsUserPermission umsUserPermission : umsUserPermissions) {
-                        if (umsUserPermission.getPermissionId().intValue() == umsPermission.getId().intValue()) {
-                            node.put("checked", true);
+                        if (umsUserPermission.getPermissionId().intValue() == upmsPermission2.getId().intValue()) {
+                            node2.put("checked", true);
                         }
                     }
-                    folders.add(node);
-                    // 菜单
-                    JSONArray menus = new JSONArray();
-                    for (Object folder : folders) {
-                        for (UmsPermission upmsPermission2: umsPermissions) {
-                            if (upmsPermission2.getPid().intValue() != ((JSONObject) folder).getIntValue("id") || upmsPermission2.getType() != 2) continue;
-                            JSONObject node2 = new JSONObject();
-                            node2.put("id", upmsPermission2.getId());
-                            node2.put("name", upmsPermission2.getName());
-                            node2.put("open", true);
+                    menus.add(node2);
+                    // 按钮
+                    JSONArray buttons = new JSONArray();
+                    for (Object menu : menus) {
+                        for (UmsPermission umsPermission3: umsPermissions) {
+                            if (umsPermission3.getPid().intValue() != ((JSONObject) menu).getIntValue("id") || umsPermission3.getType() != 3) continue;
+                            JSONObject node3 = new JSONObject();
+                            node3.put("id", umsPermission3.getId());
+                            node3.put("name", umsPermission3.getName());
+                            node3.put("open", true);
                             for (UmsUserPermission umsUserPermission : umsUserPermissions) {
-                                if (umsUserPermission.getPermissionId().intValue() == upmsPermission2.getId().intValue()) {
-                                    node2.put("checked", true);
+                                if (umsUserPermission.getPermissionId().intValue() == umsPermission3.getId().intValue()) {
+                                    node3.put("checked", true);
                                 }
                             }
-                            menus.add(node2);
-                            // 按钮
-                            JSONArray buttons = new JSONArray();
-                            for (Object menu : menus) {
-                                for (UmsPermission umsPermission3: umsPermissions) {
-                                    if (umsPermission3.getPid().intValue() != ((JSONObject) menu).getIntValue("id") || umsPermission3.getType() != 3) continue;
-                                    JSONObject node3 = new JSONObject();
-                                    node3.put("id", umsPermission3.getId());
-                                    node3.put("name", umsPermission3.getName());
-                                    node3.put("open", true);
-                                    for (UmsUserPermission umsUserPermission : umsUserPermissions) {
-                                        if (umsUserPermission.getPermissionId().intValue() == umsPermission3.getId().intValue()) {
-                                            node3.put("checked", true);
-                                        }
-                                    }
-                                    buttons.add(node3);
-                                }
-                                if (buttons.size() > 0) {
-                                    ((JSONObject) menu).put("children", buttons);
-                                    buttons = new JSONArray();
-                                }
-                            }
+                            buttons.add(node3);
                         }
-                        if (menus.size() > 0) {
-                            ((JSONObject) folder).put("children", menus);
-                            menus = new JSONArray();
+                        if (buttons.size() > 0) {
+                            ((JSONObject) menu).put("children", buttons);
+                            buttons = new JSONArray();
                         }
                     }
                 }
-                if (folders.size() > 0) {
-                    ((JSONObject) system).put("children", folders);
+                if (menus.size() > 0) {
+                    ((JSONObject) folder).put("children", menus);
+                    menus = new JSONArray();
                 }
             }
         }
-        return systems;
+        
+        return folders;
     }
     
     

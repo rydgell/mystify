@@ -19,11 +19,52 @@
 <div id="main">
 	<div id="toolbar">
 		<shiro:hasPermission name="upms:user:create"><a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增用户</a></shiro:hasPermission>
-		<shiro:hasPermission name="upms:user:organization"><a class="waves-effect waves-button" href="javascript:;" onclick="organizationAction()"><i class="zmdi zmdi-accounts-list"></i> 用户组织</a></shiro:hasPermission>
+		<a class="waves-effect waves-button" href="javascript:;" data-toggle="modal" data-target="#searchModal"><i class="zmdi zmdi-search"></i> 查询</a>
+		<%-- <shiro:hasPermission name="upms:user:organization"><a class="waves-effect waves-button" href="javascript:;" onclick="organizationAction()"><i class="zmdi zmdi-accounts-list"></i> 用户组织</a></shiro:hasPermission>
 		<shiro:hasPermission name="upms:user:role"><a class="waves-effect waves-button" href="javascript:;" onclick="roleAction()"><i class="zmdi zmdi-accounts"></i> 用户角色</a></shiro:hasPermission>
-		<shiro:hasPermission name="upms:user:permission"><a class="waves-effect waves-button" href="javascript:;" onclick="permissionAction()"><i class="zmdi zmdi-key"></i> 用户权限</a></shiro:hasPermission>
+		<shiro:hasPermission name="upms:user:permission"><a class="waves-effect waves-button" href="javascript:;" onclick="permissionAction()"><i class="zmdi zmdi-key"></i> 用户权限</a></shiro:hasPermission> --%>
 	</div>
 	<table id="table"></table>
+	<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" style="width:360px">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+            <form>
+			<div class="form-group">
+				<label for="username">帐号</label>
+				<input id="username" type="text" class="form-control" name="username" maxlength="20">
+			</div>
+			<div class="form-group">
+				<label for="realname">姓名</label>
+				<input id="realname" type="text" class="form-control" name="realname" maxlength="20">
+			</div>
+			<div class="form-group">
+				<label for="sex">性别</label>
+				<select class="form-control" id="sex" name="sex" style="width: 100%" >
+				  <option  value="">全部</option>
+			      <option value="1">男</option>
+			      <option value="0">女</option>
+			    </select>
+			</div>
+			<div class="form-group">
+				<label  >姓名</label>
+				<select class="form-control" id="locked" name="locked" style="width: 100%">
+				  <option  value="">全部</option>
+			      <option value="0">正常</option>
+			      <option value="1">锁定 </option>
+			    </select>
+			</div>
+			</form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">查询</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 </div>
 <jsp:include page="/views/common/footer.jsp" flush="true"/>
 <script>
@@ -49,6 +90,8 @@ $(function() {
 		idField: 'id',
 		maintainSelected: true,
 		toolbar: '#toolbar',
+		mobileResponsive:true,
+	    checkOnInit:true,
 		columns: [
 			{field: 'id', title: '编号', sortable: false, align: 'center',width:20},
             {field: 'username', title: '帐号'},
@@ -67,10 +110,10 @@ $(function() {
 function actionFormatter(value, row, index) {
     return [
 		'<shiro:hasPermission name="upms:user:update"><a class="update" href="javascript:;" onclick="updateAction('+row.id+')" data-toggle="tooltip" title="编辑"><i class="glyphicon glyphicon-edit"></i></a>　</shiro:hasPermission>',
-		'<shiro:hasPermission name="upms:user:delete"><a class="delete" href="javascript:;" onclick="deleteAction('+row.id+')" data-toggle="tooltip" title="删除"><i class="glyphicon glyphicon-remove"></i></a></shiro:hasPermission>',
-		'<shiro:hasPermission name="upms:user:organization"><a class="waves-effect waves-button" href="javascript:;" onclick="organizationAction('+row.id+')" data-toggle="tooltip" title="用户组织"><i class="zmdi zmdi-accounts-list"></i> </a></shiro:hasPermission>',
-		'<shiro:hasPermission name="upms:user:role"><a class="waves-effect waves-button" href="javascript:;" onclick="roleAction('+row.id+')" data-toggle="tooltip" title="用户角色"><i class="zmdi zmdi-accounts"></i> </a></shiro:hasPermission>',
-		'<shiro:hasPermission name="upms:user:permission"><a class="waves-effect waves-button" href="javascript:;" onclick="permissionAction('+row.id+')" data-toggle="tooltip" title="用户权限"><i class="zmdi zmdi-key"></i> </a></shiro:hasPermission>'
+		'<shiro:hasPermission name="upms:user:delete"><a class="delete" href="javascript:;" onclick="deleteAction('+row.id+')" data-toggle="tooltip" title="删除"><i class="glyphicon glyphicon-remove"></i>&nbsp &nbsp</a></shiro:hasPermission>',
+		'<shiro:hasPermission name="upms:user:organization"><a class="delete" href="javascript:;" onclick="organizationAction('+row.id+')" data-toggle="tooltip" title="用户组织"><i class="glyphicon glyphicon-th-list"></i>&nbsp &nbsp </a></shiro:hasPermission>',
+		'<shiro:hasPermission name="upms:user:role"><a class="delete" href="javascript:;" onclick="roleAction('+row.id+')" data-toggle="tooltip" title="用户角色"><i class="glyphicon glyphicon-user"></i> &nbsp &nbsp</a></shiro:hasPermission>',
+		'<shiro:hasPermission name="upms:user:permission"><a class="delete" href="javascript:;" onclick="permissionAction('+row.id+')" data-toggle="tooltip" title="用户权限"><i class="glyphicon glyphicon-lock"></i> &nbsp &nbsp</a></shiro:hasPermission>'
     ].join('');
 }
 // 格式化图标
@@ -187,7 +230,7 @@ function organizationAction(userId) {
 	organizationUserId = userId;
 	organizationDialog = $.dialog({
 		animationSpeed: 300,
-		title: '用户组织',
+		title: '所属部门',
 		content: 'url:${basePath}/manage/user/organization/' + organizationUserId,
 		onContentReady: function () {
 			initMaterialInput();
