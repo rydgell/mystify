@@ -49,9 +49,15 @@ public class UmsUserService extends BaseService<UmsUser> {
 		 		if(StringUtils.isNotBlank(entity.getUsername())){
 			 		ew.and().like("username", entity.getUsername());
 			 	}
-		 		/*if(StringUtils.isNotBlank(entity.getIp())){
-		 			ew.andNew("ip={0}", entity.getIp());
-			 	}*/
+		 		if(StringUtils.isNotBlank(entity.getRealname())){
+			 		ew.and().like("realname", entity.getRealname());
+			 	}
+		 		if(null!=entity.getSex()){
+		 			ew.andNew("sex={0}", entity.getSex());
+			 	}
+		 		if(null!=entity.getLocked()){
+		 			ew.andNew("locked={0}", entity.getLocked());
+			 	}
 		 	}
 		    page.setRecords(umsUserMapper.selectPage(page, ew));
 		    return page;

@@ -31,16 +31,16 @@
             <div class="modal-header">
             </div>
             <div class="modal-body">
-            <form>
-			<div class="form-group">
+            <form id="searchForm">
+			<div >
 				<label for="username">帐号</label>
 				<input id="username" type="text" class="form-control" name="username" maxlength="20">
 			</div>
-			<div class="form-group">
+			<div >
 				<label for="realname">姓名</label>
 				<input id="realname" type="text" class="form-control" name="realname" maxlength="20">
 			</div>
-			<div class="form-group">
+			<div >
 				<label for="sex">性别</label>
 				<select class="form-control" id="sex" name="sex" style="width: 100%" >
 				  <option  value="">全部</option>
@@ -48,9 +48,9 @@
 			      <option value="0">女</option>
 			    </select>
 			</div>
-			<div class="form-group">
+			<div >
 				<label  >姓名</label>
-				<select class="form-control" id="locked" name="locked" style="width: 100%">
+				<select class="form-control"   id="locked" name="locked" style="width: 100%">
 				  <option  value="">全部</option>
 			      <option value="0">正常</option>
 			      <option value="1">锁定 </option>
@@ -60,7 +60,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">查询</button>
+                <button type="button" class="btn btn-primary" onclick="searchData()">查询</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -70,6 +70,12 @@
 <script>
 var $table = $('#table');
 $(function() {
+	$("#locked").select2({
+        minimumResultsForSearch: -1
+    });
+	$("#sex").select2({
+        minimumResultsForSearch: -1
+    });
 	// bootstrap table初始化
 	$table.bootstrapTable({
 		url: '${basePath}/manage/user/list',
@@ -92,6 +98,7 @@ $(function() {
 		toolbar: '#toolbar',
 		mobileResponsive:true,
 	    checkOnInit:true,
+	    queryParams:queryParams,
 		columns: [
 			{field: 'id', title: '编号', sortable: false, align: 'center',width:20},
             {field: 'username', title: '帐号'},
@@ -106,6 +113,24 @@ $(function() {
 		]
 	});
 });
+//搜索参数
+function queryParams(params) {
+    var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+    	limit: params.limit,   //每页显示数量
+        offset: params.offset,  //页码
+        username: $("#searchForm #username").val(),
+        realname: $("#searchForm #realname").val(),
+        sex: $("#searchForm #sex").val(),
+        locked: $("#searchForm #locked").val() 
+    };
+    return temp;
+}
+
+function searchData() {
+	$table.bootstrapTable('refresh');
+	$('#searchModal').modal('hide')
+}
+
 // 格式化操作按钮
 function actionFormatter(value, row, index) {
     return [
