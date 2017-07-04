@@ -1,4 +1,4 @@
-package com.mystify.ums.utils;
+package com.mystify.common.utils;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.codec.Base64;

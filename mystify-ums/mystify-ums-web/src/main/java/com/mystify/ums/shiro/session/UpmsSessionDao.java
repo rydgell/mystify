@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.mystify.ums.model.SessionView;
 import com.mystify.ums.utils.RedisUtil;
-import com.mystify.ums.utils.SerializableUtil;
+import com.mystify.common.utils.SerializableUtil;
 import com.mystify.ums.utils.UpmsConstant;
 
 import redis.clients.jedis.Jedis;
@@ -68,7 +68,7 @@ public class UpmsSessionDao extends CachingSessionDAO {
             upmsSession.setAttribute("FORCE_LOGOUT", cacheUpmsSession.getAttribute("FORCE_LOGOUT"));
         }
         RedisUtil.set(UMS_SHIRO_SESSION_ID + "_" + session.getId(), SerializableUtil.serialize(session), (int) session.getTimeout() / 1000);
-        // 更新ZHENG_UPMS_SERVER_SESSION_ID、ZHENG_UPMS_SERVER_CODE过期时间 TODO
+        // 更新UMS_SERVER_SESSION_ID、UMS_SERVER_CODE过期时间 TODO
         _log.debug("doUpdate >>>>> sessionId={}", session.getId());
     }
 

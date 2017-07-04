@@ -14,7 +14,6 @@ import java.util.List;
 
 /**
  * 用户service实现
- * Created by shuzheng on 2016/01/19.
  */
 @Service("umsApiService")  
 @Transactional

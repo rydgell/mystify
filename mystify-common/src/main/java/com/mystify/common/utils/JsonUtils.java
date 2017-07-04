@@ -1,4 +1,4 @@
-package com.mystify.ums.utils;
+package com.mystify.common.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

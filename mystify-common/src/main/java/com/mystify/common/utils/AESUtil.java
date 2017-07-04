@@ -17,7 +17,7 @@ import java.security.SecureRandom;
  */
 public class AESUtil {
 
-    private static final String encodeRules = "zheng";
+    private static final String encodeRules = "mystify";
 
     /**
      * 加密
