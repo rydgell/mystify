@@ -4,7 +4,7 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 a i{font-size: 13px;}
 
 body{background:#ECECEC;}
-body:before{height:50%;width:100%;position:absolute;top:0;left:0;background:#29a176;content:"";z-index:0}
+body:before{height:100%;width:100%;position:absolute;top:0;left:0;background:#55AAAA;content:"";z-index:0}
 #login-window{position:relative;top:50%;left:50%;width:320px;height:250px;margin-left:-150px;margin-top:-100px;padding:35px 55px 35px 25px;z-index:10;background:#fff;box-shadow:0 1px 11px rgba(0,0,0,.27);border-radius:2px;}
 .m-b-20{margin-bottom:20px !important;}
 

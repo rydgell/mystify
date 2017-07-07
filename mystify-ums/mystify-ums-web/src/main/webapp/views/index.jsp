@@ -148,13 +148,83 @@
 		</div>
 		<div class="content_main">
 			<div id="iframe_home" class="iframe cur">
-				<p><h4>通用管理系统</h4></p>
-				<p>xxxxxxxxxxxxxxxxxxxx</p>
-				<p>xxxxxxxxxxxxxxxxxxxx</p>
-				<p>xxxxxxxxxxxxxxxxxxxx</p>
-				<p>xxxxxxxxxxxxxxxxxxxx</p>
-				<p>xxxxxxxxxxxxxxxxxxxx</p>
-				<p>xxxxxxxxxxxxxxxxxxxx</p>
+			<div class="wrapper">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel">
+                                <div class="panel-body p-states">
+                                    <div class="summary pull-left">
+                                        <span>登录账号</span>
+                                        <h4>${umsUser.username}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="panel">
+                                <div class="panel-body p-states green-box">
+                                    <div class="summary pull-left">
+                                        <span>姓名</span>
+                                        <h4>${umsUser.realname}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="panel">
+                                <div class="panel-body p-states">
+                                    <div class="summary pull-left">
+                                        <span>电话</span>
+                                        <h4>${umsUser.phone}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="panel">
+                                <div class="panel-body p-states">
+                                    <div class="summary pull-left">
+                                        <span>邮箱</span>
+                                        <h4>${umsUser.email}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="panel">
+                                <div class="panel-body p-states">
+                                    <div class="summary pull-left">
+                                        <span>性别</span>
+                                        <h4>${umsUser.sex==1?'男':'女'}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel">
+                                <div class="panel-body">
+                                    <div class="profile-desk">
+                                        <h1>john doe</h1>
+                                        <span class="designation">PRODUCT DESIGNER (UX / UI / Visual Interaction)</span>
+                                        <p>
+                                            I have 10 years of experience designing for the web, and specialize in the areas of user interface design, interaction design, visual design and prototyping. I’ve worked with notable startups including Pearl Street Software.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
 			</div>
 		</div>
 	</section>

@@ -45,11 +45,12 @@ $(function() {
     	 login();
     });
 	// 回车事件
-	$('#username, #password').keypress(function (event) {
+	/*$('#username, #password','#verificationCode').keypress(function (event) {
+		alert("xxxxxx");
 		if (13 == event.keyCode) {
 			 login();
 		}
-	});
+	});*/
 });
 // 登录
 var options = {
